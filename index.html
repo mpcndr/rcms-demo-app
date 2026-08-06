@@ -67,6 +67,12 @@ button{font-family:inherit}
 .bell.open{background:var(--m-lite);border-color:#C8DDEC}
 .bell b{position:absolute;top:1px;right:1px;background:var(--bad);color:#fff;font-size:8.5px;
   border-radius:8px;padding:0 4px;font-weight:600;line-height:1.5}
+.clearCache{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--ink2);cursor:pointer;border:1px solid transparent}
+.clearCache:hover{background:var(--m-lite)}
+.clearCache.open{background:var(--m-lite);border-color:#C8DDEC}
+.clearCache b{position:absolute;top:1px;right:1px;background:var(--bad);color:#fff;font-size:8.5px;
+  border-radius:8px;padding:0 4px;font-weight:600;line-height:1.5}
 .panel{position:absolute;right:0;top:40px;width:344px;background:var(--white);border:1px solid var(--line);
   border-radius:9px;box-shadow:0 14px 40px rgba(8,50,77,.19);z-index:60;overflow:hidden}
 .panel .ph{padding:11px 14px;border-bottom:1px solid var(--soft);display:flex;align-items:center;gap:8px}
@@ -244,21 +250,17 @@ tbody tr:hover td{background:var(--m-lite)}
 .login{display:grid;grid-template-columns:1.15fr 1fr;height:100vh;overflow:hidden}
 .login .lf{background:linear-gradient(180deg,rgba(10,40,64,.82),rgba(10,40,64,.93)),url('MOIC01.webp') center/cover no-repeat,var(--m-dark);
   color:#fff;padding:52px 52px;display:flex;flex-direction:column;overflow-y:auto}
-.seal{width:46px;height:46px;border-radius:50%;border:2px solid var(--m-light);color:var(--m-light);
-  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin-bottom:24px}
-.sealrow{display:flex;align-items:center;gap:13px;margin-bottom:24px}
-.sealrow .seal{margin-bottom:0}
-.moic-logo{width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:3px}
+.moic-logo{width:80px;height:80px;object-fit:contain;border-radius:8px;background:transparent;padding:3px}
 .brand .moic-logo{width:22px;height:22px;padding:2px;margin-right:2px}
-.login h1{font-size:27px;font-weight:600;line-height:1.4;letter-spacing:-.02em;margin-bottom:14px}
+.login h1{font-size:32px;font-weight:600;line-height:1.4;letter-spacing:-.02em;margin-bottom:14px}
 .login h1 span{color:var(--m-light)}
 .login .sub{font-size:12.5px;color:#9EBCD1;line-height:1.9;max-width:440px}
 .login .stat{margin-top:auto;display:flex;gap:34px;padding-top:28px;border-top:1px solid #164B6C;flex-wrap:wrap}
 .login .stat .n{font-size:22px;font-weight:600;color:var(--m-light)}
 .login .stat .l{font-size:10.5px;color:#83A5BD;margin-top:3px}
-.login .rt2{background:var(--white);padding:40px 46px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
-.login .rt2 h2{font-size:17px;font-weight:600;margin-bottom:4px}
-.login .rt2 p{font-size:12px;color:var(--muted);margin-bottom:16px}
+.login .rt2{background:var(--white);padding:40px 52px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
+.login .rt2 h2{font-size:32px;font-weight:600; line-height:1.4em;}
+.login .rt2 p{font-size:12px;color:var(--muted);margin-bottom:24px}
 .acct{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:7px;cursor:pointer;
   display:flex;align-items:center;gap:11px;transition:.14s}
 .acct:hover{border-color:var(--m-light);background:var(--m-lite)}
@@ -333,8 +335,8 @@ lo:{
  valQueue:'ຄິວງານປະເມີນ',valPortal:'ວຽກປະເມີນຂອງຂ້ອຍ',fin:'ການເງິນ',rep:'ລາຍງານ',set:'ຕັ້ງຄ່າລະບົບ',portal:'Portal ພາຍນອກ',
  myCap:'ທຶນຂອງຂ້ອຍ',notif:'ການແຈ້ງເຕືອນ',markRead:'ໝາຍວ່າອ່ານແລ້ວທັງໝົດ',noNotif:'ບໍ່ມີການແຈ້ງເຕືອນ',
 
- dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING — ລໍຊຳລະ',kPartial:'PARTIAL — ຊຳລະບາງສ່ວນ',
- kCompleted:'COMPLETED — ຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ສັດສ່ວນຕາມສະຖານະ',
+ dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING — ລໍຖ້າຊຳລະ',kPartial:'PARTIAL — ຊຳລະບາງສ່ວນ',
+ kCompleted:'COMPLETED — ຊຳລະຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ສັດສ່ວນຕາມສະຖານະ',
  dueSoon:'ໃກ້ຄົບກຳນົດພາຍໃນ 30 ວັນ',seeAll:'ເບິ່ງທັງໝົດ',adminUsers:'ຜູ້ໃຊ້ລະບົບ',onlineNow:'ອອນລາຍຕອນນີ້',totalUsers:'ຜູ້ໃຊ້ທັງໝົດ',
  secCapital:'ພາບລວມທຶນຈົດທະບຽນ',secUsers:'ພາບລວມຜູ້ໃຊ້ລະບົບ',orgBreakdown:'ຈຳແນກຕາມໜ່ວຍງານ',
 
@@ -868,8 +870,13 @@ function vLogin(){
   var step=S.loginStep||'cred';
   var matched=matchAcct();
   var dl=ACCTS.map(function(a){return '<option value="'+a.user+'" label="'+a.nm+' — '+(a.rl[lang]||a.rl.en)+'">';}).join('');
+  var langToggle='<div class="lang">'+
+   '<span'+(lang==='lo'?' class="on"':'')+' data-lang="lo">ລາວ</span>'+
+   '<span'+(lang==='en'?' class="on"':'')+' data-lang="en">EN</span></div>';
   var credBody=
-   '<h2>'+t('pickAcct')+'</h2><p>'+t('loginHint')+'</p>'+
+   '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'+
+   '<h2 style="margin-bottom:0">'+t('pickAcct')+'</h2>'+langToggle+'</div>'+
+   '<p style="margin-top:4px">'+t('loginHint')+'</p>'+
    '<div class="field"><label>'+t('loginUser')+'</label>'+
    '<input id="loginUser" list="userlist" autocomplete="off" placeholder="lao.agri" value="'+esc(S.loginUser||'')+'"></div>'+
    '<datalist id="userlist">'+dl+'</datalist>'+
@@ -886,16 +893,14 @@ function vLogin(){
    '<div class="otp" id="otp">'+[0,1,2,3,4,5].map(function(){return '<input maxlength="1" size="1" inputmode="numeric">'}).join('')+'</div>'+
    '<button class="btn" style="width:100%;padding:12px;margin-top:13px" id="doLogin" disabled>'+t('login')+'</button>'+
    '<div style="margin-top:12px;font-size:11px;color:var(--m);cursor:pointer" data-backcred="1">'+t('loginBack')+'</div>';
-  return '<div class="login"><div class="lf"><div class="sealrow"><img class="moic-logo" src="moic-logo.png" alt="MOIC"><div class="seal">ລ</div></div>'+
+  return '<div class="login"><div class="lf"><div class="sealrow"><img class="moic-logo" src="moic-logo.png" alt="MOIC"></div>'+
   '<h1>'+t('sysName')+'<br><span>RCMS</span></h1>'+
   '<div class="sub">'+t('sysSub')+' — '+t('coop')+'</div>'+
   '<div class="stat"><div><div class="n num">218,622</div><div class="l">'+t('s1')+'</div></div>'+
   '<div><div class="n num">1.15</div><div class="l">'+t('s2')+'</div></div>'+
   '<div><div class="n num">5</div><div class="l">'+t('s3')+'</div></div></div>'+
-  '<div style="margin-top:20px"><span style="font-size:11.5px;color:var(--m-light);cursor:pointer;text-decoration:underline" data-verify="1">◎ '+t('qrVerify')+'</span></div></div>'+
-  '<div class="rt2"><div class="lang" style="align-self:flex-end;margin-bottom:16px">'+
-  '<span'+(lang==='lo'?' class="on"':'')+' data-lang="lo">ລາວ</span>'+
-  '<span'+(lang==='en'?' class="on"':'')+' data-lang="en">EN</span></div>'+
+  '<div style="margin-top:20px"><span style="font-size:11.5px;color:var(--m-light);cursor:pointer;text-decoration:underline" data-verify="1">◎ '+t('qrVerify')+'</span></div></div>'+ 
+  '<div class="rt2">'+
   (step==='otp'?otpBody:credBody)+
   '<div class="note">'+t('secNote')+'<br><br><kbd>Alt</kbd> + <kbd>/</kbd> — '+t('kbTitle')+'</div></div></div>';
 }
