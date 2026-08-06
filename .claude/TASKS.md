@@ -123,3 +123,73 @@ Notes: verified with `node --check`, dict symmetry (348/348 — removed unused p
 Notes: field set per asset category (5-6 fields each) is a curated subset of the ~30-column source spreadsheet, picked for demo relevance (identifying document no., key dimensions, location, estimated price); required field per category (deedNo/buildingName/licenseNo/machineName) blocks submission via new errAssetField message. Admin dashboard fix caught and fixed a missing closing </div> that had broken the second two-column card row into a vertical stack. Verified with `node --check`, dict symmetry (352/352), full regression suite (55 checks, zero JS errors), plus a Playwright check of asset field swapping/validation and a full-page screenshot comparison of the dashboard before/after.
 
 ---
+
+## Epic: Entity Info Visibility
+
+### Done
+- [x] TASK-043 | fix: extract "Entity Information" into a shared entInfoCard(e) helper, pin it as the first card on every page that shows a specific entity — detail page, owner dashboard, payment/asset declaration form, and the checker/approver task review page — so it's visible for every role, including while a transaction is being filled in | 2026-08-06 | fix
+
+Notes: previously only existed (buried mid-page) on the Maker/Checker/Approver detail page; Owner's dashboard and the declare/task-review pages had no entity identification at all. Removed the now-redundant status pill duplicated in the Capital Status card headers on vDetail/vOwnerDash since it's shown once at the top in entInfoCard now. Verified with `node --check`, full regression suite (55 checks, zero JS errors), and a Playwright screenshot check confirming the card renders first on owner dashboard, detail page, and the declare form.
+
+---
+
+## Epic: Entity Info / Capital Status Layout
+
+### Done
+- [x] TASK-044 | feat: put Entity Information and Capital Contribution Status side by side in a 70:30 grid (new `.split70` CSS class, responsive — collapses to 1 column under 900px) on both the entity detail page and the Owner dashboard; split the instalment schedule out of the capital-status card into its own full-width card below so it isn't squeezed into the narrow 30% column | 2026-08-06 | feature
+
+Notes: added noMargin param to entInfoCard(e,true) so it can sit flush inside the grid instead of carrying its own bottom margin. Verified with `node --check`, full regression suite (55 checks, zero JS errors), and screenshots confirming the 70:30 layout on both pages.
+
+---
+
+## Epic: History Table, Collateral Click-through, Upload UX, Stepper Redesign
+
+### Done
+- [x] TASK-045 | fix: Owner dashboard — replace instalment-card list with the same "processing & approval history" table Maker/Checker/Approver see on the detail page (factored into shared historySection(e)) | 2026-08-06 | fix
+- [x] TASK-046 | fix: entity detail page — remove the separate "Collateral Items" table; asset-mode history rows are now clickable (underlined "Assets" channel label) and open a coldetail modal showing the matching collateral entry (type, description, appraised value) | 2026-08-06 | fix
+- [x] TASK-047 | feat: file upload dropzones (#drop, #fjDrop) now support real drag-and-drop (dragover/dragleave/drop handlers, visual .drag state) in addition to click-to-attach, via a shared wireDrop() helper; dropped files use their real filename | 2026-08-06 | feature
+- [x] TASK-048 | feat: clearer upload hints — dropT now says "click to attach, or drag and drop files here", dropS/new dropSVal spell out "attach at least 1: <document types> · PDF, JPG up to 10MB" (dropSVal is valuation-report-specific, used in the firm's submission modal instead of the generic payment-doc hint) | 2026-08-06 | feature
+- [x] TASK-049 | fix: Declare Capital Payment (step 1, initial submission) no longer shows any step/progress indicator; the Checker/Approver task review page replaces the old flat 3-box `.steps` bar with a numbered circle-and-connecting-line stepper (new stepCircles() helper, `.stepc` CSS) with the step description written under each circle | 2026-08-06 | fix
+
+Notes: removed now-dead collateralEmpty dict key (collateral/colVal kept — reused in the new coldetail modal). Verified with `node --check`, dict symmetry (352/352), full regression suite (55 checks, zero JS errors), plus targeted Playwright/screenshot checks: owner dashboard shows history table not instalment cards, collateral section removed from detail page, asset history row opens coldetail modal, declare page has zero `.steps` elements, checker task page renders the new `.stepc` circle stepper.
+
+---
+
+## Epic: History Row Drill-in Page
+
+### Done
+- [x] TASK-050 | feat: Payment & Approval History rows (with an amount) now navigate to a new full-page transaction detail view (vTxDetail, view 'tx') instead of doing nothing / opening the old asset-only modal | 2026-08-06 | feature
+- [x] TASK-051 | feat: new segmented 3-stage progress bar (`.txpbar` — explicit exception to the earlier no-progress-bar rule, confirmed with user) pinned at the very top of the transaction detail page, showing Submitted → Checker → Approver all filled since historical entries are fully processed | 2026-08-06 | feature
+
+Notes: replaced the old data-histasset → coldetail modal path entirely — asset-mode entries now show their collateral card inline on the same full-page tx detail view instead of a separate modal, alongside the transaction's date/action/mode/amount/submitter/channel/doc-count. Added S.tx={ent,idx,back} state and a 'tx' entry to the view dispatcher; back-crumb returns to wherever the row was clicked from (detail page or owner dashboard). Verified with `node --check`, dict symmetry (352/352), full regression suite (55 checks, zero JS errors), and a screenshot confirming the progress bar renders first on the page.
+
+---
+
+## Epic: Checker/Approver Task Page Cleanup
+
+### Done
+- [x] TASK-052 | fix: Checker/Approver task review page — remove the "Processing history" card (redundant with the new `.stepc` circle stepper already added at the top) and its "Waiting for your verification/approval" status line; right column now goes straight from evidence to the Decision card | 2026-08-06 | fix
+
+Notes: removed the now-unused waitYouC/waitYouA dict keys and the dead `trail` local variable in vTask() (kept the `trail` dict key itself — still used by vDeclare's sidebar preview card). Verified with `node --check`, dict symmetry (350/350), full regression suite (55 checks, zero JS errors), and a screenshot confirming both elements are gone.
+
+---
+
+## Epic: Stepper Visual Match to Reference
+
+### Done
+- [x] TASK-053 | fix: restyle the `.stepc` circle stepper to match a reference screenshot — completed steps now show a checkmark (✓) instead of a number, the current step gets a scaled-up ring-highlighted circle, connecting lines color through completed segments; wrapped stepCircles() output in its own card for consistency with the rest of the page | 2026-08-06 | fix
+- [x] TASK-054 | fix: replaced the segmented `.txpbar` bar on the transaction detail page with the same stepCircles() component used on the Checker/Approver task page, for one consistent stepper style app-wide; removed the now-unused `.txpbar`/`.txpbarlbl` CSS | 2026-08-06 | fix
+
+Notes: verified with `node --check`, full regression suite (55 checks, zero JS errors), and screenshots of both usages (Checker task page, transaction detail page) confirming the checkmark/ring/colored-line styling matches the reference.
+
+---
+
+## Epic: Remove Capital Contribution Schedule & Declare-page Processing History
+
+### Done
+- [x] TASK-055 | fix: remove the "Capital contribution schedule" (instalment-card) section from the entity detail page entirely, for every role | 2026-08-06 | fix
+- [x] TASK-056 | fix: remove the "Processing history" sidebar card from the Declare Capital Payment page (step 1, initial submission) so it no longer appears for any role — same card had already been cut from the Checker/Approver task page in a prior round | 2026-08-06 | fix
+
+Notes: deleted the now-dead instalments()/instBadge() functions, `.insts`/`.inst`/`.law` CSS, and unused dict keys (capSched, lawNote, inst1, inst2, stWait, stOver, stReview, trail). Left the underlying e.insts data model and its mutations in approve/submit/return-for-correction handlers untouched since they don't cause errors and aren't rendered anywhere — pure internal state, not dead code with a visible symptom. Verified with `node --check`, dict symmetry (342/342), full regression suite (71 checks across smoke/flow/flow2, zero JS errors), and screenshots confirming both removals.
+
+---
