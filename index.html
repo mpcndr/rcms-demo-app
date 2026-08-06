@@ -158,6 +158,8 @@ tbody tr:hover td{background:var(--m-lite)}
 .btn:hover{background:var(--m-dark)}
 .btn.ghost{background:var(--white);border:1px solid var(--line);color:var(--ink2)}
 .btn.ghost:hover{background:var(--m-lite);border-color:var(--m-light)}
+.btn.danger{background:var(--bad);color:#fff}
+.btn.danger:hover{background:#8F231C}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .acts{display:flex;gap:8px;flex-wrap:wrap}
 .kv{font-size:11.5px}
@@ -321,7 +323,7 @@ lo:{
  pwMismatch:'ລະຫັດຜ່ານບໍ່ກົງກັນ',unknownUser:'ບໍ່ພົບຜູ້ໃຊ້ນີ້ — ເລືອກຈາກລາຍຊື່ທີ່ແນະນຳ',errPw:'ກະລຸນາໃສ່ລະຫັດຜ່ານ',
  qrVerify:'ກວດສອບສະຖານະວິສາຫະກິດ',qrVerifyNote:'ບໍ່ຈຳເປັນຕ້ອງເຂົ້າສູ່ລະບົບ · ຄົ້ນຫາດ້ວຍຊື່ ຫຼື ເລກທະບຽນ',
  verifyNotFound:'ບໍ່ພົບຂໍ້ມູນວິສາຫະກິດນີ້',secNote:'ບັງຄັບ MFA ສຳລັບຜູ້ອະນຸມັດ · Session Timeout 15 ນາທີ · ຫ້າມເຂົ້າໃຊ້ຊ້ຳຊ້ອນ · Audit Trail ທຸກການເຂົ້າເຖິງ',
- kbTitle:'ປຸ່ມລັດ',close:'ປິດ',cancel:'ຍົກເລີກ',save:'ບັນທຶກ',edit:'ແກ້ໄຂ',manage:'ຈັດການ',
+ kbTitle:'ປຸ່ມລັດ',close:'ປິດ',cancel:'ຍົກເລີກ',confirm:'ຢືນຢັນ',save:'ບັນທຶກ',edit:'ແກ້ໄຂ',manage:'ຈັດການ',
  helpCenter:'ຄູ່ມືການໃຊ້ ແລະ Helpdesk',profile:'ຂໍ້ມູນຜູ້ໃຊ້',logout:'ອອກຈາກລະບົບ',signedAs:'ເຂົ້າສູ່ລະບົບເປັນ',
  loggedIn:'ເຂົ້າສູ່ລະບົບສຳເລັດ',resetDone:'ຣີເຊັດເດໂມແລ້ວ',resetDoneS:'ເລີ່ມຈາກໜ້າເຂົ້າສູ່ລະບົບອີກຄັ້ງ',
 
@@ -447,7 +449,7 @@ en:{
  pwMismatch:'Passwords do not match',unknownUser:'User not found — pick one of the suggested accounts',errPw:'Enter your password',
  qrVerify:'Verify enterprise status',qrVerifyNote:'No login required · search by name or registration number',
  verifyNotFound:'No matching enterprise found',secNote:'MFA enforced for approvers · 15-minute session timeout · concurrent sessions blocked · every access written to the audit trail',
- kbTitle:'Keyboard shortcuts',close:'Close',cancel:'Cancel',save:'Save',edit:'Edit',manage:'Manage',
+ kbTitle:'Keyboard shortcuts',close:'Close',cancel:'Cancel',confirm:'Confirm',save:'Save',edit:'Edit',manage:'Manage',
  helpCenter:'User Manual & Helpdesk',profile:'Profile',logout:'Sign out',signedAs:'Signed in as',
  loggedIn:'Signed in',resetDone:'Demo reset',resetDoneS:'Starting again from the sign-in screen',
 
@@ -1278,7 +1280,7 @@ function vTask(){
   (isC?'<button class="btn" style="width:100%" data-fwd="1">'+t('fwdApprover')+'</button>'
       :'<button class="btn" style="width:100%" data-sign="1">'+t('signApprove')+'</button>')+
   '</div>'+
-  '<button class="btn ghost" style="width:100%;margin-top:10px" data-openback="1">'+t('sendBack')+'</button></div></div></div></div>';
+  '<button class="btn danger" style="width:100%;margin-top:10px" data-openback="1">'+t('sendBack')+'</button></div></div></div></div>';
   return shell(x.ref,[isC?t('queueTitle'):t('queueApprove'),isC?'inspect':'approveQ'],inner);
 }
 
@@ -1699,8 +1701,8 @@ function vModal(){
     '<div class="field" style="margin-bottom:8px"><label>'+t('reasonExtLbl')+'</label>'+
     '<textarea id="reasonExtTxt" rows="2" placeholder="'+t('reasonExtPh')+'">'+esc(S.backReasonExt||'')+'</textarea></div>'+
     (m.err?'<div class="hint err">'+m.err+'</div>':'')+
-    '<div class="acts" style="margin-top:14px"><button class="btn ghost" style="flex:1" data-back="1">'+t('sendBack')+'</button>'+
-    '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
+    '<div class="acts" style="margin-top:14px"><button class="btn ghost" data-close>'+t('cancel')+'</button>'+
+    '<button class="btn danger" style="flex:1" data-back="1">'+t('confirm')+'</button></div></div></div>';
   }
   if(m.type==='verify'){
     var vq=(m.q||'').trim().toLowerCase();

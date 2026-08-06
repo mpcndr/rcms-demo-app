@@ -260,3 +260,12 @@ Notes: verified with `node --check`, full regression suite (55 checks, zero JS e
 Notes: new modal type 'backreason' reuses the same reasonIntTxt/reasonExtTxt ids and S.backReasonInt/Ext state, so the underlying return logic (mutating e.insts, pushing to e.hist, removing the task) is unchanged — only the trigger and validation-error surface moved into the modal (data-openback opens it, data-back now sets S.modal.err instead of just no-op'ing when the external reason is empty). Verified with `node --check`, full regression suite (55 checks, zero JS errors), a targeted Playwright test of the full block→fill→submit flow, and a screenshot of the modal.
 
 ---
+
+## Epic: Return-for-Correction Visual Styling
+
+### Done
+- [x] TASK-068 | fix: "Return for correction" button styled red (new `.btn.danger` class); modal buttons relabeled to Confirm/Cancel with Confirm also styled red, to visually signal this is a destructive/negative action | 2026-08-06 | fix
+
+Notes: added a reusable `.btn.danger` CSS class (background var(--bad), darker hover) rather than one-off inline styling, and a new `confirm` dict key. Verified with `node --check`, dict symmetry (345/345), full regression suite (55 checks, zero JS errors), and a screenshot confirming both the page button and modal Confirm button render red.
+
+---
