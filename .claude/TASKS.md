@@ -203,3 +203,15 @@ Notes: deleted the now-dead instalments()/instBadge() functions, `.insts`/`.inst
 Notes: also discovered and fixed the root cause of a longer-standing confusion this session — local edits across many prior rounds had never been pushed to git, so the live GitHub Pages link stayed frozen on an old commit the whole time. Committed and pushed (3cf8ddd..f027cb7) to sync the live site. Verified the scroll fix with a Playwright check that scrolls `.body` to 400px, changes the asset category select, and confirms scrollTop is unchanged — plus a second check confirming scrollTop still resets to 0 on real page navigation. Full regression suite (55 checks) still passes, zero JS errors.
 
 ---
+
+## Epic: Declare Form Field Relevance & Doc Checklist
+
+### Done
+- [x] TASK-059 | fix: hide "Receiving account" and "Payment date" fields on the Declare Capital Payment form when mode is Assets — they only apply to cash transfers | 2026-08-06 | fix
+- [x] TASK-060 | feat: add a document checklist above the upload dropzone (new docChecklist() helper, reuses MASTER.doctype) — cash mode lists deposit slip/transfer receipt/confirmation letter marked "choose at least 1", asset mode lists valuation report as Required and asset photos as Optional | 2026-08-06 | feature
+- [x] TASK-061 | fix: made the "Finance & Penalties" row in Entity Information plain/non-clickable for every role — it navigated to the Finance page which not all roles even have in their sidebar, causing an inconsistent dead-end for some | 2026-08-06 | fix
+- [x] TASK-062 | fix: strengthened the render() scroll-preservation fix with a synchronous + setTimeout(0) double-apply, to also override any late native browser focus-scroll adjustment on the freshly re-created `<select>` element | 2026-08-06 | fix
+
+Notes: removed the now-dead data-gofinpen bind handler and its S.finTab='pen' shortcut. Verified with `node --check`, dict symmetry (344/344), full regression suite (55 checks, zero JS errors), and targeted Playwright checks: fDate/fAcct hidden in asset mode, checklist renders per mode, Finance & Penalties row has cursor:auto (not pointer), and a real click+keyboard select interaction only shows a ~40px native focus adjustment instead of a full jump to scrollTop 0.
+
+---

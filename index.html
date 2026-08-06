@@ -365,6 +365,7 @@ lo:{
  fAmt:'ຈຳນວນເງິນ',fDate:'ວັນທີຊຳລະ',fAcct:'ບັນຊີຮັບເງິນ',fRef:'ເລກທີ່ອ້າງອີງ',fDocs:'ເອກະສານຫຼັກຖານ',
  dropT:'ກົດເພື່ອແນບໄຟລ໌ ຫຼື ລາກໄຟລ໌ມາວາງທີ່ນີ້',dropS:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ໃບນຳຝາກ / ສະລິບໂອນ / ໜັງສືຢືນຢັນ · PDF, JPG ບໍ່ເກີນ 10MB',
  dropSVal:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ບົດລາຍງານປະເມີນລາຄາ / ຮູບຖ່າຍຊັບສິນ / ໃບກວດສະຖານທີ່ · PDF, JPG ບໍ່ເກີນ 10MB',
+ reqLbl:'ຈຳເປັນ',optLbl:'ບໍ່ບັງຄັບ',anyOneLbl:'ເລືອກຢ່າງໜ້ອຍ 1',docAssetPhoto:'ຮູບຖ່າຍຊັບສິນ',
  remainNote:'ຍັງເຫຼືອທີ່ຕ້ອງຊຳລະ',submitDeclare:'ຍື່ນເຂົ້າຄິວກວດສອບ',
  errAmt:'ກະລຸນາໃສ່ຈຳນວນເງິນ',errOver:'ຈຳນວນເກີນຍອດຄົງເຫຼືອ',errFile:'ຕ້ອງແນບເອກະສານຢ່າງໜ້ອຍ 1 ໄຟລ໌',
  errAssetField:'ກະລຸນາໃສ່ຂໍ້ມູນຊັບສິນທີ່ຈຳເປັນ (ຊ່ອງທີ່ມີ *)',
@@ -490,6 +491,7 @@ en:{
  fAmt:'Amount',fDate:'Payment date',fAcct:'Receiving account',fRef:'Transaction reference',fDocs:'Supporting documents',
  dropT:'Click to attach, or drag and drop files here',dropS:'Attach at least 1: deposit slip / transfer receipt / confirmation letter · PDF, JPG up to 10MB',
  dropSVal:'Attach at least 1: appraisal report / asset photos / site inspection form · PDF, JPG up to 10MB',
+ reqLbl:'Required',optLbl:'Optional',anyOneLbl:'Choose at least 1',docAssetPhoto:'Asset photos',
  remainNote:'Outstanding balance',submitDeclare:'Submit for verification',
  errAmt:'Enter the amount',errOver:'Amount exceeds the outstanding balance',errFile:'Attach at least one supporting document',
  errAssetField:'Please fill in the required asset details (marked with *)',
@@ -1078,9 +1080,21 @@ function entInfoCard(e,noMargin){
     '<div><span class="k">'+t('taxrisNo')+'</span><span class="v num">'+e.taxris+'</span></div>'+
     '<div><span class="k">'+t('acctNo')+'</span><span class="v num" style="font-size:10.5px">'+e.acct+'</span></div>'+
     '<div><span class="k">eBRS</span><span class="v" style="color:var(--m)">sync 09:15</span></div>'+
-    '<div><span class="k">'+t('finTitle')+'</span><span class="v" style="color:'+(unpaidInvs.length?'var(--bad)':'var(--ok)')+';cursor:pointer" data-gofinpen="1">'+
+    '<div><span class="k">'+t('finTitle')+'</span><span class="v" style="color:'+(unpaidInvs.length?'var(--bad)':'var(--ok)')+'">'+
     (unpaidInvs.length?(unpaidInvs.length+' · '+fmt(unpaidAmt)+' LAK'):t('stPaid'))+'</span></div>'+
     '</div></div></div>';
+}
+function docChecklist(mode){
+  var items=mode==='asset'
+    ?[[L(MASTER.doctype[3]),1],[t('docAssetPhoto'),0]]
+    :MASTER.doctype.slice(0,3).map(function(d){return [L(d),0]});
+  var noteLbl=mode==='asset'?null:t('anyOneLbl');
+  return '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">'+
+   items.map(function(it){return '<div style="display:flex;justify-content:space-between;align-items:center;'+
+    'padding:7px 10px;border:1px solid var(--line);border-radius:6px;font-size:11px">'+
+    '<span>'+it[0]+'</span><span style="font-size:10px;font-weight:600;color:'+
+    (it[1]?'var(--bad)':'var(--muted)')+'">'+(it[1]?t('reqLbl'):(noteLbl||t('optLbl')))+'</span></div>'}).join('')+
+   '</div>';
 }
 function wireDrop(el,files,mocks){
   if(!el)return;
@@ -1197,8 +1211,8 @@ function vDeclare(){
   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
   '<div class="field"><label>'+t('fAmt')+' (LAK)</label><input class="big num" id="fAmt" value="'+f.amt+'"'+(f.payMode==='full'?' disabled':'')+'>'+
   '<div class="hint'+(f.err?' err':'')+'">'+(f.err||(t('remainNote')+' '+fmt(remain)+' LAK'))+'</div></div>'+
-  '<div class="field"><label>'+t('fDate')+'</label><input value="04/08/2026" class="num"></div>'+
-  '<div class="field"><label>'+t('fAcct')+'</label><input value="'+e.acct+'"></div>'+
+  (f.mode==='cash'?'<div class="field"><label>'+t('fDate')+'</label><input value="04/08/2026" class="num"></div>'+
+   '<div class="field"><label>'+t('fAcct')+'</label><input value="'+e.acct+'"></div>':'')+
   '<div class="field"><label>'+t('fRef')+'</label><input class="num" value="TRX-20260804-00913"></div></div>'+
   (f.mode==='asset'?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
    '<div class="field"><label>'+t('assetCategory')+'</label><select id="assetCat">'+
@@ -1208,7 +1222,8 @@ function vDeclare(){
    ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
      return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
    '</div>':'')+
-  '<div class="field"><label>'+t('fDocs')+'</label><div class="drop" id="drop"><b>'+t('dropT')+'</b>'+t('dropS')+'</div>'+
+  '<div class="field"><label>'+t('fDocs')+'</label>'+docChecklist(f.mode)+
+  '<div class="drop" id="drop"><b>'+t('dropT')+'</b>'+(f.mode==='asset'?t('dropSVal'):t('dropS'))+'</div>'+
   '<div class="files">'+f.files.map(function(n){return '<span class="chip"><b>✓</b>'+n+'</span>'}).join('')+'</div></div>'+
   '<div class="audit"><b>'+t('auditTrail')+'</b> — '+who().n+' · 04/08/2026 09:47</div>'+
   '<div class="acts" style="margin-top:16px"><button class="btn" id="submitDeclare">'+t('submitDeclare')+'</button>'+
@@ -1728,8 +1743,11 @@ function render(){
   var v=$('#veil');if(v)v.remove();
   if(S.modal)document.body.insertAdjacentHTML('beforeend',vModal());
   bind();
-  var newBody=document.querySelector('.body');
-  if(newBody&&keepScroll)newBody.scrollTop=prevTop;
+  if(keepScroll){
+    var newBody=document.querySelector('.body');
+    if(newBody)newBody.scrollTop=prevTop;
+    setTimeout(function(){var b=document.querySelector('.body');if(b)b.scrollTop=prevTop},0);
+  }
   render._key=S.view+':'+S.mobile;
 }
 function go(v){S.view=v;S.mobile=false;S.bell=false;S.umenu=false;render()}
@@ -1841,9 +1859,6 @@ function bind(){
     ev.stopPropagation();S.read=true;render()}});
   document.querySelectorAll('[data-help]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();S.modal={type:'help'};render()}});
-  document.querySelectorAll('[data-gofinpen]').forEach(function(b){b.onclick=function(ev){
-    ev.stopPropagation();S.finTab='pen';go('fin')}});
-
   document.querySelectorAll('[data-pay]').forEach(function(b){b.onclick=function(){
     var e=S.ents.filter(function(x){return x.id===S.sel})[0];
     S.form={mode:'cash',payMode:'full',amt:fmt(e.cap-e.paid),files:[],err:''};go('declare')}});
