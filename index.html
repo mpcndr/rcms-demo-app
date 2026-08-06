@@ -384,7 +384,7 @@ lo:{
  dropSVal:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ບົດລາຍງານປະເມີນລາຄາ / ຮູບຖ່າຍຊັບສິນ / ໃບກວດສະຖານທີ່ · PDF, JPG ບໍ່ເກີນ 10MB',
  reqLbl:'ຈຳເປັນ',optLbl:'ບໍ່ບັງຄັບ',anyOneLbl:'ເລືອກຢ່າງໜ້ອຍ 1',docAssetPhoto:'ຮູບຖ່າຍຊັບສິນ',
  submittedFields:'ຂໍ້ມູນທີ່ຍື່ນຕອນປະກອບທຶນ',
- remainNote:'ຍັງເຫຼືອທີ່ຕ້ອງຊຳລະ',submitDeclare:'ຍື່ນເຂົ້າຄິວກວດສອບ',
+ remainNote:'ຍັງເຫຼືອທີ່ຕ້ອງຊຳລະ',fAmtAuto:'ຄິດໄລ່ອັດຕະໂນມັດຈາກລາຄາປະເມີນຂ້າງເທິງ',submitDeclare:'ຍື່ນເຂົ້າຄິວກວດສອບ',
  errAmt:'ກະລຸນາໃສ່ຈຳນວນເງິນ',errOver:'ຈຳນວນເກີນຍອດຄົງເຫຼືອ',errFile:'ຕ້ອງແນບເອກະສານຢ່າງໜ້ອຍ 1 ໄຟລ໌',
  errAssetField:'ກະລຸນາໃສ່ຂໍ້ມູນຊັບສິນທີ່ຈຳເປັນ (ຊ່ອງທີ່ມີ *)',
  hasPending:'ມີລາຍການລໍພິຈາລະນາຢູ່ແລ້ວ',
@@ -514,7 +514,7 @@ en:{
  dropSVal:'Attach at least 1: appraisal report / asset photos / site inspection form · PDF, JPG up to 10MB',
  reqLbl:'Required',optLbl:'Optional',anyOneLbl:'Choose at least 1',docAssetPhoto:'Asset photos',
  submittedFields:'Fields submitted at capital declaration',
- remainNote:'Outstanding balance',submitDeclare:'Submit for verification',
+ remainNote:'Outstanding balance',fAmtAuto:'Auto-calculated from the estimated price above',submitDeclare:'Submit for verification',
  errAmt:'Enter the amount',errOver:'Amount exceeds the outstanding balance',errFile:'Attach at least one supporting document',
  errAssetField:'Please fill in the required asset details (marked with *)',
  hasPending:'A submission is already awaiting a decision',
@@ -752,6 +752,7 @@ var ASSET_FIELDS={
  ]
 };
 var ASSET_REQ={land:'deedNo',building:'buildingName',car:'licenseNo',machine:'machineName'};
+var ASSET_PRICE_KEY={land:'landEstimatedPrice',building:'totalPrice',car:'estimatedPrice',machine:'estimatedPrice'};
 var MASTER={
  isic:[['0111','ກະສິກຳ, ປູກຝັງ'],['4630','ຄ້າສົ່ງ'],['4923','ຂົນສົ່ງສິນຄ້າທາງບົກ'],['1079','ຜະລິດອາຫານ'],['4100','ກໍ່ສ້າງອາຄານ'],['7911','ບໍລິການທ່ອງທ່ຽວ']],
  prov:['ນະຄອນຫຼວງວຽງຈັນ','ສະຫວັນນະເຂດ','ຈຳປາສັກ','ຫຼວງພະບາງ','ຄຳມ່ວນ'],
@@ -1268,7 +1269,7 @@ function vDetail(){
 function vDeclare(){
   var e=S.ents.filter(function(x){return x.id===S.sel})[0],f=S.form,remain=e.cap-e.paid;
   var isOwner=S.role==='owner',canPartial=e.paid===0;
-  if(!canPartial&&f.payMode!=='full'){f.payMode='full';f.amt=fmt(remain)}
+  if(!canPartial&&f.payMode!=='full'){f.payMode='full';if(f.mode==='cash')f.amt=fmt(remain)}
   var inner=
   entInfoCard(e)+
   '<div class="card"><div class="c">'+
@@ -1282,20 +1283,27 @@ function vDeclare(){
    '<div class="lang"><span'+(f.payMode==='full'?' class="on"':'')+' data-paymode="full">'+t('payFull')+'</span>'+
    '<span'+(f.payMode==='partial'?' class="on"':'')+' data-paymode="partial">'+t('payPartial')+'</span></div></div>'
    :'<div class="hint" style="margin-top:10px">'+t('payFullOnly')+'</div>')+
-  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
-  '<div class="field"><label>'+t('fAmt')+' (LAK)</label><input class="big num" id="fAmt" value="'+f.amt+'"'+(f.payMode==='full'?' disabled':'')+'>'+
-  '<div class="hint'+(f.err?' err':'')+'">'+(f.err||(t('remainNote')+' '+fmt(remain)+' LAK'))+'</div></div>'+
-  (f.mode==='cash'?'<div class="field"><label>'+t('fDate')+'</label><input value="04/08/2026" class="num"></div>'+
-   '<div class="field"><label>'+t('fAcct')+'</label><input value="'+e.acct+'"></div>':'')+
-  '<div class="field"><label>'+t('fRef')+'</label><input class="num" value="TRX-20260804-00913"></div></div>'+
-  (f.mode==='asset'?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+  (f.mode==='cash'?
+   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
+   '<div class="field"><label>'+t('fAmt')+' (LAK)</label><input class="big num" id="fAmt" value="'+f.amt+'"'+(f.payMode==='full'?' disabled':'')+'>'+
+   '<div class="hint'+(f.err?' err':'')+'">'+(f.err||(t('remainNote')+' '+fmt(remain)+' LAK'))+'</div></div>'+
+   '<div class="field"><label>'+t('fDate')+'</label><input value="04/08/2026" class="num"></div>'+
+   '<div class="field"><label>'+t('fAcct')+'</label><input value="'+e.acct+'"></div>'+
+   '<div class="field"><label>'+t('fRef')+'</label><input class="num" value="TRX-20260804-00913"></div></div>'
+   :'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
+   '<div class="field"><label>'+t('fRef')+'</label><input class="num" value="TRX-20260804-00913"></div></div>')+
+  (f.mode==='asset'?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
    '<div class="field"><label>'+t('assetCategory')+'</label><select id="assetCat">'+
    ['land','building','car','machine'].map(function(k){return '<option value="'+k+'"'+(f.assetCat===k?' selected':'')+'>'+t(k+'Type')+'</option>'}).join('')+'</select></div>'+
    '<div class="field"><label>'+t('firmNet')+'</label><select>'+MASTER.valfirms.map(function(vf){return '<option>'+vf.nm+' — '+(vf.net==='in'?t('inNet'):t('outNet'))+'</option>'}).join('')+'</select></div></div>'+
    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
    ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
      return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
-   '</div>':'')+
+   '</div>'+
+   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
+   '<div class="field"><label>'+t('fAmt')+' (LAK)</label><input class="big num" id="fAmt" value="'+f.amt+'" readonly>'+
+   '<div class="hint'+(f.err?' err':'')+'">'+(f.err||t('fAmtAuto'))+'</div></div></div>'
+   :'')+
   '<div class="field"><label>'+t('fDocs')+'</label>'+
   '<select id="docType" style="width:100%;margin-bottom:10px">'+docTypeOptions(f.mode).map(function(o){
     return '<option value="'+o.k+'"'+(f.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
@@ -1948,18 +1956,23 @@ function bind(){
     ev.stopPropagation();toast(b.dataset.soon,t('notDemo'))}});
   document.querySelectorAll('[data-mode]').forEach(function(b){b.onclick=function(){
     S.form.mode=b.dataset.mode;
-    if(S.form.mode==='asset'&&!S.form.assetCat){S.form.assetCat='land';S.form.assetVals={}}
+    if(S.form.mode==='asset'){
+      if(!S.form.assetCat){S.form.assetCat='land';S.form.assetVals={}}
+      S.form.amt=(S.form.assetVals&&S.form.assetVals[ASSET_PRICE_KEY[S.form.assetCat]])||'';
+    }
     var okKeys=docTypeOptions(S.form.mode).map(function(o){return o.k});
     S.form.files=S.form.files.filter(function(fl){return okKeys.indexOf(fl.k)>-1});
-    S.form.docType=okKeys[0];S.form.docErr='';
+    S.form.docType=okKeys[0];S.form.docErr='';S.form.err='';
     render()}});
   var dts=$('#docType');if(dts)dts.onchange=function(){S.form.docType=dts.value};
   document.querySelectorAll('[data-rmfile]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();S.form.files=S.form.files.filter(function(fl){return fl.k!==b.dataset.rmfile});
     S.form.docErr=docsErrMsg(S.form);render()}});
-  var acs=$('#assetCat');if(acs)acs.onchange=function(){S.form.assetCat=acs.value;S.form.assetVals={};render()};
+  var acs=$('#assetCat');if(acs)acs.onchange=function(){
+    S.form.assetCat=acs.value;S.form.assetVals={};S.form.amt='';S.form.err='';render()};
   document.querySelectorAll('[data-assetfield]').forEach(function(inp){inp.oninput=function(){
-    if(!S.form.assetVals)S.form.assetVals={};S.form.assetVals[inp.dataset.assetfield]=inp.value}});
+    if(!S.form.assetVals)S.form.assetVals={};S.form.assetVals[inp.dataset.assetfield]=inp.value;
+    if(inp.dataset.assetfield===ASSET_PRICE_KEY[S.form.assetCat]){S.form.amt=inp.value;S.form.err='';render()}}});
   document.querySelectorAll('[data-paymode]').forEach(function(b){b.onclick=function(){
     var e=S.ents.filter(function(x){return x.id===S.sel})[0];
     S.form.payMode=b.dataset.paymode;
