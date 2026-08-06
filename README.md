@@ -3,8 +3,18 @@
 Prototype สำหรับนำเสนอโครงการ **Registration and Capital Monitoring System (RCMS)**
 ความร่วมมือระหว่างกระทรวงอุตสาหกรรมและการค้า (MOIC) กับธนาคารส่งเสริมการเกษตร (APB)
 
-เป็นไฟล์ HTML เดี่ยว ไม่มี dependency ไม่ต้อง build เปิดด้วยเบราว์เซอร์ได้เลย
-ใช้งานได้แบบ offline (ยกเว้นฟอนต์ที่โหลดจาก Google Fonts — ถ้าไม่มีเน็ตจะ fallback เป็นฟอนต์ระบบ)
+แอปยังเป็น `index.html` ไฟล์เดียว vanilla JS เหมือนเดิม แต่ตอนนี้รันผ่าน Vite
+(ดู `package.json`) เพื่อให้ import npm package จริงได้ (เช่น Leaflet สำหรับแผนที่)
+
+```
+npm install
+npm run dev      # dev server ที่ http://localhost:5173
+npm run build    # build ไปที่ dist/
+npm run preview  # serve dist/ ไว้เช็คก่อน deploy
+```
+
+ต้องมีเน็ตตอน `npm install` ครั้งแรก และตอนรัน (โหลดฟอนต์จาก Google Fonts + tile แผนที่จาก OpenStreetMap —
+ถ้าไม่มีเน็ต ฟอนต์จะ fallback เป็นฟอนต์ระบบ แต่แผนที่จะไม่ขึ้น)
 
 ---
 

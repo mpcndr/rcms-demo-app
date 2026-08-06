@@ -111,6 +111,33 @@ select.sel{cursor:pointer;height:33px;flex:0 1 190px}
 .kpi .d{font-size:10.5px;color:var(--muted);margin-top:4px}
 @keyframes flash{0%{background:var(--m-lite)}100%{background:var(--white)}}
 .flash{animation:flash 1.5s ease-out}
+.dkpi{box-shadow:0 1px 2px rgba(8,50,77,.05)}
+.dkpi .ic{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;background:var(--m-lite);color:var(--m)}
+.dkpi.ok .ic{background:var(--okbg);color:var(--ok)}
+.dkpi.warn .ic{background:var(--warnbg);color:var(--warn)}
+.dkpi.bad .ic{background:var(--badbg);color:var(--bad)}
+.dlegend{display:flex;flex-direction:column;gap:7px;flex:1;min-width:200px}
+.dlegend .row{position:relative;overflow:hidden;display:flex;align-items:center;gap:9px;padding:8px 10px;
+  border-radius:7px;background:var(--soft);font-size:11px;transition:.15s}
+.dlegend .row:hover{background:var(--m-lite)}
+.dlegend .row .bar{position:absolute;left:0;top:0;bottom:0;opacity:.16;border-radius:7px 0 0 7px}
+.dlegend .row i{width:9px;height:9px;border-radius:3px;flex:0 0 auto;position:relative}
+.dlegend .row .nm{flex:1;color:var(--ink2);position:relative}
+.dlegend .row .ct{font-weight:600;color:var(--ink);font-family:'IBM Plex Mono',monospace;position:relative}
+.dlegend .row .pc{font-size:10px;color:var(--muted);min-width:32px;text-align:right;position:relative}
+.dstat{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-width:220px;align-content:center}
+.dstat .cell{background:var(--soft);border-radius:9px;padding:12px 14px}
+.dstat .cell .k{font-size:10.5px;color:var(--muted);margin-bottom:5px}
+.dstat .cell .v{font-size:16.5px;font-weight:600;font-family:'IBM Plex Mono',monospace;letter-spacing:-.02em}
+.hero{background:linear-gradient(135deg,var(--m-dark),var(--m));border-radius:12px;padding:22px 26px;
+  display:flex;align-items:center;gap:30px;flex-wrap:wrap;margin-bottom:16px;color:#fff}
+.hero .hpct{font-size:42px;font-weight:700;font-family:'IBM Plex Mono',monospace;letter-spacing:-.02em;line-height:1}
+.hero .hpctl{font-size:10.5px;color:#BBD3E8;text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+.hero .hstats{display:flex;gap:30px;flex-wrap:wrap;flex:1}
+.hero .hstat .k{font-size:10.5px;color:#BBD3E8;margin-bottom:5px}
+.hero .hstat .v{font-size:18px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+@media(max-width:640px){.hero{padding:18px}}
 
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
 .split{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:12px;align-items:start}
@@ -166,6 +193,13 @@ tbody tr:hover td{background:var(--m-lite)}
 .kv>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--soft)}
 .kv>div:last-child{border:0}
 .kv .k{color:var(--muted);flex-shrink:0} .kv .v{font-weight:500;text-align:right}
+.reglist{border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:1.3;min-width:280px}
+.regrow{display:flex;justify-content:space-between;gap:14px;padding:9px 13px;font-size:11.5px}
+.regrow:nth-child(even){background:var(--soft)}
+.regrow .k{color:var(--muted)} .regrow .v{font-weight:600;color:var(--ink);text-align:right}
+.regmap{flex:1;min-width:240px;display:flex;flex-direction:column;gap:6px}
+.regmap .cap{font-size:10.5px;color:var(--muted);text-align:center}
+.leaflet-container{z-index:0}
 .steps{display:flex}
 .st{flex:1;padding:10px 12px;background:var(--white);border:1px solid var(--line);font-size:11px;color:var(--muted)}
 .st:first-child{border-radius:7px 0 0 7px} .st:last-child{border-radius:0 7px 7px 0}
@@ -313,11 +347,15 @@ tbody tr:hover td{background:var(--m-lite)}
 <div class="toasts" id="toasts"></div>
 <div id="tip"></div>
 
-<script>
+<script type="module">
 /* ============================================================
    RCMS Phase 1 — rebuilt from RCMS_Phase1_Spec.md
-   Vanilla ES5, single file, no dependencies, no build step.
+   Vanilla ES5 app logic, still one HTML file. Now built with Vite
+   (see package.json) solely so real npm packages (e.g. Leaflet for
+   the map) can be imported — run `npm install` then `npm run dev`.
    ============================================================ */
+import Leaflet from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 var D={
 lo:{
  sysName:'ລະບົບຂຶ້ນທະບຽນ ແລະ ຕິດຕາມການປະກອບທຶນ',sysSub:'Registration and Capital Monitoring System',
@@ -346,7 +384,8 @@ lo:{
  myCap:'ທຶນຂອງຂ້ອຍ',notif:'ການແຈ້ງເຕືອນ',markRead:'ໝາຍວ່າອ່ານແລ້ວທັງໝົດ',noNotif:'ບໍ່ມີການແຈ້ງເຕືອນ',
 
  dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING — ລໍຊຳລະ',kPartial:'PARTIAL — ຊຳລະບາງສ່ວນ',
- kCompleted:'COMPLETED — ຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ສັດສ່ວນຕາມສະຖານະ',
+ kCompleted:'COMPLETED — ຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ວິສາຫະກິດຕາມສະຖານະ',
+ heroPaidPct:'ອັດຕາການຊຳລະລວມ',heroEnts:'ວິສາຫະກິດທັງໝົດ',
  dueSoon:'ໃກ້ຄົບກຳນົດພາຍໃນ 30 ວັນ',seeAll:'ເບິ່ງທັງໝົດ',adminUsers:'ຜູ້ໃຊ້ລະບົບ',onlineNow:'ອອນລາຍຕອນນີ້',totalUsers:'ຜູ້ໃຊ້ທັງໝົດ',
  secCapital:'ພາບລວມທຶນຈົດທະບຽນ',secUsers:'ພາບລວມຜູ້ໃຊ້ລະບົບ',orgBreakdown:'ຈຳແນກຕາມໜ່ວຍງານ',
 
@@ -361,7 +400,11 @@ lo:{
  fltNameLo:'ຊື່ວິສາຫະກິດ (ລາວ)',fltNameEn:'ຊື່ວິສາຫະກິດ (English)',
  fltRegFrom:'ວັນທີ່ຈົດທະບຽນ ຈາກ',fltRegTo:'ວັນທີ່ຈົດທະບຽນ ຫາ',fltUpdFrom:'ວັນທີ່ອັບເດດ ຈາກ',fltUpdTo:'ວັນທີ່ອັບເດດ ຫາ',
 
- tabInfo:'ຂໍ້ມູນນິຕິບຸກຄົນ',entType:'ປະເພດນິຕິບຸກຄົນ',regNo:'ເລກທະບຽນ',taxrisNo:'ເລກ TaxRis',acctNo:'ບັນຊີຮັບທຶນ',
+ entType:'ປະເພດນິຕິບຸກຄົນ',regNo:'ເລກທະບຽນ',taxrisNo:'ເລກ TaxRis',acctNo:'ບັນຊີຮັບທຶນ',
+ regCardTitle:'ລາຍລະອຽດການຈົດທະບຽນວິສາຫະກິດ',nameLoLbl:'ຊື່ວິສາຫະກິດ (ລາວ)',nameEnLbl:'ຊື່ວິສາຫະກິດ (ອັງກິດ)',
+ repLbl:'ຊື່ຜູ້ຖືທະບຽນ',regStatusLbl:'ສະຖານະ',operating:'ດຳເນີນທຸລະກິດຢູ່',districtLbl:'ເມືອງ',villageLbl:'ບ້ານ',
+ taxRegDateLbl:'ວັນທີຂຶ້ນທະບຽນອາກອນ',taxStatusLbl:'ສະຖານະອາກອນ',vatStatusLbl:'ສະຖານະອາກອນມູນຄ່າເພີ່ມ',vatRegistered:'ຂຶ້ນທະບຽນແລ້ວ',
+ mapCaption:'ແຜນທີ່ສະແດງຂອບເຂດພື້ນທີ່ຂອງວິສາຫະກິດ',mapSyncedAt:'ຂໍ້ມູນລ້າສຸດ',
  capStatus:'ສະຖານະການປະກອບທຶນ',capBreak:'ຊຳລະແລ້ວ ທຽບກັບ ຄົງເຫຼືອ',outstanding:'ຍອດຄ້າງຊຳລະ',penaltyAmt:'ຄ່າປັບສະສົມ',
  daysLeft:'ວັນທີ່ເຫຼືອກ່ອນຄົບກຳນົດ',
  stPaid:'ຢືນຢັນແລ້ວ',stDue:'ລໍຊຳລະ',
@@ -379,10 +422,11 @@ lo:{
  payMode:'ຮູບແບບການຊຳລະ',payFull:'ຊຳລະເຕັມຈຳນວນ',payPartial:'ຊຳລະບາງສ່ວນ',
  payFullOnly:'ມີການຊຳລະບາງສ່ວນມາກ່ອນແລ້ວ — ງວດຕໍ່ໄປຕ້ອງຊຳລະຍອດຄົງເຫຼືອທັງໝົດ',
  firmNet:'ບໍລິສັດປະເມີນ',inNet:'In-network',outNet:'Out-of-network (ບໍ່ມີ login — Maker ຄີຍ໌ແທນ)',
+ outNetShort:'Out-of-network',firmNameLbl:'ຊື່ບໍລິສັດປະເມີນ',
  fAmt:'ຈຳນວນເງິນ',fDate:'ວັນທີຊຳລະ',fAcct:'ບັນຊີຮັບເງິນ',fRef:'ເລກທີ່ອ້າງອີງ',fDocs:'ເອກະສານຫຼັກຖານ',
  dropT:'ກົດເພື່ອແນບໄຟລ໌ ຫຼື ລາກໄຟລ໌ມາວາງທີ່ນີ້',dropS:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ໃບນຳຝາກ / ສະລິບໂອນ / ໜັງສືຢືນຢັນ · PDF, JPG ບໍ່ເກີນ 10MB',
  dropSVal:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ບົດລາຍງານປະເມີນລາຄາ / ຮູບຖ່າຍຊັບສິນ / ໃບກວດສະຖານທີ່ · PDF, JPG ບໍ່ເກີນ 10MB',
- reqLbl:'ຈຳເປັນ',optLbl:'ບໍ່ບັງຄັບ',anyOneLbl:'ເລືອກຢ່າງໜ້ອຍ 1',docAssetPhoto:'ຮູບຖ່າຍຊັບສິນ',
+ reqLbl:'ຈຳເປັນ',optLbl:'ບໍ່ບັງຄັບ',anyOneLbl:'ເລືອກຢ່າງໜ້ອຍ 1',docAssetPhoto:'ຮູບຖ່າຍຊັບສິນ',docSiteInspect:'ໃບກວດສະຖານທີ່',
  submittedFields:'ຂໍ້ມູນທີ່ຍື່ນຕອນປະກອບທຶນ',
  remainNote:'ຍັງເຫຼືອທີ່ຕ້ອງຊຳລະ',submitDeclare:'ຍື່ນເຂົ້າຄິວກວດສອບ',
  errAmt:'ກະລຸນາໃສ່ຈຳນວນເງິນ',errOver:'ຈຳນວນເກີນຍອດຄົງເຫຼືອ',errFile:'ຕ້ອງແນບເອກະສານຢ່າງໜ້ອຍ 1 ໄຟລ໌',
@@ -476,7 +520,8 @@ en:{
  myCap:'My Capital',notif:'Notifications',markRead:'Mark all as read',noNotif:'No notifications',
 
  dashTitle:'Registered Capital Contribution Overview',kPending:'PENDING — awaiting payment',kPartial:'PARTIAL — partly paid',
- kCompleted:'COMPLETED — paid in full',kOverdue:'OVERDUE — past deadline',byStatus:'Breakdown by status',
+ kCompleted:'COMPLETED — paid in full',kOverdue:'OVERDUE — past deadline',byStatus:'Enterprises by status',
+ heroPaidPct:'Overall paid rate',heroEnts:'Enterprises tracked',
  dueSoon:'Due within the next 30 days',seeAll:'View all',adminUsers:'System users',onlineNow:'Online now',totalUsers:'Total users',
  secCapital:'Capital Overview',secUsers:'System Users Overview',orgBreakdown:'Breakdown by Organization',
 
@@ -491,7 +536,11 @@ en:{
  fltNameLo:'Enterprise name (Lao)',fltNameEn:'Enterprise name (English)',
  fltRegFrom:'Registration date from',fltRegTo:'Registration date to',fltUpdFrom:'Last update from',fltUpdTo:'Last update to',
 
- tabInfo:'Entity Information',entType:'Entity type',regNo:'Registration no.',taxrisNo:'TaxRis no.',acctNo:'Capital account',
+ entType:'Entity type',regNo:'Registration no.',taxrisNo:'TaxRis no.',acctNo:'Capital account',
+ regCardTitle:'Enterprise Registration Details',nameLoLbl:'Enterprise name (Lao)',nameEnLbl:'Enterprise name (English)',
+ repLbl:'Name of registration holder',regStatusLbl:'Status',operating:'Operating',districtLbl:'District',villageLbl:'Village',
+ taxRegDateLbl:'Tax registration date',taxStatusLbl:'Tax status',vatStatusLbl:'VAT status',vatRegistered:'Registered',
+ mapCaption:'Map showing the enterprise location',mapSyncedAt:'Last synced',
  capStatus:'Capital contribution status',capBreak:'Paid vs outstanding',outstanding:'Outstanding balance',penaltyAmt:'Accrued penalty',
  daysLeft:'Days left before the deadline',
  stPaid:'Confirmed',stDue:'Awaiting payment',
@@ -509,10 +558,11 @@ en:{
  payMode:'Payment type',payFull:'Pay in full',payPartial:'Pay partially',
  payFullOnly:'A partial payment was already made — the next instalment must settle the full outstanding balance',
  firmNet:'Valuation firm',inNet:'In-network',outNet:'Out-of-network (no login — Maker keys it in)',
+ outNetShort:'Out-of-network',firmNameLbl:'Valuation firm name',
  fAmt:'Amount',fDate:'Payment date',fAcct:'Receiving account',fRef:'Transaction reference',fDocs:'Supporting documents',
  dropT:'Click to attach, or drag and drop files here',dropS:'Attach at least 1: deposit slip / transfer receipt / confirmation letter · PDF, JPG up to 10MB',
  dropSVal:'Attach at least 1: appraisal report / asset photos / site inspection form · PDF, JPG up to 10MB',
- reqLbl:'Required',optLbl:'Optional',anyOneLbl:'Choose at least 1',docAssetPhoto:'Asset photos',
+ reqLbl:'Required',optLbl:'Optional',anyOneLbl:'Choose at least 1',docAssetPhoto:'Asset photos',docSiteInspect:'Site inspection form',
  submittedFields:'Fields submitted at capital declaration',
  remainNote:'Outstanding balance',submitDeclare:'Submit for verification',
  errAmt:'Enter the amount',errOver:'Amount exceeds the outstanding balance',errFile:'Attach at least one supporting document',
@@ -591,7 +641,7 @@ var parseD=function(s){if(!s)return 0;var p=s.split('/');return Number(p[2]+p[1]
 function lastUpd(e){var d=e.reg;e.hist.forEach(function(h){if(parseD(h.d)>parseD(d))d=h.d});return d}
 var ST={COMPLETED:['kCompleted','p-ok'],PARTIAL:['kPartial','p-warn'],PENDING:['kPending','p-idle'],OVERDUE:['kOverdue','p-bad']};
 function stName(s){return ST[s]?t(ST[s][0]).split(' — ')[1]||t(ST[s][0]):s}
-function pill(s){var x=ST[s]||['','p-idle'];return '<span class="pill '+x[1]+'">'+stName(s)+'<i>'+s+'</i></span>'}
+function pill(s){var x=ST[s]||['','p-idle'];return '<span class="pill '+x[1]+'">'+stName(s)+'</span>'}
 var HST={complete:['hstComplete','p-ok'],pending:['hstPending','p-warn'],returned:['hstReturned','p-bad']};
 function histPill(s){var x=HST[s]||HST.complete;return '<span class="pill '+x[1]+'">'+t(x[0])+'</span>'}
 function modeLbl(m){return t(m==='cash'?'modeCash':'modeAsset')}
@@ -624,19 +674,51 @@ function donutSegs(segs,centerLabel){
    '<text x="64" y="60" text-anchor="middle" font-size="19" font-weight="700" fill="var(--ink)" font-family="IBM Plex Mono,monospace">'+fmt(tot)+'</text>'+
    '<text x="64" y="76" text-anchor="middle" font-size="8.5" fill="var(--muted)">'+(centerLabel||'')+'</text></svg>';
 }
+function donutLegend(segs){
+  var tot=segs.reduce(function(a,s){return a+s[0]},0)||1;
+  return '<div class="dlegend">'+segs.map(function(s){
+    var pc=s[0]/tot*100;
+    return '<div class="row"><div class="bar" style="width:'+pc.toFixed(1)+'%;background:'+s[1]+'"></div>'+
+    '<i style="background:'+s[1]+'"></i><span class="nm">'+s[2]+'</span>'+
+    '<span class="ct">'+fmt(s[0])+'</span><span class="pc">'+pc.toFixed(0)+'%</span></div>'}).join('')+'</div>';
+}
+var KPI_ICON={PENDING:'◷',PARTIAL:'◐',COMPLETED:'✓',OVERDUE:'⚠'};
+function kpiTile(cls,icon,label,val,tab){
+  return '<div class="kpi dkpi '+cls+'"'+(tab?' data-tab="'+tab+'"':'')+'><div class="ic">'+icon+'</div>'+
+   '<div class="k">'+label+'</div><div class="v num">'+val+'</div></div>';
+}
+function capHero(){
+  var totalCap=0,totalPaid=0;
+  S.ents.forEach(function(e){totalCap+=e.cap;totalPaid+=e.paid});
+  var pct=totalCap?Math.round(totalPaid/totalCap*100):0;
+  return '<div class="hero"><div><div class="hpct num">'+pct+'%</div><div class="hpctl">'+t('heroPaidPct')+'</div></div>'+
+   '<div class="hstats">'+
+   '<div class="hstat"><div class="k">'+t('heroEnts')+'</div><div class="v">'+fmt(S.ents.length)+'</div></div>'+
+   '<div class="hstat"><div class="k">'+t('cCap')+'</div><div class="v">'+fmt(totalCap)+' LAK</div></div>'+
+   '<div class="hstat"><div class="k">'+t('cPaid')+'</div><div class="v">'+fmt(totalPaid)+' LAK</div></div>'+
+   '</div></div>';
+}
 function barChart(labels,values,color,unit){
-  var max=Math.max.apply(null,values)||1,W=760,H=140,PL=6,PR=6,step=(W-PL-PR)/labels.length;
+  var max=Math.max.apply(null,values)||1,W=760,H=150,PL=6,PR=6,PT=20,BASE=H-24,step=(W-PL-PR)/labels.length;
+  var grid=[0.25,0.5,0.75,1].map(function(f){var y=BASE-(BASE-PT)*f;
+    return '<line x1="0" y1="'+y.toFixed(1)+'" x2="'+W+'" y2="'+y.toFixed(1)+'" stroke="var(--line)" stroke-width="1" stroke-dasharray="2 3"/>'}).join('');
+  var peak=values.indexOf(max);
   var bars=values.map(function(v,i){
-    var bw=step*0.56,x=PL+i*step+(step-bw)/2,h=v/max*(H-24);
-    return '<rect class="hv" x="'+x.toFixed(1)+'" y="'+(H-24-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" '+
-      'fill="'+color+'" rx="3" data-tip="'+labels[i]+'|'+fmt(v)+' '+(unit||'')+'"></rect>'+
+    var bw=step*0.56,x=PL+i*step+(step-bw)/2,h=v/max*(BASE-PT);
+    return '<rect class="hv" x="'+x.toFixed(1)+'" y="'+(BASE-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" '+
+      'fill="url(#barGrad)" rx="4" data-tip="'+labels[i]+'|'+fmt(v)+' '+(unit||'')+'"></rect>'+
+      '<text x="'+(x+bw/2).toFixed(1)+'" y="'+(BASE-h-6).toFixed(1)+'" text-anchor="middle" font-size="9.5" '+
+      'font-family="IBM Plex Mono,monospace" fill="'+(i===peak?color:'var(--muted)')+'" font-weight="'+(i===peak?'700':'400')+'">'+fmt(v)+'</text>'+
       '<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10" fill="var(--muted)">'+labels[i]+'</text>'}).join('');
-  return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:150px"><line x1="0" y1="'+(H-24)+'" x2="'+W+'" y2="'+(H-24)+'" stroke="var(--line)"/>'+bars+'</svg>';
+  return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:160px">'+
+   '<defs><linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">'+
+   '<stop offset="0%" stop-color="'+color+'"/><stop offset="100%" stop-color="'+color+'" stop-opacity=".5"/></linearGradient></defs>'+
+   grid+'<line x1="0" y1="'+BASE+'" x2="'+W+'" y2="'+BASE+'" stroke="var(--line)"/>'+bars+'</svg>';
 }
 
 /* ================= accounts (RBAC per spec §2) ================= */
 var ACCTS=[
- {id:'owner',user:'lao.agri',nm:'ລາວກະສິກຳ ພັດທະນາ',rl:{lo:'ຜູ້ປະກອບການ · Owner',en:'Business owner · Owner'},av:'ລກ'},
+ {id:'owner',user:'lao.agri',nm:'ອິນຟີນິເທັກ',rl:{lo:'ຜູ້ປະກອບການ · Owner',en:'Business owner · Owner'},av:'IT'},
  {id:'maker',user:'khamla.p',nm:'ນ. ຄຳລາ',rl:{lo:'ພະນັກງານໜ້າເຄົາເຕີ APB · Maker',en:'APB counter officer · Maker'},av:'ຄລ'},
  {id:'valfirm',user:'lao.valuation',nm:'Lao Valuation Co., Ltd.',rl:{lo:'ບໍລິສັດປະເມີນ · In-network Firm',en:'Valuation firm · In-network'},av:'LV'},
  {id:'checker',user:'sivilay.a',nm:'ນ. ສີວິໄລ',rl:{lo:'ເຈົ້າໜ້າທີ່ກວດສອບ · Checker',en:'Inspection officer · Checker'},av:'ສວ'},
@@ -650,38 +732,45 @@ function matchAcct(){var u=(S.loginUser||'').trim().toLowerCase();return ACCTS.f
 
 /* ================= seed data ================= */
 function seedEnts(){return[
- {id:'ELN-2025-1001',name:'ລາວກະສິກຳ ພັດທະນາ ຈຳກັດ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ນະຄອນຫຼວງວຽງຈັນ',en:'Vientiane Capital'},isic:'0111',
-  reg:'18/08/2025',due:'18/08/2026',cap:1000000000,paid:300000000,status:'PARTIAL',acct:'APB 010-2-88471-6',taxris:'206448711',
+ {id:'ELN-2025-1001',name:'ບໍລິສັດ ອິນຟີນິເທັກ ຈຳກັດຜູ້ດຽວ',nameEn:'Infinitech Sole Co., Ltd',rep:'ທ່ານ Chat Wattanasirikiat',
+  village:{lo:'ບ້ານຫາຍໂສກ',en:'Ban Hai Sok'},lat:17.9583196,lng:102.5931644,taxRegDate:'12/10/2022',
+  type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ນະຄອນຫຼວງວຽງຈັນ',en:'Vientiane Capital'},isic:'0111',
+  reg:'16/10/2024',due:'18/08/2026',cap:1000000000,paid:300000000,status:'PARTIAL',acct:'APB 010-2-88471-6',taxris:'741202588000',
   collateral:[{type:'land',label:{lo:'ທີ່ດິນ 2 ຕອນ',en:'2 land plots'},detail:{lo:'ເນື້ອທີ່ 1.5 ha · ໃບຕາດິນເລກທີ 4471-A, 4471-B',en:'Area 1.5 ha · Land title nos. 4471-A, 4471-B'},value:700000000,
    fields:{deedNo:'4471-A, 4471-B',landParcelNo:'PL-4471',totalArea:'15,000',landEstimatedPrice:'700,000,000'}}],
   insts:[{no:1,amt:300000000,state:'paid',meta:{lo:'ເງິນສົດ · ໂອນເຂົ້າບັນຊີ APB 010-2-88471-6 · ຢືນຢັນໂດຍ Checker 02/11/2025',en:'Cash · transferred to APB 010-2-88471-6 · confirmed by the Checker on 02/11/2025'}},
          {no:2,amt:700000000,state:'due',meta:{lo:'ແຈ້ງເປັນຊັບສິນ (ທີ່ດິນ 2 ຕອນ) · ລໍຜົນປະເມີນ',en:'Declared as assets (2 land plots) · awaiting appraisal'}}],
   hist:[{d:'02/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1 (ເງິນສົດ)',en:'Capital instalment 1 received (cash)'},m:'cash',v:300000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter',st:'complete'}]},
- {id:'ELN-2025-1002',name:'ວຽງຈັນ ການຄ້າ',type:{lo:'ຫຸ້ນສ່ວນ',en:'Partnership'},prov:{lo:'ນະຄອນຫຼວງວຽງຈັນ',en:'Vientiane Capital'},isic:'4630',
+ {id:'ELN-2025-1002',name:'ວຽງຈັນ ການຄ້າ',nameEn:'Vientiane Trading',rep:'ນ. ວັນນະລີ ສີສະຫວາດ',
+  type:{lo:'ຫຸ້ນສ່ວນ',en:'Partnership'},prov:{lo:'ນະຄອນຫຼວງວຽງຈັນ',en:'Vientiane Capital'},isic:'4630',
   reg:'22/08/2025',due:'22/08/2026',cap:450000000,paid:0,status:'PENDING',acct:'APB 010-2-90233-1',taxris:'207451201',collateral:[],
   insts:[{no:1,amt:135000000,state:'due',meta:{lo:'ຍັງບໍ່ມີການຊຳລະ',en:'No payment received yet'}},
          {no:2,amt:315000000,state:'wait',meta:{lo:'ລໍຊຳລະງວດທີ 1 ກ່ອນ',en:'Waiting on instalment 1'}}],hist:[]},
- {id:'ELN-2025-1003',name:'ສະຫວັນ ໂລຈິສຕິກ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ສະຫວັນນະເຂດ',en:'Savannakhet'},isic:'4923',
+ {id:'ELN-2025-1003',name:'ສະຫວັນ ໂລຈິສຕິກ',nameEn:'Savan Logistics Co., Ltd.',rep:'ທ. ພອນສະຫວັນ ແກ້ວມະນີ',
+  type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ສະຫວັນນະເຂດ',en:'Savannakhet'},isic:'4923',
   reg:'29/08/2025',due:'29/08/2026',cap:2800000000,paid:1260000000,status:'PARTIAL',acct:'APB 021-4-11902-3',taxris:'206649931',
   collateral:[{type:'building',label:{lo:'ອາຄານສາງສິນຄ້າ',en:'Warehouse building'},detail:{lo:'ພື້ນທີ່ໃຊ້ສອຍ 2,400 ຕ.ມ. · ສ້າງປີ 2018 · ເລກທະບຽນອາຄານ 330-WB-12',en:'Usage area 2,400 sq.m · built 2018 · building registration no. 330-WB-12'},value:1540000000,
    fields:{buildingName:'Savan Logistics Warehouse',noOfFloor:'1',usageArea:'2,400',estimatedYear:'2018',totalPrice:'1,540,000,000'}}],
   insts:[{no:1,amt:1260000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 15/12/2025',en:'Confirmed 15/12/2025'}},
          {no:2,amt:1540000000,state:'due',meta:{lo:'ຍັງບໍ່ແຈ້ງຮູບແບບການຊຳລະ',en:'Payment form not yet declared'}}],
   hist:[{d:'15/12/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1260000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter',st:'complete'}]},
- {id:'ELN-2024-1004',name:'ຈຳປາສັກ ອາຫານ ຈຳກັດ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຈຳປາສັກ',en:'Champasak'},isic:'1079',
+ {id:'ELN-2024-1004',name:'ຈຳປາສັກ ອາຫານ ຈຳກັດ',nameEn:'Champasak Food Co., Ltd.',rep:'ນ. ສຸກສະຫວັນ ບົວທອງ',
+  type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຈຳປາສັກ',en:'Champasak'},isic:'1079',
   reg:'12/06/2025',due:'12/06/2026',cap:760000000,paid:228000000,status:'OVERDUE',acct:'APB 033-1-55210-8',taxris:'205433181',collateral:[],
   insts:[{no:1,amt:228000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 20/09/2025',en:'Confirmed 20/09/2025'}},
          {no:2,amt:532000000,state:'over',meta:{lo:'ເກີນກຳນົດ 53 ວັນ · ຄ່າປັບສະສົມ <b style="color:var(--bad)">15,960,000 ກີບ</b>',en:'53 days overdue · accrued penalty <b style="color:var(--bad)">15,960,000 LAK</b>'}}],
   hist:[{d:'20/09/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:228000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter',st:'complete'},
         {d:'13/06/2026',a:{lo:'ເຂົ້າສະຖານະເກີນກຳນົດ (ອັດຕະໂນມັດ)',en:'Flagged overdue (automatic)'},m:'',v:0,u:'System',f:'—',ch:'',st:'complete'}]},
- {id:'ELN-2025-1005',name:'ຫຼວງພະບາງ ທ່ອງທ່ຽວ',type:{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},prov:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},isic:'7911',
+ {id:'ELN-2025-1005',name:'ຫຼວງພະບາງ ທ່ອງທ່ຽວ',nameEn:'Luang Prabang Tourism',rep:'ທ. ບຸນເຮັງ ວິໄລວົງ',
+  type:{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},prov:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},isic:'7911',
   reg:'31/08/2025',due:'31/08/2026',cap:180000000,paid:180000000,status:'COMPLETED',acct:'APB 044-2-77410-5',taxris:'207450441',
   collateral:[{type:'land',label:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},detail:{lo:'ເນື້ອທີ່ 0.4 ha · ໃບຕາດິນເລກທີ 5518-C',en:'Area 0.4 ha · Land title no. 5518-C'},value:180000000,
    fields:{deedNo:'5518-C',landParcelNo:'PL-5518',totalArea:'4,000',landEstimatedPrice:'180,000,000'}}],
   insts:[{no:1,amt:180000000,state:'paid',meta:{lo:'ຊຳລະຄັ້ງດຽວເຕັມຈຳນວນ · ອອກໃບຢັ້ງຢືນແລ້ວ',en:'Paid in full in one transfer · certificate issued'}},
          {no:2,amt:0,state:'na',meta:{lo:'',en:''}}],
   hist:[{d:'05/09/2025',a:{lo:'ຊຳລະທຶນເຕັມຈຳນວນ',en:'Capital paid in full'},m:'cash',v:180000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter',st:'complete'}]},
- {id:'ELN-2025-1006',name:'ຄຳມ່ວນ ກໍ່ສ້າງ ຈຳກັດ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຄຳມ່ວນ',en:'Khammouane'},isic:'4100',
+ {id:'ELN-2025-1006',name:'ຄຳມ່ວນ ກໍ່ສ້າງ ຈຳກັດ',nameEn:'Khammouane Construction Co., Ltd.',rep:'ທ. ສົມພອນ ໄຊຍະວົງ',
+  type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຄຳມ່ວນ',en:'Khammouane'},isic:'4100',
   reg:'04/09/2025',due:'04/09/2026',cap:5400000000,paid:1620000000,status:'PARTIAL',acct:'APB 052-3-30188-7',taxris:'206447021',
   collateral:[{type:'machine',label:{lo:'ເຄື່ອງຈັກຜະລິດວັດສະດຸກໍ່ສ້າງ 6 ລາຍການ',en:'6 construction-material machinery items'},detail:{lo:'ຜູ້ຜະລິດ XCMG · ກຳລັງຜະລິດ 50 ໜ່ວຍ/ຊມ',en:'Manufacturer XCMG · Capacity 50 units/hr'},value:3780000000,
    fields:{machineName:'XCMG Batching Plant Set (6 units)',machinePledgeType:'Chattel mortgage',manufactory:'XCMG',capacity:'50 units/hr',estimatedPrice:'3,780,000,000'}}],
@@ -760,6 +849,13 @@ var MASTER={
  doctype:[{lo:'ໃບນຳຝາກ',en:'Deposit slip'},{lo:'ສະລິບໂອນ',en:'Transfer receipt'},{lo:'ໜັງສືຢືນຢັນ',en:'Confirmation letter'},{lo:'ບົດລາຍງານປະເມີນ',en:'Valuation report'}],
  valfirms:[{nm:'Lao Valuation Co., Ltd.',net:'in'},{nm:'Mekong Appraisal',net:'in'},{nm:'Indochina Asset',net:'out'}]
 };
+var PROV_META={
+ 'ນະຄອນຫຼວງວຽງຈັນ':{lat:17.9757,lng:102.6331,district:{lo:'ຈັນທະບູລີ',en:'Chanthabuly'},village:{lo:'ບ້ານໂສກ',en:'Ban Sok'}},
+ 'ສະຫວັນນະເຂດ':{lat:16.5570,lng:104.7500,district:{lo:'ໄກສອນ ພົມວິຫານ',en:'Kaysone Phomvihane'},village:{lo:'ບ້ານທ່າແຮ່',en:'Ban Thahae'}},
+ 'ຈຳປາສັກ':{lat:15.1202,lng:105.7988,district:{lo:'ປາກເຊ',en:'Pakse'},village:{lo:'ບ້ານວັດຫຼວງ',en:'Ban Vat Luang'}},
+ 'ຫຼວງພະບາງ':{lat:19.8856,lng:102.1347,district:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},village:{lo:'ບ້ານວັດແສນ',en:'Ban Vat Sene'}},
+ 'ຄຳມ່ວນ':{lat:17.4085,lng:104.8078,district:{lo:'ທ່າແຂກ',en:'Thakhek'},village:{lo:'ບ້ານທ່າແຂກ',en:'Ban Thakhek'}}
+};
 
 /* TOR §5.1/5.2 real fee schedule — decree 002/ປປທ 17/06/2021 */
 var FEES={
@@ -804,7 +900,7 @@ function reset(){
      ents:seedEnts(),invs:seedInv(),tasks:[],taskI:0,form:null,modal:null,notif:[],
      read:false,bell:false,umenu:false,setTab:'fee',finTab:'fee',certCopy:false,
      valjobs:JSON.parse(JSON.stringify(VALJOBS)),users:JSON.parse(JSON.stringify(USERS_SEED)),
-     backReasonInt:'',backReasonExt:'',loginStep:'cred',loginUser:'',loginPass:'',loginErr:'',tx:null,valI:0,valForm:{val:null,files:[],err:''},
+     backReasonInt:'',backReasonExt:'',loginStep:'cred',loginUser:'',loginPass:'',loginErr:'',tx:null,valI:0,valForm:{val:null,files:[],err:'',docType:'valReport',docErr:''},
      adv:{regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''}};
   render();
 }
@@ -812,7 +908,7 @@ function clearCache(){
   S.ents=seedEnts();S.invs=seedInv();S.tasks=[];S.taskI=0;S.form=null;S.modal=null;S.notif=[];
   S.read=false;S.bell=false;S.umenu=false;S.certCopy=false;
   S.valjobs=JSON.parse(JSON.stringify(VALJOBS));S.users=JSON.parse(JSON.stringify(USERS_SEED));
-  S.backReasonInt='';S.backReasonExt='';S.tx=null;S.valI=0;S.valForm={val:null,files:[],err:''};
+  S.backReasonInt='';S.backReasonExt='';S.tx=null;S.valI=0;S.valForm={val:null,files:[],err:'',docType:'valReport',docErr:''};
   S.adv={regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''};
   if(S.view==='declare')S.view=S.sel?'detail':'dash';
   render();
@@ -896,9 +992,6 @@ function vLogin(){
    '<div class="field"><label>'+t('loginUser')+'</label>'+
    '<input id="loginUser" list="userlist" autocomplete="off" placeholder="lao.agri" value="'+esc(S.loginUser||'')+'"></div>'+
    '<datalist id="userlist">'+dl+'</datalist>'+
-   (matched?'<div class="acct on" style="margin-bottom:14px;cursor:default"><div class="av">'+matched.av+'</div>'+
-     '<div><div class="nm">'+matched.nm+'</div><div class="rl">'+(matched.rl[lang]||matched.rl.en)+'</div></div>'+
-     '<div class="usr">'+matched.user+'</div></div>':'')+
    '<div class="field"><label>'+t('loginPass')+'</label>'+
    '<input id="loginPass" type="password" placeholder="••••••••" value="'+esc(S.loginPass||'')+'"></div>'+
    (S.loginErr?'<div class="hint err" style="margin:-8px 0 12px">'+S.loginErr+'</div>':'')+
@@ -941,25 +1034,19 @@ function vDash(){
 
 function vStaffDash(){
   var c=counts();
-  var segs=[[c.COMPLETED,'#1B6E45',t('kCompleted')],[c.PARTIAL,'#B06A05',t('kPartial')],
-    [c.PENDING,'#8E9CB0',t('kPending')],[c.OVERDUE,'#B03127',t('kOverdue')]];
+  var segs=[[c.COMPLETED,'#1B6E45',stName('COMPLETED')],[c.PARTIAL,'#B06A05',stName('PARTIAL')],
+    [c.PENDING,'#8E9CB0',stName('PENDING')],[c.OVERDUE,'#B03127',stName('OVERDUE')]];
   var dueSoon=S.ents.filter(function(e){return e.status!=='COMPLETED'}).slice(0,5);
   var rows=dueSoon.map(function(e){
     return '<tr data-open="'+e.id+'"><td style="padding-left:16px"><span class="co">'+e.name+'<small>'+e.id+'</small></span></td>'+
     '<td>'+L(e.type)+'</td><td class="num">'+e.due+'</td><td class="r num">'+fmt(e.cap)+'</td>'+
     '<td class="r" style="padding-right:16px">'+pill(e.status)+'</td></tr>'}).join('');
   var mm=MOCK_MONTHS[lang]||MOCK_MONTHS.en;
-  var inner='<div class="kpis">'+
-   '<div class="kpi warn" data-tab="PENDING"><div class="k">'+t('kPending')+'</div><div class="v num">'+c.PENDING+'</div></div>'+
-   '<div class="kpi warn" data-tab="PARTIAL"><div class="k">'+t('kPartial')+'</div><div class="v num">'+c.PARTIAL+'</div></div>'+
-   '<div class="kpi ok" data-tab="COMPLETED"><div class="k">'+t('kCompleted')+'</div><div class="v num">'+c.COMPLETED+'</div></div>'+
-   '<div class="kpi bad" data-tab="OVERDUE"><div class="k">'+t('kOverdue')+'</div><div class="v num">'+c.OVERDUE+'</div></div></div>'+
-   '<div class="grid3" style="grid-template-columns:1fr 1fr">'+
+  var inner=capHero()+
+   '<div class="grid3" style="grid-template-columns:3fr 7fr">'+
    '<div class="card"><div class="h"><h3>'+t('byStatus')+'</h3></div><div class="c">'+
-   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(segs,t('cEnt'))+
-   '<div class="legend" style="flex-direction:column;gap:8px">'+
-   segs.map(function(s){return '<span><i style="background:'+s[1]+'"></i>'+s[2]+' <b class="num">'+fmt(s[0])+'</b></span>'}).join('')+
-   '</div></div></div></div>'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(segs,t('cEnt'))+donutLegend(segs)+
+   '</div></div></div>'+
    '<div class="card"><div class="h"><h3>'+t('overdueTrend')+'</h3></div><div class="c">'+
    barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
    '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
@@ -976,8 +1063,8 @@ function sechead(txt,first){
 }
 function vAdminDash(){
   var c=counts();
-  var capSegs=[[c.COMPLETED,'#1B6E45',t('kCompleted')],[c.PARTIAL,'#B06A05',t('kPartial')],
-    [c.PENDING,'#8E9CB0',t('kPending')],[c.OVERDUE,'#B03127',t('kOverdue')]];
+  var capSegs=[[c.COMPLETED,'#1B6E45',stName('COMPLETED')],[c.PARTIAL,'#B06A05',stName('PARTIAL')],
+    [c.PENDING,'#8E9CB0',stName('PENDING')],[c.OVERDUE,'#B03127',stName('OVERDUE')]];
   var mm=MOCK_MONTHS[lang]||MOCK_MONTHS.en;
   var online=S.users.filter(function(u){return u.online}).length;
   var byOrg={};S.users.forEach(function(u){byOrg[u.org]=(byOrg[u.org]||0)+1});
@@ -989,32 +1076,24 @@ function vAdminDash(){
     '<td class="r num" style="color:var(--ok)">'+onl+'</td>'+
     '<td class="r num" style="padding-right:16px;color:'+(lck?'var(--bad)':'var(--muted)')+'">'+lck+'</td></tr>'}).join('');
   var inner=
+   capHero()+
    sechead(t('secCapital'),true)+
-   '<div class="kpis">'+
-   '<div class="kpi warn" data-tab="PENDING"><div class="k">'+t('kPending')+'</div><div class="v num">'+c.PENDING+'</div></div>'+
-   '<div class="kpi warn" data-tab="PARTIAL"><div class="k">'+t('kPartial')+'</div><div class="v num">'+c.PARTIAL+'</div></div>'+
-   '<div class="kpi ok" data-tab="COMPLETED"><div class="k">'+t('kCompleted')+'</div><div class="v num">'+c.COMPLETED+'</div></div>'+
-   '<div class="kpi bad" data-tab="OVERDUE"><div class="k">'+t('kOverdue')+'</div><div class="v num">'+c.OVERDUE+'</div></div></div>'+
-   '<div class="grid3" style="grid-template-columns:1fr 1fr;margin-top:12px">'+
+   '<div class="grid3" style="grid-template-columns:3fr 7fr">'+
    '<div class="card"><div class="h"><h3>'+t('byStatus')+'</h3></div><div class="c">'+
-   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(capSegs,t('cEnt'))+
-   '<div class="legend" style="flex-direction:column;gap:8px">'+
-   capSegs.map(function(s){return '<span><i style="background:'+s[1]+'"></i>'+s[2]+' <b class="num">'+fmt(s[0])+'</b></span>'}).join('')+
-   '</div></div></div></div>'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(capSegs,t('cEnt'))+donutLegend(capSegs)+
+   '</div></div></div>'+
    '<div class="card"><div class="h"><h3>'+t('overdueTrend')+'</h3></div><div class="c">'+
    barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
    '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
    sechead(t('secUsers'))+
    '<div class="kpis" style="grid-template-columns:repeat(3,1fr)">'+
-   '<div class="kpi"><div class="k">'+t('totalUsers')+'</div><div class="v num">'+S.users.length+'</div></div>'+
-   '<div class="kpi ok"><div class="k">'+t('onlineNow')+'</div><div class="v num">'+online+'</div></div>'+
-   '<div class="kpi warn"><div class="k">'+t('uLocked')+'</div><div class="v num">'+S.users.filter(function(u){return !u.active}).length+'</div></div></div>'+
+   kpiTile('','◈',t('totalUsers'),S.users.length)+
+   kpiTile('ok','✓',t('onlineNow'),online)+
+   kpiTile('warn',KPI_ICON.OVERDUE,t('uLocked'),S.users.filter(function(u){return !u.active}).length)+'</div>'+
    '<div class="grid3" style="grid-template-columns:1fr 1fr;margin-top:12px">'+
    '<div class="card"><div class="h"><h3>'+t('adminUsers')+'</h3></div><div class="c">'+
-   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(userSegs,t('totalUsers'))+
-   '<div class="legend" style="flex-direction:column;gap:8px">'+
-   userSegs.map(function(s){return '<span><i style="background:'+s[1]+'"></i>'+s[2]+' <b class="num">'+fmt(s[0])+'</b></span>'}).join('')+
-   '</div></div></div></div>'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(userSegs,t('totalUsers'))+donutLegend(userSegs)+
+   '</div></div></div>'+
    '<div class="card"><div class="h"><h3>'+t('orgBreakdown')+'</h3></div><div class="c" style="padding:10px 0 0">'+
    '<table><thead><tr><th style="padding-left:16px">'+t('uOrg')+'</th><th class="r">'+t('totalUsers')+'</th>'+
    '<th class="r">'+t('onlineNow')+'</th><th class="r" style="padding-right:16px">'+t('uLocked')+'</th></tr></thead>'+
@@ -1034,16 +1113,17 @@ function vOwnerDash(){
   var days=daysLeft(e.due);
   var payBtn=(remain>0)?(pend?'<button class="btn ghost" disabled>'+t('waitingOn')+' '+(pend.stage==='checker'?t('stageChecker'):t('stageApprover'))+'…</button>'
     :'<button class="btn" data-selfpay="1">'+t('selfDeclare')+'</button>'):'';
-  var capStatusCard='<div class="card" style="height:100%"><div class="h"><h3>'+t('capStatus')+'</h3></div>'+
+  var capStatusCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('capStatus')+'</h3></div>'+
    '<div class="c"><div class="donutrow">'+donutPct(pct,'#1B6E45')+
-   '<div style="flex:1;min-width:220px"><div class="kv">'+
-   '<div><span class="k">'+t('cCap')+'</span><span class="v num">'+fmt(e.cap)+' LAK</span></div>'+
-   '<div><span class="k">'+t('cPaid')+'</span><span class="v num" style="color:var(--ok)">'+fmt(e.paid)+' LAK</span></div>'+
-   '<div><span class="k">'+(remain>0?t('bizRemain'):t('bizDone'))+'</span><span class="v num" style="color:'+(remain>0?'var(--warn)':'var(--ok)')+'">'+fmt(remain)+' LAK</span></div>'+
-   '<div><span class="k">'+t('cDue')+'</span><span class="v num" style="color:'+(days<0?'var(--bad)':'var(--ink)')+'">'+e.due+' ('+(lang==='lo'?days+' ວັນ':days+' days')+')</span></div>'+
-   '</div></div></div></div></div>';
-  var inner='<div class="split70">'+entInfoCard(e,true)+capStatusCard+'</div>'+
-   (remain>0&&!pend?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('howToPay')+'</h3></div><div class="c">'+
+   '<div class="dstat">'+
+   '<div class="cell"><div class="k">'+t('cCap')+'</div><div class="v">'+fmt(e.cap)+'</div></div>'+
+   '<div class="cell"><div class="k">'+t('cPaid')+'</div><div class="v" style="color:var(--ok)">'+fmt(e.paid)+'</div></div>'+
+   '<div class="cell"><div class="k">'+(remain>0?t('bizRemain'):t('bizDone'))+'</div><div class="v" style="color:'+(remain>0?'var(--warn)':'var(--ok)')+'">'+fmt(remain)+'</div></div>'+
+   '<div class="cell"><div class="k">'+t('cDue')+'</div><div class="v" style="color:'+(days<0?'var(--bad)':'var(--ink)')+';font-size:13px">'+e.due+'</div>'+
+   '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">'+(lang==='lo'?days+' ວັນ':days+' days')+'</div></div>'+
+   '</div></div></div></div>';
+  var inner=regDetailCard(e)+capStatusCard+
+   (remain>0&&!pend?'<div class="card" style="margin:14px 0"><div class="h"><h3>'+t('howToPay')+'</h3></div><div class="c">'+
     '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">'+
     '<div class="num" style="font-size:18px;font-weight:600">'+e.acct+'</div>'+
     '<button class="btn ghost" style="padding:6px 12px;font-size:11px" data-copyacct="'+e.acct+'">'+t('copyAcct')+'</button></div>'+
@@ -1110,22 +1190,42 @@ function vList(){
   return shell(t('ent'),'',inner);
 }
 
-function entInfoCard(e,noMargin){
+function regDetailCard(e){
+  var pm=PROV_META[e.prov.lo]||PROV_META['ນະຄອນຫຼວງວຽງຈັນ'];
+  var lat=e.lat||pm.lat,lng=e.lng||pm.lng;
+  var district=e.district?L(e.district):L(pm.district),village=e.village?L(e.village):L(pm.village);
   var entInvs=S.invs.filter(function(x){return x.ent===e.id});
   var unpaidInvs=entInvs.filter(function(x){return x.status==='UNPAID'});
   var unpaidAmt=unpaidInvs.reduce(function(a,x){return a+x.amt},0);
-  return '<div class="card" style="'+(noMargin?'height:100%':'margin-bottom:14px')+'"><div class="h"><h3>'+t('tabInfo')+'</h3><span style="margin-left:auto">'+pill(e.status)+'</span></div><div class="c"><div class="kv">'+
-    '<div><span class="k">'+t('cEnt')+'</span><span class="v">'+e.name+'</span></div>'+
-    '<div><span class="k">'+t('regNo')+'</span><span class="v num">'+e.id+'</span></div>'+
-    '<div><span class="k">'+t('entType')+'</span><span class="v">'+L(e.type)+'</span></div>'+
-    '<div><span class="k">'+t('cProv')+'</span><span class="v">'+L(e.prov)+'</span></div>'+
-    '<div><span class="k">ISIC</span><span class="v num">'+e.isic+'</span></div>'+
-    '<div><span class="k">'+t('taxrisNo')+'</span><span class="v num">'+e.taxris+'</span></div>'+
-    '<div><span class="k">'+t('acctNo')+'</span><span class="v num" style="font-size:10.5px">'+e.acct+'</span></div>'+
-    '<div><span class="k">eBRS</span><span class="v" style="color:var(--m)">sync 09:15</span></div>'+
-    '<div><span class="k">'+t('finTitle')+'</span><span class="v" style="color:'+(unpaidInvs.length?'var(--bad)':'var(--ok)')+'">'+
-    (unpaidInvs.length?(unpaidInvs.length+' · '+fmt(unpaidAmt)+' LAK'):t('stPaid'))+'</span></div>'+
-    '</div></div></div>';
+  var finVal='<span style="color:'+(unpaidInvs.length?'var(--bad)':'var(--ok)')+'">'+
+    (unpaidInvs.length?(unpaidInvs.length+' · '+fmt(unpaidAmt)+' LAK'):t('stPaid'))+'</span>';
+  var rows=[
+    [t('regNo'),e.id],[t('nameLoLbl'),e.name],[t('nameEnLbl'),e.nameEn||'—'],[t('repLbl'),e.rep||'—'],
+    [t('cRegD'),e.reg],[t('regStatusLbl'),t('operating')],[t('entType'),L(e.type)],
+    [t('cProv'),L(e.prov)],[t('districtLbl'),district],[t('villageLbl'),village],
+    ['ISIC',e.isic],[t('acctNo'),e.acct],
+    [t('taxrisNo'),e.taxris],[t('taxRegDateLbl'),e.taxRegDate||e.reg],[t('taxStatusLbl'),t('operating')],
+    [t('vatStatusLbl'),t('vatRegistered')],[t('finTitle'),finVal]
+  ];
+  return '<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('regCardTitle')+'</h3>'+
+    '<span style="margin-left:auto;display:flex;align-items:center;gap:10px">'+pill(e.status)+
+    '<span style="font-size:10.5px;color:var(--muted)">'+t('mapSyncedAt')+' 09:15</span></span></div>'+
+    '<div class="c" style="display:flex;gap:16px;flex-wrap:wrap">'+
+    '<div class="reglist">'+rows.map(function(r,i){return '<div class="regrow"><span class="k">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>'}).join('')+'</div>'+
+    '<div class="regmap"><div id="regmap" data-lat="'+lat+'" data-lng="'+lng+'" style="width:100%;flex:1;min-height:260px;border-radius:8px;border:1px solid var(--line)"></div>'+
+    '<div class="cap">'+t('mapCaption')+' — '+lat.toFixed(4)+', '+lng.toFixed(4)+'</div></div>'+
+    '</div></div>';
+}
+var regMapInst=null;
+function mountRegMap(){
+  if(regMapInst){regMapInst.remove();regMapInst=null}
+  var el=$('#regmap');if(!el)return;
+  var lat=Number(el.dataset.lat),lng=Number(el.dataset.lng);
+  regMapInst=Leaflet.map(el,{attributionControl:true}).setView([lat,lng],15);
+  Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19,attribution:'&copy; OpenStreetMap contributors'
+  }).addTo(regMapInst);
+  Leaflet.marker([lat,lng]).addTo(regMapInst);
 }
 function docsErrMsg(f){
   if(f.mode==='asset'){
@@ -1143,31 +1243,31 @@ function docTypeOptions(mode){
 }
 var DOC_MOCKS={doc0:'bank-slip-20260804.pdf',doc1:'transfer-receipt.pdf',doc2:'confirmation-letter.pdf',
   valReport:'valuation-report.pdf',assetPhoto:'asset-photos.jpg'};
-function wireDropTyped(el,f){
+function valDocTypeOptions(){
+  return [{k:'valReport',lbl:L(MASTER.doctype[3])},{k:'assetPhoto',lbl:t('docAssetPhoto')},{k:'siteInspect',lbl:t('docSiteInspect')}];
+}
+function valDocMocks(jobId){
+  return {valReport:'valuation-report-'+jobId+'.pdf',assetPhoto:'asset-photos.pdf',siteInspect:'site-inspection.jpg'};
+}
+function valDocsErrMsg(f){
+  if(!f.files.length)return t('errFile')+' — '+t('anyOneLbl')+': '+valDocTypeOptions().map(function(o){return o.lbl}).join(' / ');
+  return '';
+}
+function wireDropTyped(el,f,opts,mocks){
   if(!el)return;
   var push=function(name){
-    var opts=docTypeOptions(f.mode),o=opts.filter(function(x){return x.k===f.docType})[0]||opts[0];
+    var o=opts.filter(function(x){return x.k===f.docType})[0]||opts[0];
     f.files=f.files.filter(function(x){return x.k!==o.k});
     f.files.push({k:o.k,lbl:o.lbl,name:name});
     f.docErr='';
     render();
   };
-  el.onclick=function(){push(DOC_MOCKS[f.docType]||'document.pdf')};
+  el.onclick=function(){push(mocks[f.docType]||'document.pdf')};
   el.ondragover=function(ev){ev.preventDefault();el.classList.add('drag')};
   el.ondragleave=function(){el.classList.remove('drag')};
   el.ondrop=function(ev){ev.preventDefault();el.classList.remove('drag');
     var dt=ev.dataTransfer&&ev.dataTransfer.files;
-    push(dt&&dt.length?dt[0].name:(DOC_MOCKS[f.docType]||'document.pdf'))};
-}
-function wireDrop(el,files,mocks){
-  if(!el)return;
-  var push=function(name){if(files.length<3){files.push(name);render()}};
-  el.onclick=function(){push(mocks[files.length])};
-  el.ondragover=function(ev){ev.preventDefault();el.classList.add('drag')};
-  el.ondragleave=function(){el.classList.remove('drag')};
-  el.ondrop=function(ev){ev.preventDefault();el.classList.remove('drag');
-    var dt=ev.dataTransfer&&ev.dataTransfer.files;
-    if(dt&&dt.length)push(dt[0].name);else push(mocks[files.length])};
+    push(dt&&dt.length?dt[0].name:(mocks[f.docType]||'document.pdf'))};
 }
 function stepCircles(steps){
   return '<div class="card" style="margin-bottom:14px"><div class="c"><div class="stepc">'+steps.map(function(s,i){
@@ -1227,7 +1327,7 @@ function vTxDetail(){
    mockDocs.map(function(f){return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
    '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+f+'</span>'+
    '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div></div>':'';
-  var inner=pbar+entInfoCard(e)+txCard+payFieldsCard+colCard+filesCard;
+  var inner=pbar+regDetailCard(e)+txCard+payFieldsCard+colCard+filesCard;
   return shell(t('reqDetail'),[e.name,tx.back||'detail'],inner);
 }
 function vDetail(){
@@ -1252,7 +1352,7 @@ function vDetail(){
     '<div><div class="t" style="color:var(--m)">'+t('hasPending')+' — '+pend.ref+' · '+fmt(pend.amt)+' LAK</div>'+
     '<div class="s" style="color:var(--ink2)">'+t('waitingOn')+' '+(pend.stage==='checker'?t('stageChecker'):t('stageApprover'))+'</div></div></div>':'';
 
-  var capStatusCard='<div class="card" style="height:100%"><div class="h"><h3>'+t('capStatus')+'</h3></div>'+
+  var capStatusCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('capStatus')+'</h3></div>'+
     '<div class="c"><div class="donutrow">'+donutPct(pct,e.status==='OVERDUE'?'#B03127':'#1B6E45')+
     '<div style="flex:1;min-width:220px"><div class="kv">'+
     '<div><span class="k">'+t('cCap')+'</span><span class="v num">'+fmt(e.cap)+' LAK</span></div>'+
@@ -1260,9 +1360,7 @@ function vDetail(){
     (unpaidPen.length?'<div><span class="k">'+t('penaltyAmt')+'</span><span class="v num" style="color:var(--bad)">'+fmt(penAmt)+' LAK</span></div>':'')+
     '<div><span class="k">'+t('cDue')+'</span><span class="v num" style="color:'+(days<0?'var(--bad)':'var(--ink)')+'">'+e.due+' ('+(lang==='lo'?days+' ວັນ':days+' days')+')</span></div>'+
     '</div></div></div></div></div>';
-  var topRow='<div class="split70">'+entInfoCard(e,true)+capStatusCard+'</div>';
-
-  var inner=topRow+actionBar+banner+historySection(e);
+  var inner=regDetailCard(e)+capStatusCard+actionBar+banner+historySection(e);
   return shell(e.name,[t('ent'),'ent'],inner,pill(e.status));
 }
 
@@ -1271,7 +1369,7 @@ function vDeclare(){
   var isOwner=S.role==='owner',canPartial=e.paid===0;
   if(!canPartial&&f.payMode!=='full'){f.payMode='full';if(f.mode==='cash')f.amt=fmt(remain)}
   var inner=
-  entInfoCard(e)+
+  regDetailCard(e)+
   '<div class="card"><div class="c">'+
   '<div style="font-size:11px;color:var(--muted);margin-bottom:9px">'+t('capMode')+'</div>'+
   '<div class="radio"><div class="opt'+(f.mode==='cash'?' on':'')+'" data-mode="cash"><div class="t">'+t('modeCash')+'</div>'+
@@ -1295,7 +1393,22 @@ function vDeclare(){
   (f.mode==='asset'?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
    '<div class="field"><label>'+t('assetCategory')+'</label><select id="assetCat">'+
    ['land','building','car','machine'].map(function(k){return '<option value="'+k+'"'+(f.assetCat===k?' selected':'')+'>'+t(k+'Type')+'</option>'}).join('')+'</select></div>'+
-   '<div class="field"><label>'+t('firmNet')+'</label><select>'+MASTER.valfirms.map(function(vf){return '<option>'+vf.nm+' — '+(vf.net==='in'?t('inNet'):t('outNet'))+'</option>'}).join('')+'</select></div></div>'+
+   '</div>'+
+   '<div class="field" style="margin-top:14px"><label>'+t('firmNet')+'</label>'+
+   '<div style="display:flex;flex-direction:column;gap:8px">'+
+   '<div style="display:flex;align-items:center;gap:10px">'+
+   '<label style="display:flex;align-items:center;gap:5px;font-size:11.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto">'+
+   '<input type="radio" name="firmType" data-firmtype="in"'+(f.firmType!=='out'?' checked':'')+'>'+t('inNet')+'</label>'+
+   (f.firmType!=='out'?'<select id="firmName" style="flex:1;min-width:180px">'+
+     MASTER.valfirms.filter(function(vf){return vf.net==='in'}).map(function(vf){return '<option value="'+vf.nm+'"'+(f.firmName===vf.nm?' selected':'')+'>'+vf.nm+'</option>'}).join('')+'</select>':'')+
+   '</div>'+
+   '<div style="display:flex;align-items:center;gap:10px">'+
+   '<label style="display:flex;align-items:center;gap:5px;font-size:11.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto">'+
+   '<input type="radio" name="firmType" data-firmtype="out"'+(f.firmType==='out'?' checked':'')+'>'+t('outNetShort')+'</label>'+
+   (f.firmType==='out'?'<input list="outFirmList" id="firmName" style="flex:1;min-width:180px" placeholder="'+t('firmNameLbl')+'" value="'+esc(f.firmName||'')+'">'+
+     '<datalist id="outFirmList">'+MASTER.valfirms.filter(function(vf){return vf.net==='out'}).map(function(vf){return '<option value="'+vf.nm+'">'}).join('')+'</datalist>':'')+
+   '</div></div>'+
+   '</div>'+
    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
    ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
      return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
@@ -1315,7 +1428,7 @@ function vDeclare(){
   '<div class="audit"><b>'+t('auditTrail')+'</b> — '+who().n+' · 04/08/2026 09:47</div>'+
   '<div class="acts" style="margin-top:16px"><button class="btn" id="submitDeclare">'+t('submitDeclare')+'</button>'+
   '<button class="btn ghost" data-nav="'+(isOwner?'dash':'ent')+'">'+t('cancel')+'</button></div></div></div>';
-  return shell(t('declareTitle'),[e.name,'detail'],inner);
+  return shell(t('declareTitle'),[e.name,isOwner?'dash':'detail'],inner);
 }
 
 function vQueue(){
@@ -1347,7 +1460,7 @@ function vTask(){
     '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join(''):'—';
   var inner=
   stepCircles([[cls(1),t('channelOnline').split(' (')[0]],[cls(2),t('stageChecker')],[cls(3),t('stageApprover')]])+
-  entInfoCard(e)+
+  regDetailCard(e)+
   '<div class="split"><div><div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('reqDetail')+'</h3></div>'+
   '<div class="c"><div class="kv">'+
   '<div><span class="k">'+t('cRef')+'</span><span class="v num">'+x.ref+'</span></div>'+
@@ -1376,12 +1489,13 @@ function vValFirm(){
     var idx=S.valjobs.indexOf(j),lbl=VAL_LBL[j.status];
     return '<tr data-valjobfirm="'+idx+'"><td style="padding-left:16px" class="num">'+j.id+'</td>'+
     '<td><span class="co">'+(S.ents.filter(function(y){return y.id===j.ent})[0]||{}).name+'<small>'+L(j.asset)+'</small></span></td>'+
+    '<td><span class="pill '+(j.net==='in'?'p-ok':'p-idle')+'">'+(j.net==='in'?t('inNet'):t('outNet').split(' (')[0])+'</span></td>'+
     '<td class="r num">'+fmt(j.amt)+'</td>'+
     '<td class="r" style="padding-right:16px"><span class="pill '+lbl[1]+'">'+t(lbl[0])+'</span></td></tr>'}).join('');
   var inner='<div class="card"><div class="h"><h3>'+t('myJobs')+'</h3></div>'+
    '<div class="c" style="padding:12px 0 0">'+
    (rows?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+' / '+t('valAsset')+'</th>'+
-     '<th class="r">'+t('valDeclared')+' (LAK)</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+rows+'</tbody></table>'
+     '<th>'+t('valFirmType')+'</th><th class="r">'+t('valDeclared')+' (LAK)</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+rows+'</tbody></table>'
     :'<div class="empty">'+t('noMatch')+'</div>')+'</div></div>';
   return shell(t('valPortal'),'',inner);
 }
@@ -1409,21 +1523,32 @@ function vValJobDetail(){
    '<div><span class="k">'+t('valFirmType')+'</span><span class="v">'+(j.net==='in'?t('inNet'):t('outNet').split(' (')[0])+'</span></div>'+
    '<div><span class="k">'+t('valDeclared')+'</span><span class="v num">'+fmt(j.amt)+' LAK</span></div>'+
    '</div></div></div>';
-  var filesCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+
-   (j.files&&j.files.length?j.files.map(function(f){
+  var filesCard='<div class="card"'+(canSubmit?'':' style="margin-bottom:14px"')+'><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+
+   (j.files&&j.files.length?'<div style="max-height:360px;overflow-y:auto;padding-right:2px">'+j.files.map(function(f){
     return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
-    '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+f+'</span>'+
-    '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')
+    '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
+    '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div>'
     :'<div class="empty">—</div>')+'</div></div>';
   var formCard=canSubmit?'<div class="card"><div class="h"><h3>'+t('submitJob')+'</h3></div><div class="c">'+
    '<div class="field"><label>'+t('valDeclared')+' (LAK)</label>'+
    '<input class="big num" id="fjVal" value="'+(S.valForm.val!=null?S.valForm.val:j.amt)+'"></div>'+
    (S.valForm.err?'<div class="hint err" style="margin-top:-8px;margin-bottom:10px">'+S.valForm.err+'</div>':'')+
-   '<div class="field"><label>'+t('fDocs')+'</label><div class="drop" id="fjDrop"><b>'+t('dropT')+'</b>'+t('dropSVal')+'</div>'+
-   '<div class="files">'+S.valForm.files.map(function(n){return '<span class="chip"><b>✓</b>'+n+'</span>'}).join('')+'</div></div>'+
+   '<div class="field"><label>'+t('fDocs')+'</label>'+
+   '<select id="valDocType" style="width:100%;margin-bottom:10px">'+valDocTypeOptions().map(function(o){
+     return '<option value="'+o.k+'"'+(S.valForm.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
+   '<div class="drop" id="fjDrop"><span class="dropIcon">⬆</span><b>'+t('dropT')+'</b></div>'+
+   '<div class="filelist">'+(S.valForm.files.length?S.valForm.files.map(function(fl){
+     return '<div class="filerow"><span class="fic">✓</span>'+
+     '<div class="fmeta"><b>'+fl.lbl+'</b><span>'+fl.name+'</span></div>'+
+     '<span class="frm" data-rmvalfile="'+fl.k+'" title="'+t('cancel')+'">✕</span></div>'}).join('')
+     :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div>'+
+   (S.valForm.docErr?'<div class="hint err" style="margin-top:8px">'+S.valForm.docErr+'</div>':'')+'</div>'+
    '<button class="btn" style="width:100%;margin-top:6px" data-submitjob="'+S.valI+'">'+t('submitJob')+'</button>'+
    '</div></div>':'';
-  var inner=jobCard+colCard+fieldsCard+filesCard+formCard;
+  var filesFormRow=canSubmit
+   ?'<div style="display:grid;grid-template-columns:4fr 6fr;gap:14px;margin-bottom:14px">'+filesCard+formCard+'</div>'
+   :filesCard;
+  var inner=jobCard+colCard+fieldsCard+filesFormRow;
   return shell(j.id,[t('valPortal'),'valfirm'],inner);
 }
 
@@ -1503,18 +1628,16 @@ function vFin(){
 function vRep(){
   var mm=MOCK_MONTHS[lang]||MOCK_MONTHS.en;
   var c=counts();
-  var segs=[[c.COMPLETED,'#1B6E45',t('kCompleted')],[c.PARTIAL,'#B06A05',t('kPartial')],
-    [c.PENDING,'#8E9CB0',t('kPending')],[c.OVERDUE,'#B03127',t('kOverdue')]];
+  var segs=[[c.COMPLETED,'#1B6E45',stName('COMPLETED')],[c.PARTIAL,'#B06A05',stName('PARTIAL')],
+    [c.PENDING,'#8E9CB0',stName('PENDING')],[c.OVERDUE,'#B03127',stName('OVERDUE')]];
   var reps=[{lo:'ສະຖິຕິວິສາຫະກິດຕາມຂະແໜງ ISIC',en:'Enterprises by ISIC sector'},
     {lo:'ລາຍງານການປະກອບທຶນຈົດທະບຽນ',en:'Registered capital contribution report'},
     {lo:'ລາຍງານຄ່າທຳນຽມ ແລະ ຄ່າປັບ',en:'Fees and penalties report'},
     {lo:'ລາຍງານປະສິດທິພາບງານ (Turnaround Time)',en:'Turnaround time report'}];
-  var inner='<div class="grid3" style="grid-template-columns:1fr 1fr">'+
+  var inner='<div class="grid3" style="grid-template-columns:3fr 7fr">'+
    '<div class="card"><div class="h"><h3>'+t('byStatus')+'</h3></div><div class="c">'+
-   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(segs,t('cEnt'))+
-   '<div class="legend" style="flex-direction:column;gap:8px">'+
-   segs.map(function(s){return '<span><i style="background:'+s[1]+'"></i>'+s[2]+' <b class="num">'+fmt(s[0])+'</b></span>'}).join('')+
-   '</div></div></div></div>'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(segs,t('cEnt'))+donutLegend(segs)+
+   '</div></div></div>'+
    '<div class="card"><div class="h"><h3>'+t('overdueTrend')+'</h3></div><div class="c">'+
    barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
    '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
@@ -1755,7 +1878,7 @@ function vModal(){
     '<div><span class="k">'+t('cStatus')+'</span><span class="v"><span class="pill '+jLbl[1]+'">'+t(jLbl[0])+'</span></span></div></div>'+
     (j.files&&j.files.length?'<div class="files" style="margin-top:12px">'+j.files.map(function(f){
       return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
-      '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+f+'</span>'+
+      '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
       '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div>':'')+
     '<div class="audit" style="margin-top:12px">'+t('valRule')+'</div>'+
     '<div class="acts" style="margin-top:16px">'+
@@ -1941,6 +2064,7 @@ function vMobile(){
 }
 
 function bind(){
+  mountRegMap();
   document.querySelectorAll('[data-lang]').forEach(function(b){b.onclick=function(){lang=b.dataset.lang;render()}});
   document.querySelectorAll('[data-nav]').forEach(function(el){el.onclick=function(ev){
     ev.stopPropagation();go(el.dataset.nav)}});
@@ -1957,6 +2081,10 @@ function bind(){
     if(S.form.mode==='asset'){
       if(!S.form.assetCat){S.form.assetCat='land';S.form.assetVals={}}
       S.form.amt=(S.form.assetVals&&S.form.assetVals[ASSET_PRICE_KEY[S.form.assetCat]])||'';
+      if(!S.form.firmType){S.form.firmType='in';S.form.firmName=MASTER.valfirms.filter(function(vf){return vf.net==='in'})[0].nm}
+    }else{
+      var ce=S.ents.filter(function(x){return x.id===S.sel})[0];
+      if(ce)S.form.amt=S.form.payMode==='full'?fmt(ce.cap-ce.paid):'';
     }
     var okKeys=docTypeOptions(S.form.mode).map(function(o){return o.k});
     S.form.files=S.form.files.filter(function(fl){return okKeys.indexOf(fl.k)>-1});
@@ -1971,6 +2099,11 @@ function bind(){
   document.querySelectorAll('[data-assetfield]').forEach(function(inp){inp.oninput=function(){
     if(!S.form.assetVals)S.form.assetVals={};S.form.assetVals[inp.dataset.assetfield]=inp.value;
     if(inp.dataset.assetfield===ASSET_PRICE_KEY[S.form.assetCat]){S.form.amt=inp.value;S.form.err=''}}});
+  document.querySelectorAll('[data-firmtype]').forEach(function(b){b.onchange=function(){
+    S.form.firmType=b.dataset.firmtype;
+    S.form.firmName=S.form.firmType==='in'?MASTER.valfirms.filter(function(vf){return vf.net==='in'})[0].nm:'';
+    render()}});
+  var fnSel=$('#firmName');if(fnSel)fnSel[fnSel.tagName==='SELECT'?'onchange':'oninput']=function(){S.form.firmName=fnSel.value};
   document.querySelectorAll('[data-paymode]').forEach(function(b){b.onclick=function(){
     var e=S.ents.filter(function(x){return x.id===S.sel})[0];
     S.form.payMode=b.dataset.paymode;
@@ -2022,15 +2155,20 @@ function bind(){
   document.querySelectorAll('[data-valjob]').forEach(function(r){r.onclick=function(){
     S.modal={type:'valjob',i:Number(r.dataset.valjob)};render()}});
   document.querySelectorAll('[data-valjobfirm]').forEach(function(r){r.onclick=function(){
-    S.valI=Number(r.dataset.valjobfirm);S.valForm={val:null,files:[],err:''};go('valjobdetail')}});
+    S.valI=Number(r.dataset.valjobfirm);S.valForm={val:null,files:[],err:'',docType:'valReport',docErr:''};go('valjobdetail')}});
   var fjv=$('#fjVal');if(fjv)fjv.oninput=function(){S.valForm.val=fjv.value};
-  if($('#fjDrop'))wireDrop($('#fjDrop'),S.valForm.files,
-    ['valuation-report-'+S.valjobs[S.valI].id+'.pdf','asset-photos.pdf','site-inspection.jpg']);
+  if($('#fjDrop'))wireDropTyped($('#fjDrop'),S.valForm,valDocTypeOptions(),valDocMocks(S.valjobs[S.valI].id));
+  var vdt=$('#valDocType');if(vdt)vdt.onchange=function(){S.valForm.docType=vdt.value};
+  document.querySelectorAll('[data-rmvalfile]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.valForm.files=S.valForm.files.filter(function(fl){return fl.k!==b.dataset.rmvalfile});
+    S.valForm.docErr=valDocsErrMsg(S.valForm);render()}});
   document.querySelectorAll('[data-submitjob]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();var j=S.valjobs[Number(b.dataset.submitjob)];if(!j)return;
     var v=Number(String(S.valForm.val!=null?S.valForm.val:j.amt).replace(/[^0-9]/g,''));
     if(!v){S.valForm.err=t('errAmt');return render()}
-    if(!S.valForm.files.length){S.valForm.err=t('errFile');return render()}
+    var docErr=valDocsErrMsg(S.valForm);
+    if(docErr){S.valForm.docErr=docErr;return render()}
+    S.valForm.docErr='';
     j.amt=v;j.files=S.valForm.files.slice();j.status='wait';toast(t('jobSubmitted'),t('jobSubmittedS'),true);
     render()}});
   document.querySelectorAll('[data-acceptjob]').forEach(function(b){b.onclick=function(ev){
@@ -2064,7 +2202,7 @@ function bind(){
   var aut=$('#advUpdTo');if(aut)aut.onchange=function(){S.adv.updTo=aut.value;render()};
 
   var amt=$('#fAmt');if(amt)amt.oninput=function(){S.form.amt=amt.value};
-  if($('#drop'))wireDropTyped($('#drop'),S.form);
+  if($('#drop'))wireDropTyped($('#drop'),S.form,docTypeOptions(S.form.mode),DOC_MOCKS);
 
   var sp=$('#submitDeclare');
   if(sp)sp.onclick=function(){
