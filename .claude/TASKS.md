@@ -233,3 +233,12 @@ Notes: verified with `node --check`, full regression suite (55 checks, zero JS e
 Notes: docChecklist(mode) now builds a list of [header, items] groups for both modes — cash has one "Choose at least 1" group with all 3 alternatives, asset has a "Required" group (valuation report) and an "Optional" group (asset photos) — rendered through the same box markup. Verified with `node --check`, full regression suite (55 checks, zero JS errors), and a screenshot confirming the match.
 
 ---
+
+## Epic: Login Page Background Photo
+
+### Done
+- [x] TASK-065 | feat: set MOIC01.webp (MOIC building photo) as the background of the login page's left panel, with a dark gradient overlay so the existing white title/stats/verify-link text stays fully readable | 2026-08-06 | feature
+
+Notes: image referenced as a plain file (MOIC01.webp, ~126KB) alongside index.html, same pattern as moic-logo.png — not embedded as a data URI. Verified with `node --check`, full regression suite (71 checks across smoke/flow/flow2, zero JS errors), and a screenshot confirming the photo renders behind the login copy with good contrast.
+
+---
