@@ -326,6 +326,7 @@ lo:{
  kbTitle:'ປຸ່ມລັດ',close:'ປິດ',cancel:'ຍົກເລີກ',confirm:'ຢືນຢັນ',save:'ບັນທຶກ',edit:'ແກ້ໄຂ',manage:'ຈັດການ',
  helpCenter:'ຄູ່ມືການໃຊ້ ແລະ Helpdesk',profile:'ຂໍ້ມູນຜູ້ໃຊ້',logout:'ອອກຈາກລະບົບ',signedAs:'ເຂົ້າສູ່ລະບົບເປັນ',
  loggedIn:'ເຂົ້າສູ່ລະບົບສຳເລັດ',resetDone:'ຣີເຊັດເດໂມແລ້ວ',resetDoneS:'ເລີ່ມຈາກໜ້າເຂົ້າສູ່ລະບົບອີກຄັ້ງ',
+ clearCache:'ລ້າງແຄດ',clearCacheConfirm:'ລ້າງແຄດ ແລະ ຣີເຊັດຂໍ້ມູນເດໂມທັງໝົດ? ການດຳເນີນການນີ້ຈະກັບຄືນໜ້າເຂົ້າສູ່ລະບົບ.',
 
  mMonitor:'ຕິດຕາມທຶນ',mQueue:'ຄິວງານ',mOther:'ອື່ນໆ',
  dash:'ໜ້າຫຼັກ',ent:'ຄົ້ນຫາວິສາຫະກິດ',declare:'ແຈ້ງຊຳລະທຶນ',inspect:'ຄິວກວດສອບ',approveQ:'ຄິວອະນຸມັດ',
@@ -339,7 +340,8 @@ lo:{
 
  cEnt:'ວິສາຫະກິດ',cType:'ປະເພດ',cProv:'ແຂວງ',cRegD:'ວັນຈົດທະບຽນ',cDue:'ຄົບກຳນົດ',cCap:'ທຶນຈົດທະບຽນ',
  cPaid:'ຊຳລະແລ້ວ',cLeft:'ຍັງເຫຼືອ',cStatus:'ສະຖານະ',cDate:'ວັນທີ',cAct:'ລາຍການ',cMode:'ຊ່ອງທາງ',
- cAmt:'ຈຳນວນ',cBy:'ຜູ້ດຳເນີນການ',cDoc:'ເອກະສານ',cTime:'ເວລາ',cRef:'ເລກທີ່ອ້າງອີງ',
+ cAmt:'ຈຳນວນ',cBy:'ຜູ້ສົ່ງເລື່ອງ',cDoc:'ເອກະສານ',cTime:'ເວລາ',cRef:'ເລກທີ່ອ້າງອີງ',
+ hstComplete:'ສຳເລັດ',hstPending:'ລໍກວດສອບ',hstReturned:'ຕີກັບ',
  search:'ຄົ້ນຫາຊື່ ຫຼື ເລກທະບຽນ',allSt:'ທຸກສະຖານະ',allProv:'ທຸກແຂວງ',allIsic:'ISIC ທຸກຂະແໜງ',
  export:'ສົ່ງອອກ Excel',print:'ພິມ',showing:'ສະແດງ',of:'ຈາກ',items:'ລາຍການ',
  noMatch:'ບໍ່ພົບລາຍການທີ່ຕົງກັບເງື່ອນໄຂ',noMatchS:'ລອງປ່ຽນເງື່ອນໄຂ ຫຼື ລ້າງຄ່າຄົ້ນຫາ',
@@ -453,6 +455,7 @@ en:{
  kbTitle:'Keyboard shortcuts',close:'Close',cancel:'Cancel',confirm:'Confirm',save:'Save',edit:'Edit',manage:'Manage',
  helpCenter:'User Manual & Helpdesk',profile:'Profile',logout:'Sign out',signedAs:'Signed in as',
  loggedIn:'Signed in',resetDone:'Demo reset',resetDoneS:'Starting again from the sign-in screen',
+ clearCache:'Clear cache',clearCacheConfirm:'Clear cache and reset all demo data? This will return you to the sign-in screen.',
 
  mMonitor:'Capital Monitoring',mQueue:'Queues',mOther:'Other',
  dash:'Dashboard',ent:'Search Enterprises',declare:'Declare Payment',inspect:'Inspection Queue',approveQ:'Approval Queue',
@@ -466,7 +469,8 @@ en:{
 
  cEnt:'Enterprise',cType:'Type',cProv:'Province',cRegD:'Registered',cDue:'Deadline',cCap:'Registered capital',
  cPaid:'Paid',cLeft:'Outstanding',cStatus:'Status',cDate:'Date',cAct:'Activity',cMode:'Channel',
- cAmt:'Amount',cBy:'Handled by',cDoc:'Files',cTime:'Time',cRef:'Reference',
+ cAmt:'Amount',cBy:'Submit by',cDoc:'Files',cTime:'Time',cRef:'Reference',
+ hstComplete:'Complete',hstPending:'Pending',hstReturned:'Returned',
  search:'Search by name or registration number',allSt:'All statuses',allProv:'All provinces',allIsic:'All ISIC sectors',
  export:'Export to Excel',print:'Print',showing:'Showing',of:'of',items:'records',
  noMatch:'No records match these filters',noMatchS:'Try different criteria or clear the search',
@@ -575,6 +579,8 @@ function lastUpd(e){var d=e.reg;e.hist.forEach(function(h){if(parseD(h.d)>parseD
 var ST={COMPLETED:['kCompleted','p-ok'],PARTIAL:['kPartial','p-warn'],PENDING:['kPending','p-idle'],OVERDUE:['kOverdue','p-bad']};
 function stName(s){return ST[s]?t(ST[s][0]).split(' — ')[1]||t(ST[s][0]):s}
 function pill(s){var x=ST[s]||['','p-idle'];return '<span class="pill '+x[1]+'">'+stName(s)+'<i>'+s+'</i></span>'}
+var HST={complete:['hstComplete','p-ok'],pending:['hstPending','p-warn'],returned:['hstReturned','p-bad']};
+function histPill(s){var x=HST[s]||HST.complete;return '<span class="pill '+x[1]+'">'+t(x[0])+'</span>'}
 function modeLbl(m){return t(m==='cash'?'modeCash':'modeAsset')}
 function toast(a,b,ok){
   var d=document.createElement('div');d.className='toast'+(ok?' ok':'');
@@ -637,8 +643,7 @@ function seedEnts(){return[
    fields:{deedNo:'4471-A, 4471-B',landParcelNo:'PL-4471',totalArea:'15,000',landEstimatedPrice:'700,000,000'}}],
   insts:[{no:1,amt:300000000,state:'paid',meta:{lo:'ເງິນສົດ · ໂອນເຂົ້າບັນຊີ APB 010-2-88471-6 · ຢືນຢັນໂດຍ Checker 02/11/2025',en:'Cash · transferred to APB 010-2-88471-6 · confirmed by the Checker on 02/11/2025'}},
          {no:2,amt:700000000,state:'due',meta:{lo:'ແຈ້ງເປັນຊັບສິນ (ທີ່ດິນ 2 ຕອນ) · ລໍຜົນປະເມີນ',en:'Declared as assets (2 land plots) · awaiting appraisal'}}],
-  hist:[{d:'02/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1 (ເງິນສົດ)',en:'Capital instalment 1 received (cash)'},m:'cash',v:300000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter'},
-        {d:'28/07/2026',a:{lo:'ສົ່ງເລື່ອງປະເມີນຊັບສິນ',en:'Sent for asset valuation'},m:'asset',v:700000000,u:'ນ. ຄຳລາ',f:'5',ch:''}]},
+  hist:[{d:'02/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1 (ເງິນສົດ)',en:'Capital instalment 1 received (cash)'},m:'cash',v:300000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter',st:'complete'}]},
  {id:'ELN-2025-1002',name:'ວຽງຈັນ ການຄ້າ',type:{lo:'ຫຸ້ນສ່ວນ',en:'Partnership'},prov:{lo:'ນະຄອນຫຼວງວຽງຈັນ',en:'Vientiane Capital'},isic:'4630',
   reg:'22/08/2025',due:'22/08/2026',cap:450000000,paid:0,status:'PENDING',acct:'APB 010-2-90233-1',taxris:'207451201',collateral:[],
   insts:[{no:1,amt:135000000,state:'due',meta:{lo:'ຍັງບໍ່ມີການຊຳລະ',en:'No payment received yet'}},
@@ -649,27 +654,27 @@ function seedEnts(){return[
    fields:{buildingName:'Savan Logistics Warehouse',noOfFloor:'1',usageArea:'2,400',estimatedYear:'2018',totalPrice:'1,540,000,000'}}],
   insts:[{no:1,amt:1260000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 15/12/2025',en:'Confirmed 15/12/2025'}},
          {no:2,amt:1540000000,state:'due',meta:{lo:'ຍັງບໍ່ແຈ້ງຮູບແບບການຊຳລະ',en:'Payment form not yet declared'}}],
-  hist:[{d:'15/12/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1260000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter'}]},
+  hist:[{d:'15/12/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1260000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter',st:'complete'}]},
  {id:'ELN-2024-1004',name:'ຈຳປາສັກ ອາຫານ ຈຳກັດ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຈຳປາສັກ',en:'Champasak'},isic:'1079',
   reg:'12/06/2025',due:'12/06/2026',cap:760000000,paid:228000000,status:'OVERDUE',acct:'APB 033-1-55210-8',taxris:'205433181',collateral:[],
   insts:[{no:1,amt:228000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 20/09/2025',en:'Confirmed 20/09/2025'}},
          {no:2,amt:532000000,state:'over',meta:{lo:'ເກີນກຳນົດ 53 ວັນ · ຄ່າປັບສະສົມ <b style="color:var(--bad)">15,960,000 ກີບ</b>',en:'53 days overdue · accrued penalty <b style="color:var(--bad)">15,960,000 LAK</b>'}}],
-  hist:[{d:'20/09/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:228000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter'},
-        {d:'13/06/2026',a:{lo:'ເຂົ້າສະຖານະເກີນກຳນົດ (ອັດຕະໂນມັດ)',en:'Flagged overdue (automatic)'},m:'',v:0,u:'System',f:'—',ch:''}]},
+  hist:[{d:'20/09/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:228000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter',st:'complete'},
+        {d:'13/06/2026',a:{lo:'ເຂົ້າສະຖານະເກີນກຳນົດ (ອັດຕະໂນມັດ)',en:'Flagged overdue (automatic)'},m:'',v:0,u:'System',f:'—',ch:'',st:'complete'}]},
  {id:'ELN-2025-1005',name:'ຫຼວງພະບາງ ທ່ອງທ່ຽວ',type:{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},prov:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},isic:'7911',
   reg:'31/08/2025',due:'31/08/2026',cap:180000000,paid:180000000,status:'COMPLETED',acct:'APB 044-2-77410-5',taxris:'207450441',
   collateral:[{type:'land',label:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},detail:{lo:'ເນື້ອທີ່ 0.4 ha · ໃບຕາດິນເລກທີ 5518-C',en:'Area 0.4 ha · Land title no. 5518-C'},value:180000000,
    fields:{deedNo:'5518-C',landParcelNo:'PL-5518',totalArea:'4,000',landEstimatedPrice:'180,000,000'}}],
   insts:[{no:1,amt:180000000,state:'paid',meta:{lo:'ຊຳລະຄັ້ງດຽວເຕັມຈຳນວນ · ອອກໃບຢັ້ງຢືນແລ້ວ',en:'Paid in full in one transfer · certificate issued'}},
          {no:2,amt:0,state:'na',meta:{lo:'',en:''}}],
-  hist:[{d:'05/09/2025',a:{lo:'ຊຳລະທຶນເຕັມຈຳນວນ',en:'Capital paid in full'},m:'cash',v:180000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter'}]},
+  hist:[{d:'05/09/2025',a:{lo:'ຊຳລະທຶນເຕັມຈຳນວນ',en:'Capital paid in full'},m:'cash',v:180000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter',st:'complete'}]},
  {id:'ELN-2025-1006',name:'ຄຳມ່ວນ ກໍ່ສ້າງ ຈຳກັດ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຄຳມ່ວນ',en:'Khammouane'},isic:'4100',
   reg:'04/09/2025',due:'04/09/2026',cap:5400000000,paid:1620000000,status:'PARTIAL',acct:'APB 052-3-30188-7',taxris:'206447021',
   collateral:[{type:'machine',label:{lo:'ເຄື່ອງຈັກຜະລິດວັດສະດຸກໍ່ສ້າງ 6 ລາຍການ',en:'6 construction-material machinery items'},detail:{lo:'ຜູ້ຜະລິດ XCMG · ກຳລັງຜະລິດ 50 ໜ່ວຍ/ຊມ',en:'Manufacturer XCMG · Capacity 50 units/hr'},value:3780000000,
    fields:{machineName:'XCMG Batching Plant Set (6 units)',machinePledgeType:'Chattel mortgage',manufactory:'XCMG',capacity:'50 units/hr',estimatedPrice:'3,780,000,000'}}],
   insts:[{no:1,amt:1620000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 28/11/2025',en:'Confirmed 28/11/2025'}},
          {no:2,amt:3780000000,state:'due',meta:{lo:'ລໍປະເມີນເຄື່ອງຈັກ · In-network Firm',en:'Machinery appraisal pending · in-network firm'}}],
-  hist:[{d:'28/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1620000000,u:'ນ. ສີວິໄລ',f:'4',ch:'chCounter'}]}
+  hist:[{d:'28/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1620000000,u:'ນ. ສີວິໄລ',f:'4',ch:'chCounter',st:'complete'}]}
 ];}
 
 function seedInv(){return[
@@ -845,6 +850,7 @@ function shell(title,crumb,inner,right){
    '<div class="title">'+title+'</div></div><div class="rt">'+(right||'')+
    '<div class="lang"><span'+(lang==='lo'?' class="on"':'')+' data-lang="lo">ລາວ</span>'+
    '<span'+(lang==='en'?' class="on"':'')+' data-lang="en">EN</span></div>'+
+   '<div class="bell" data-clearcache title="'+t('clearCache')+'">⟳</div>'+
    '<div class="bell" data-help title="'+t('helpCenter')+'" style="font-weight:700">?</div>'+
    bellPanel()+
    '<div class="uinfo"><b>'+w.n+'</b><br><span>'+w.r+'</span></div>'+
@@ -1109,6 +1115,28 @@ function docChecklist(mode){
   var note=mode==='asset'?'':'<div style="font-size:10px;color:var(--muted);font-weight:600;padding-top:7px;border-top:1px solid var(--soft);margin-top:1px">'+t('anyOneLbl')+'</div>';
   return '<div style="border:1px solid var(--line);border-radius:6px;padding:2px 10px 6px;margin-bottom:10px">'+body+note+'</div>';
 }
+function docTypeOptions(mode){
+  return mode==='asset'
+    ?[{k:'valReport',lbl:L(MASTER.doctype[3])},{k:'assetPhoto',lbl:t('docAssetPhoto')}]
+    :MASTER.doctype.slice(0,3).map(function(d,i){return {k:'doc'+i,lbl:L(d)}});
+}
+var DOC_MOCKS={doc0:'bank-slip-20260804.pdf',doc1:'transfer-receipt.pdf',doc2:'confirmation-letter.pdf',
+  valReport:'valuation-report.pdf',assetPhoto:'asset-photos.jpg'};
+function wireDropTyped(el,f){
+  if(!el)return;
+  var push=function(name){
+    var opts=docTypeOptions(f.mode),o=opts.filter(function(x){return x.k===f.docType})[0]||opts[0];
+    f.files=f.files.filter(function(x){return x.k!==o.k});
+    f.files.push({k:o.k,lbl:o.lbl,name:name});
+    render();
+  };
+  el.onclick=function(){push(DOC_MOCKS[f.docType]||'document.pdf')};
+  el.ondragover=function(ev){ev.preventDefault();el.classList.add('drag')};
+  el.ondragleave=function(){el.classList.remove('drag')};
+  el.ondrop=function(ev){ev.preventDefault();el.classList.remove('drag');
+    var dt=ev.dataTransfer&&ev.dataTransfer.files;
+    push(dt&&dt.length?dt[0].name:(DOC_MOCKS[f.docType]||'document.pdf'))};
+}
 function wireDrop(el,files,mocks){
   if(!el)return;
   var push=function(name){if(files.length<3){files.push(name);render()}};
@@ -1132,12 +1160,12 @@ function historySection(e){
     return '<tr'+(clickable?' data-histrow="'+e.id+'|'+idx+'"':'')+'><td style="padding-left:16px" class="num">'+h.d+'</td><td>'+L(h.a)+
     (h.internal?'<div style="font-size:10px;color:var(--muted);margin-top:2px"><i style="font-style:normal;color:var(--m)">'+t('reasonIntLbl')+':</i> '+esc(h.internal)+'</div>':'')+'</td>'+
     '<td>'+(h.m?modeLbl(h.m):'—')+'</td>'+
-    '<td class="r num">'+(h.v?fmt(h.v):'—')+'</td><td>'+h.u+'</td>'+
+    '<td class="r num">'+(h.v?fmt(h.v):'—')+'</td><td>'+histPill(h.st)+'</td><td>'+h.u+'</td>'+
     '<td class="r" style="padding-right:16px">'+(h.v&&e.status==='COMPLETED'?'<span style="color:var(--m);cursor:pointer" data-cert="1">'+t('dlPdf')+'</span>':h.f)+'</td></tr>'}).join('')
-    :'<tr><td colspan="6" style="padding:24px;text-align:center;color:var(--muted)">'+t('noHistory')+'</td></tr>';
+    :'<tr><td colspan="7" style="padding:24px;text-align:center;color:var(--muted)">'+t('noHistory')+'</td></tr>';
   return '<div class="card"><div class="h"><h3>'+t('auditTrail')+'</h3></div>'+
     '<div class="c" style="padding:12px 0 0"><table><thead><tr><th style="padding-left:16px">'+t('cDate')+'</th><th>'+t('cAct')+'</th>'+
-    '<th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+' (LAK)</th><th>'+t('cBy')+'</th>'+
+    '<th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+' (LAK)</th><th>'+t('cStatus')+'</th><th>'+t('cBy')+'</th>'+
     '<th class="r" style="padding-right:16px">'+t('cDoc')+'</th></tr></thead><tbody>'+hist+'</tbody></table>'+
     '<div class="audit" style="margin:14px 16px 16px"><b>'+t('auditTrail')+'</b> — '+t('auditNote')+'</div></div></div>';
 }
@@ -1154,6 +1182,7 @@ function vTxDetail(){
    '<div><span class="k">'+t('cAct')+'</span><span class="v">'+L(h.a)+'</span></div>'+
    '<div><span class="k">'+t('cMode')+'</span><span class="v">'+(h.m?modeLbl(h.m):'—')+'</span></div>'+
    '<div><span class="k">'+t('cAmt')+'</span><span class="v num">'+fmt(h.v)+' LAK</span></div>'+
+   '<div><span class="k">'+t('cStatus')+'</span><span class="v">'+histPill(h.st)+'</span></div>'+
    '<div><span class="k">'+t('cBy')+'</span><span class="v">'+h.u+'</span></div>'+
    (h.ch?'<div><span class="k">'+t('payChannel')+'</span><span class="v">'+t(h.ch)+'</span></div>':'')+
    '</div></div></div>';
@@ -1247,8 +1276,11 @@ function vDeclare(){
      return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
    '</div>':'')+
   '<div class="field"><label>'+t('fDocs')+'</label>'+docChecklist(f.mode)+
+  '<select id="docType" style="width:100%;margin-bottom:10px">'+docTypeOptions(f.mode).map(function(o){
+    return '<option value="'+o.k+'"'+(f.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
   '<div class="drop" id="drop"><b>'+t('dropT')+'</b>'+(f.mode==='asset'?t('dropSVal'):t('dropS'))+'</div>'+
-  '<div class="files">'+f.files.map(function(n){return '<span class="chip"><b>✓</b>'+n+'</span>'}).join('')+'</div></div>'+
+  '<div class="files">'+f.files.map(function(fl){return '<span class="chip"><b>✓</b>'+fl.lbl+': '+fl.name+
+    '<i data-rmfile="'+fl.k+'" style="margin-left:6px;cursor:pointer">✕</i></span>'}).join('')+'</div></div>'+
   '<div class="audit"><b>'+t('auditTrail')+'</b> — '+who().n+' · 04/08/2026 09:47</div>'+
   '<div class="acts" style="margin-top:16px"><button class="btn" id="submitDeclare">'+t('submitDeclare')+'</button>'+
   '<button class="btn ghost" data-nav="'+(isOwner?'dash':'ent')+'">'+t('cancel')+'</button></div></div></div>';
@@ -1280,7 +1312,7 @@ function vTask(){
   var files=x.files.length?x.files.map(function(f){
     return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);'+
     'border-radius:7px;margin-bottom:6px"><span style="color:var(--bad)">▤</span>'+
-    '<span style="font-size:11.5px;flex:1">'+f+'</span>'+
+    '<span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
     '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join(''):'—';
   var inner=
   stepCircles([[cls(1),t('channelOnline').split(' (')[0]],[cls(2),t('stageChecker')],[cls(3),t('stageApprover')]])+
@@ -1634,6 +1666,12 @@ function vModal(){
     '<div class="acts"><button class="btn" style="flex:1" data-after="dash">'+t('goDash')+'</button>'+
     '<button class="btn ghost" data-after="cert">'+t('goCert')+'</button></div></div></div>';
   }
+  if(m.type==='clearcache'){
+    return '<div class="veil" id="veil"><div class="modal" style="max-width:380px"><h3>'+t('clearCache')+'</h3>'+
+    '<p>'+t('clearCacheConfirm')+'</p>'+
+    '<div class="acts"><button class="btn" style="flex:1" data-doclearcache>'+t('confirm')+'</button>'+
+    '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
+  }
   if(m.type==='keys'){
     var rows=[['Alt + L','kbLang'],['Alt + M','kbMob'],['Alt + B','kbSide'],
               ['Alt + Q','kbOut'],['Alt + R','kbReset'],['Alt + /','kbHelp']]
@@ -1819,7 +1857,7 @@ function approve(i){
   e.status=e.paid>=e.cap?'COMPLETED':'PARTIAL';
   if(e.insts[1]){e.insts[1].state='paid';
     e.insts[1].meta={lo:'ອະນຸມັດໂດຍ ຫົວໜ້າພະແນກ 04/08/2026 · ລົງລາຍເຊັນດິຈິຕອນແລ້ວ',en:'Approved by the division head on 04/08/2026 · digitally signed'}}
-  e.hist.push({d:'04/08/2026',a:{lo:'ອະນຸມັດ ແລະ ລົງລາຍເຊັນດິຈິຕອນ',en:'Approved and digitally signed'},m:'',v:0,u:who().n,f:'1',ch:''});
+  e.hist.push({d:'04/08/2026',a:{lo:'ອະນຸມັດ ແລະ ລົງລາຍເຊັນດິຈິຕອນ',en:'Approved and digitally signed'},m:'',v:0,u:who().n,f:'1',ch:'',st:'complete'});
   S.notif.unshift({t:{lo:'ທຶນຈົດທະບຽນຄົບຖ້ວນແລ້ວ',en:'Registered capital fully paid'},
     s:{lo:'ອະນຸມັດແລ້ວ · ໃບຢັ້ງຢືນການຝາກທຶນພ້ອມດາວໂຫຼດ',en:'Approved · the capital deposit certificate is ready to download'},x:'10:12',c:'var(--ok)'});
   S.tasks.splice(i,1);
@@ -1886,7 +1924,13 @@ function bind(){
   document.querySelectorAll('[data-mode]').forEach(function(b){b.onclick=function(){
     S.form.mode=b.dataset.mode;
     if(S.form.mode==='asset'&&!S.form.assetCat){S.form.assetCat='land';S.form.assetVals={}}
+    var okKeys=docTypeOptions(S.form.mode).map(function(o){return o.k});
+    S.form.files=S.form.files.filter(function(fl){return okKeys.indexOf(fl.k)>-1});
+    S.form.docType=okKeys[0];
     render()}});
+  var dts=$('#docType');if(dts)dts.onchange=function(){S.form.docType=dts.value};
+  document.querySelectorAll('[data-rmfile]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.form.files=S.form.files.filter(function(fl){return fl.k!==b.dataset.rmfile});render()}});
   var acs=$('#assetCat');if(acs)acs.onchange=function(){S.form.assetCat=acs.value;S.form.assetVals={};render()};
   document.querySelectorAll('[data-assetfield]').forEach(function(inp){inp.oninput=function(){
     if(!S.form.assetVals)S.form.assetVals={};S.form.assetVals[inp.dataset.assetfield]=inp.value}});
@@ -1907,11 +1951,15 @@ function bind(){
     ev.stopPropagation();S.read=true;render()}});
   document.querySelectorAll('[data-help]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();S.modal={type:'help'};render()}});
+  document.querySelectorAll('[data-clearcache]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal={type:'clearcache'};render()}});
+  document.querySelectorAll('[data-doclearcache]').forEach(function(b){b.onclick=function(){
+    reset();toast(t('resetDone'),t('resetDoneS'))}});
   document.querySelectorAll('[data-pay]').forEach(function(b){b.onclick=function(){
     var e=S.ents.filter(function(x){return x.id===S.sel})[0];
-    S.form={mode:'cash',payMode:'full',amt:fmt(e.cap-e.paid),files:[],err:''};go('declare')}});
+    S.form={mode:'cash',payMode:'full',amt:fmt(e.cap-e.paid),files:[],docType:'doc0',err:''};go('declare')}});
   document.querySelectorAll('[data-selfpay]').forEach(function(b){b.onclick=function(){
-    var e=S.ents[0];S.sel=e.id;S.form={mode:'cash',payMode:'full',amt:fmt(e.cap-e.paid),files:[],err:''};go('declare')}});
+    var e=S.ents[0];S.sel=e.id;S.form={mode:'cash',payMode:'full',amt:fmt(e.cap-e.paid),files:[],docType:'doc0',err:''};go('declare')}});
   document.querySelectorAll('[data-payinv]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();S.modal={type:'qr',inv:b.dataset.payinv};render()}});
   document.querySelectorAll('[data-viewrec]').forEach(function(b){b.onclick=function(ev){
@@ -1979,8 +2027,7 @@ function bind(){
   var aut=$('#advUpdTo');if(aut)aut.onchange=function(){S.adv.updTo=aut.value;render()};
 
   var amt=$('#fAmt');if(amt)amt.oninput=function(){S.form.amt=amt.value};
-  if($('#drop'))wireDrop($('#drop'),S.form.files,
-    ['bank-slip-20260804.pdf','confirmation-letter.pdf','deposit-receipt.jpg']);
+  if($('#drop'))wireDropTyped($('#drop'),S.form);
 
   var sp=$('#submitDeclare');
   if(sp)sp.onclick=function(){
@@ -2004,7 +2051,7 @@ function bind(){
     if(e.insts[1]&&e.insts[1].state!=='paid'){e.insts[1].state='review';
       e.insts[1].meta={lo:'ສົ່ງກວດສອບແລ້ວ 04/08/2026 09:47',en:'Sent for verification on 04/08/2026 09:47'}}
     e.hist.push({d:'04/08/2026',a:{lo:'ບັນທຶກການຊຳລະທຶນ (ລໍກວດສອບ)',en:'Capital payment recorded (pending verification)'},
-      m:S.form.mode,v:v,u:subWho,f:S.form.files.length,ch:''});
+      m:S.form.mode,v:v,u:subWho,f:S.form.files.length,ch:'',st:'pending'});
     toast(t('sentCheck'),t('sentCheckS'),true);go(isOwner?'dash':'detail')};
 
   document.querySelectorAll('[data-task]').forEach(function(r){r.onclick=function(){
@@ -2014,7 +2061,7 @@ function bind(){
   document.querySelectorAll('[data-fwd]').forEach(function(b){b.onclick=function(){
     var x=S.tasks[S.taskI],e=x.ent,who1=who().n;x.stage='approve';
     x.trail.push({who:who1+' (Checker)',act:{lo:'ກວດສອບແລ້ວ ສົ່ງຕໍ່ຜູ້ອະນຸມັດ',en:'Verified and sent to the approver'},at:'04/08/2026 10:04'});
-    e.hist.push({d:'04/08/2026',a:{lo:'ກວດສອບໂດຍ Checker',en:'Verified by the Checker'},m:'',v:0,u:who1,f:'—',ch:''});
+    e.hist.push({d:'04/08/2026',a:{lo:'ກວດສອບໂດຍ Checker',en:'Verified by the Checker'},m:'',v:0,u:who1,f:'—',ch:'',st:'complete'});
     toast(t('checkDone'),t('checkDoneS'),true);go('inspect')}});
   var riTxt=$('#reasonIntTxt');if(riTxt)riTxt.oninput=function(){S.backReasonInt=riTxt.value};
   var reTxt=$('#reasonExtTxt');if(reTxt)reTxt.oninput=function(){S.backReasonExt=reTxt.value};
@@ -2025,7 +2072,7 @@ function bind(){
     var x=S.tasks[S.taskI],e=x.ent,extReason=S.backReasonExt.trim(),intNote=(S.backReasonInt||'').trim(),wasChecker=x.stage==='checker';
     if(e.insts[1]){e.insts[1].state='due';e.insts[1].meta={lo:'ຖືກຕີກັບໃຫ້ແກ້ໄຂ 04/08/2026',en:'Returned for correction on 04/08/2026'}}
     e.hist.push({d:'04/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ — '+extReason,en:'Returned for correction — '+extReason},
-      m:'',v:0,u:who().n,f:'—',ch:'',internal:intNote});
+      m:'',v:0,u:who().n,f:'—',ch:'',internal:intNote,st:'returned'});
     S.tasks.splice(S.taskI,1);S.backReasonInt='';S.backReasonExt='';S.modal=null;toast(t('backDone'),t('backDoneS'));
     go(wasChecker?'inspect':'approveQ')}});
 
