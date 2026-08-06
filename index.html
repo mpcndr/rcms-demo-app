@@ -198,13 +198,24 @@ tbody tr:hover td{background:var(--m-lite)}
 .field input.big{font-size:18px;font-weight:600;font-family:'IBM Plex Mono',monospace}
 .hint{font-size:10.5px;color:var(--muted);margin-top:5px}
 .hint.err{color:var(--bad)}
-.drop{border:1.5px dashed var(--line);border-radius:8px;padding:20px;text-align:center;color:var(--muted);font-size:11.5px;background:var(--white);cursor:pointer}
+.drop{border:1.5px dashed var(--line);border-radius:8px;padding:18px;text-align:center;color:var(--muted);font-size:11.5px;background:var(--white);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:5px}
 .drop.drag{border-color:var(--m);background:var(--m-lite);color:var(--m)}
 .drop:hover{border-color:var(--m);background:var(--m-lite)}
-.drop b{display:block;color:var(--ink2);font-size:12.5px;margin-bottom:3px}
+.drop .dropIcon{font-size:17px;color:var(--m)}
+.drop b{color:var(--ink2);font-size:12.5px;font-weight:600}
 .files{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{background:var(--m-lite);border:1px solid #C8DDEC;border-radius:5px;padding:5px 10px;font-size:10.5px;color:var(--ink2)}
 .chip b{color:var(--ok);margin-right:4px}
+.filelist{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+.filerow{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--white)}
+.filerow .fic{width:24px;height:24px;border-radius:50%;background:var(--okbg);color:var(--ok);font-size:12px;
+  display:flex;align-items:center;justify-content:center;flex:0 0 24px}
+.filerow .fmeta{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.filerow .fmeta b{font-size:11.5px;color:var(--ink);font-weight:600}
+.filerow .fmeta span{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.filerow .frm{cursor:pointer;color:var(--muted);font-size:12.5px;padding:3px 6px;border-radius:5px;flex:0 0 auto}
+.filerow .frm:hover{color:var(--bad);background:var(--badbg)}
 .audit{background:var(--soft);border-radius:7px;padding:12px 14px;font-size:10.5px;color:var(--muted);line-height:1.7;margin-top:13px}
 .audit b{color:var(--ink2)}
 
@@ -326,7 +337,8 @@ lo:{
  kbTitle:'ປຸ່ມລັດ',close:'ປິດ',cancel:'ຍົກເລີກ',confirm:'ຢືນຢັນ',save:'ບັນທຶກ',edit:'ແກ້ໄຂ',manage:'ຈັດການ',
  helpCenter:'ຄູ່ມືການໃຊ້ ແລະ Helpdesk',profile:'ຂໍ້ມູນຜູ້ໃຊ້',logout:'ອອກຈາກລະບົບ',signedAs:'ເຂົ້າສູ່ລະບົບເປັນ',
  loggedIn:'ເຂົ້າສູ່ລະບົບສຳເລັດ',resetDone:'ຣີເຊັດເດໂມແລ້ວ',resetDoneS:'ເລີ່ມຈາກໜ້າເຂົ້າສູ່ລະບົບອີກຄັ້ງ',
- clearCache:'ລ້າງແຄດ',clearCacheConfirm:'ລ້າງແຄດ ແລະ ຣີເຊັດຂໍ້ມູນເດໂມທັງໝົດ? ການດຳເນີນການນີ້ຈະກັບຄືນໜ້າເຂົ້າສູ່ລະບົບ.',
+ clearCache:'ລ້າງແຄດ',clearCacheConfirm:'ລ້າງແຄດ ແລະ ຣີເຊັດຂໍ້ມູນເດໂມທັງໝົດ? ທ່ານຈະຍັງເຂົ້າສູ່ລະບົບຢູ່.',
+ clearCacheDone:'ລ້າງແຄດແລ້ວ',clearCacheDoneS:'ຂໍ້ມູນເດໂມຖືກຣີເຊັດ ໂດຍທ່ານຍັງເຂົ້າສູ່ລະບົບຢູ່',
 
  mMonitor:'ຕິດຕາມທຶນ',mQueue:'ຄິວງານ',mOther:'ອື່ນໆ',
  dash:'ໜ້າຫຼັກ',ent:'ຄົ້ນຫາວິສາຫະກິດ',declare:'ແຈ້ງຊຳລະທຶນ',inspect:'ຄິວກວດສອບ',approveQ:'ຄິວອະນຸມັດ',
@@ -356,7 +368,7 @@ lo:{
  collateral:'ລາຍການຫຼັກປະກັນ',colDetail:'ລາຍລະອຽດ',colVal:'ມູນຄ່າທີ່ຕີລາຄາ',viewReport:'ເບິ່ງບົດລາຍງານ',
  landType:'ທີ່ດິນ',buildingType:'ອາຄານ',carType:'ລົດ',machineType:'ເຄື່ອງຈັກ',
  auditTrail:'ປະຫວັດການຊຳລະ ແລະ ອະນຸມັດ',auditNote:'ທຸກລາຍການບັນທຶກ ຜູ້ດຳເນີນການ ວັນເວລາ ແລະ ຄ່າກ່ອນ/ຫຼັງ ກວດຍ້ອນຫຼັງໄດ້',
- noHistory:'ຍັງບໍ່ມີການເຄື່ອນໄຫວ',printData:'ພິມຂໍ້ມູນ / ໃບຢັ້ງຢືນ',addPaymentBtn:'ແຈ້ງຊຳລະທຶນເພີ່ມ',waitingOn:'ລໍຢູ່ຂັ້ນ',
+ noHistory:'ຍັງບໍ່ມີການເຄື່ອນໄຫວ',noFiles:'ຍັງບໍ່ມີເອກະສານທີ່ແນບ',printData:'ພິມຂໍ້ມູນ / ໃບຢັ້ງຢືນ',addPaymentBtn:'ແຈ້ງຊຳລະທຶນເພີ່ມ',waitingOn:'ລໍຢູ່ຂັ້ນ',
  stageChecker:'ກວດສອບ (Checker)',stageApprover:'ອະນຸມັດ (Approver)',paymentBlocked:'ຕ້ອງຊຳລະຄ່າປັບໃຫ້ຄົບກ່ອນ ຈຶ່ງຈະບັນທຶກເພີ່ມໄດ້',
  dlPdf:'ດາວໂຫຼດ PDF',issueCert:'ອອກໃບຢັ້ງຢືນ',notifyBiz:'ແຈ້ງເຕືອນຜູ້ປະກອບການ',sendVal:'ສົ່ງເລື່ອງປະເມີນຊັບສິນ',
 
@@ -455,7 +467,8 @@ en:{
  kbTitle:'Keyboard shortcuts',close:'Close',cancel:'Cancel',confirm:'Confirm',save:'Save',edit:'Edit',manage:'Manage',
  helpCenter:'User Manual & Helpdesk',profile:'Profile',logout:'Sign out',signedAs:'Signed in as',
  loggedIn:'Signed in',resetDone:'Demo reset',resetDoneS:'Starting again from the sign-in screen',
- clearCache:'Clear cache',clearCacheConfirm:'Clear cache and reset all demo data? This will return you to the sign-in screen.',
+ clearCache:'Clear cache',clearCacheConfirm:'Clear cache and reset all demo data? You will stay signed in.',
+ clearCacheDone:'Cache cleared',clearCacheDoneS:'Demo data has been reset — you are still signed in',
 
  mMonitor:'Capital Monitoring',mQueue:'Queues',mOther:'Other',
  dash:'Dashboard',ent:'Search Enterprises',declare:'Declare Payment',inspect:'Inspection Queue',approveQ:'Approval Queue',
@@ -485,7 +498,7 @@ en:{
  collateral:'Collateral Items',colDetail:'Details',colVal:'Appraised value',viewReport:'View report',
  landType:'Land',buildingType:'Building',carType:'Car',machineType:'Machine',
  auditTrail:'Payment & Approval History',auditNote:'Every entry records who acted, when, and the before/after values for full traceability',
- noHistory:'No activity yet',printData:'Print data / certificate',addPaymentBtn:'Declare additional payment',waitingOn:'Waiting on',
+ noHistory:'No activity yet',noFiles:'No documents attached yet',printData:'Print data / certificate',addPaymentBtn:'Declare additional payment',waitingOn:'Waiting on',
  stageChecker:'Verification (Checker)',stageApprover:'Approval (Approver)',paymentBlocked:'Outstanding penalties must be paid in full before another payment can be recorded',
  dlPdf:'Download PDF',issueCert:'Issue certificate',notifyBiz:'Notify business owner',sendVal:'Send for asset valuation',
 
@@ -792,6 +805,15 @@ function reset(){
      valjobs:JSON.parse(JSON.stringify(VALJOBS)),users:JSON.parse(JSON.stringify(USERS_SEED)),
      backReasonInt:'',backReasonExt:'',loginStep:'cred',loginUser:'',loginPass:'',loginErr:'',tx:null,valI:0,valForm:{val:null,files:[],err:''},
      adv:{regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''}};
+  render();
+}
+function clearCache(){
+  S.ents=seedEnts();S.invs=seedInv();S.tasks=[];S.taskI=0;S.form=null;S.modal=null;S.notif=[];
+  S.read=false;S.bell=false;S.umenu=false;S.certCopy=false;
+  S.valjobs=JSON.parse(JSON.stringify(VALJOBS));S.users=JSON.parse(JSON.stringify(USERS_SEED));
+  S.backReasonInt='';S.backReasonExt='';S.tx=null;S.valI=0;S.valForm={val:null,files:[],err:''};
+  S.adv={regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''};
+  if(S.view==='declare')S.view=S.sel?'detail':'dash';
   render();
 }
 
@@ -1104,15 +1126,16 @@ function entInfoCard(e,noMargin){
     (unpaidInvs.length?(unpaidInvs.length+' · '+fmt(unpaidAmt)+' LAK'):t('stPaid'))+'</span></div>'+
     '</div></div></div>';
 }
-function docChecklist(mode){
-  var rows=mode==='asset'
-    ?[[L(MASTER.doctype[3]),t('reqLbl'),1],[t('docAssetPhoto'),t('optLbl'),0]]
-    :MASTER.doctype.slice(0,3).map(function(d){return [L(d),'',0]});
-  var body=rows.map(function(r,i){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;'+
-    (i<rows.length-1?'border-bottom:1px solid var(--soft);':'')+'font-size:11.5px">'+
-    '<span>☐ '+r[0]+'</span>'+(r[1]?'<span style="font-size:10px;font-weight:600;color:'+(r[2]?'var(--bad)':'var(--muted)')+'">'+r[1]+'</span>':'')+
+function docChecklist(f){
+  var opts=docTypeOptions(f.mode),uploaded={};
+  f.files.forEach(function(fl){uploaded[fl.k]=true});
+  var rows=opts.map(function(o,i){return [o.k,o.lbl,f.mode==='asset'?(i===0?t('reqLbl'):t('optLbl')):'',i===0]});
+  var body=rows.map(function(r,i){var done=!!uploaded[r[0]];
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;'+
+    (i<rows.length-1?'border-bottom:1px solid var(--soft);':'')+'font-size:11.5px'+(done?';color:var(--ok)':'')+'">'+
+    '<span>'+(done?'☑':'☐')+' '+r[1]+'</span>'+(r[2]?'<span style="font-size:10px;font-weight:600;color:'+(r[3]&&!done?'var(--bad)':'var(--muted)')+'">'+r[2]+'</span>':'')+
     '</div>'}).join('');
-  var note=mode==='asset'?'':'<div style="font-size:10px;color:var(--muted);font-weight:600;padding-top:7px;border-top:1px solid var(--soft);margin-top:1px">'+t('anyOneLbl')+'</div>';
+  var note=f.mode==='asset'?'':'<div style="font-size:10px;color:var(--muted);font-weight:600;padding-top:7px;border-top:1px solid var(--soft);margin-top:1px">'+t('anyOneLbl')+'</div>';
   return '<div style="border:1px solid var(--line);border-radius:6px;padding:2px 10px 6px;margin-bottom:10px">'+body+note+'</div>';
 }
 function docTypeOptions(mode){
@@ -1275,12 +1298,15 @@ function vDeclare(){
    ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
      return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
    '</div>':'')+
-  '<div class="field"><label>'+t('fDocs')+'</label>'+docChecklist(f.mode)+
+  '<div class="field"><label>'+t('fDocs')+'</label>'+docChecklist(f)+
   '<select id="docType" style="width:100%;margin-bottom:10px">'+docTypeOptions(f.mode).map(function(o){
     return '<option value="'+o.k+'"'+(f.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
-  '<div class="drop" id="drop"><b>'+t('dropT')+'</b>'+(f.mode==='asset'?t('dropSVal'):t('dropS'))+'</div>'+
-  '<div class="files">'+f.files.map(function(fl){return '<span class="chip"><b>✓</b>'+fl.lbl+': '+fl.name+
-    '<i data-rmfile="'+fl.k+'" style="margin-left:6px;cursor:pointer">✕</i></span>'}).join('')+'</div></div>'+
+  '<div class="drop" id="drop"><span class="dropIcon">⬆</span><b>'+t('dropT')+'</b></div>'+
+  '<div class="filelist">'+(f.files.length?f.files.map(function(fl){
+    return '<div class="filerow"><span class="fic">✓</span>'+
+    '<div class="fmeta"><b>'+fl.lbl+'</b><span>'+fl.name+'</span></div>'+
+    '<span class="frm" data-rmfile="'+fl.k+'" title="'+t('cancel')+'">✕</span></div>'}).join('')
+    :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div></div>'+
   '<div class="audit"><b>'+t('auditTrail')+'</b> — '+who().n+' · 04/08/2026 09:47</div>'+
   '<div class="acts" style="margin-top:16px"><button class="btn" id="submitDeclare">'+t('submitDeclare')+'</button>'+
   '<button class="btn ghost" data-nav="'+(isOwner?'dash':'ent')+'">'+t('cancel')+'</button></div></div></div>';
@@ -1954,7 +1980,7 @@ function bind(){
   document.querySelectorAll('[data-clearcache]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();S.modal={type:'clearcache'};render()}});
   document.querySelectorAll('[data-doclearcache]').forEach(function(b){b.onclick=function(){
-    reset();toast(t('resetDone'),t('resetDoneS'))}});
+    clearCache();toast(t('clearCacheDone'),t('clearCacheDoneS'),true)}});
   document.querySelectorAll('[data-pay]').forEach(function(b){b.onclick=function(){
     var e=S.ents.filter(function(x){return x.id===S.sel})[0];
     S.form={mode:'cash',payMode:'full',amt:fmt(e.cap-e.paid),files:[],docType:'doc0',err:''};go('declare')}});
