@@ -1126,17 +1126,14 @@ function entInfoCard(e,noMargin){
     (unpaidInvs.length?(unpaidInvs.length+' · '+fmt(unpaidAmt)+' LAK'):t('stPaid'))+'</span></div>'+
     '</div></div></div>';
 }
-function docChecklist(f){
-  var opts=docTypeOptions(f.mode),uploaded={};
-  f.files.forEach(function(fl){uploaded[fl.k]=true});
-  var rows=opts.map(function(o,i){return [o.k,o.lbl,f.mode==='asset'?(i===0?t('reqLbl'):t('optLbl')):'',i===0]});
-  var body=rows.map(function(r,i){var done=!!uploaded[r[0]];
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;'+
-    (i<rows.length-1?'border-bottom:1px solid var(--soft);':'')+'font-size:11.5px'+(done?';color:var(--ok)':'')+'">'+
-    '<span>'+(done?'☑':'☐')+' '+r[1]+'</span>'+(r[2]?'<span style="font-size:10px;font-weight:600;color:'+(r[3]&&!done?'var(--bad)':'var(--muted)')+'">'+r[2]+'</span>':'')+
-    '</div>'}).join('');
-  var note=f.mode==='asset'?'':'<div style="font-size:10px;color:var(--muted);font-weight:600;padding-top:7px;border-top:1px solid var(--soft);margin-top:1px">'+t('anyOneLbl')+'</div>';
-  return '<div style="border:1px solid var(--line);border-radius:6px;padding:2px 10px 6px;margin-bottom:10px">'+body+note+'</div>';
+function docsErrMsg(f){
+  if(f.mode==='asset'){
+    if(!f.files.some(function(x){return x.k==='valReport'}))
+      return t('errFile')+' — '+t('reqLbl')+': '+L(MASTER.doctype[3]);
+  }else if(!f.files.length){
+    return t('errFile')+' — '+t('anyOneLbl')+': '+MASTER.doctype.slice(0,3).map(L).join(' / ');
+  }
+  return '';
 }
 function docTypeOptions(mode){
   return mode==='asset'
@@ -1151,6 +1148,7 @@ function wireDropTyped(el,f){
     var opts=docTypeOptions(f.mode),o=opts.filter(function(x){return x.k===f.docType})[0]||opts[0];
     f.files=f.files.filter(function(x){return x.k!==o.k});
     f.files.push({k:o.k,lbl:o.lbl,name:name});
+    f.docErr='';
     render();
   };
   el.onclick=function(){push(DOC_MOCKS[f.docType]||'document.pdf')};
@@ -1298,7 +1296,7 @@ function vDeclare(){
    ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
      return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
    '</div>':'')+
-  '<div class="field"><label>'+t('fDocs')+'</label>'+docChecklist(f)+
+  '<div class="field"><label>'+t('fDocs')+'</label>'+
   '<select id="docType" style="width:100%;margin-bottom:10px">'+docTypeOptions(f.mode).map(function(o){
     return '<option value="'+o.k+'"'+(f.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
   '<div class="drop" id="drop"><span class="dropIcon">⬆</span><b>'+t('dropT')+'</b></div>'+
@@ -1306,7 +1304,8 @@ function vDeclare(){
     return '<div class="filerow"><span class="fic">✓</span>'+
     '<div class="fmeta"><b>'+fl.lbl+'</b><span>'+fl.name+'</span></div>'+
     '<span class="frm" data-rmfile="'+fl.k+'" title="'+t('cancel')+'">✕</span></div>'}).join('')
-    :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div></div>'+
+    :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div>'+
+  (f.docErr?'<div class="hint err" style="margin-top:8px">'+f.docErr+'</div>':'')+'</div>'+
   '<div class="audit"><b>'+t('auditTrail')+'</b> — '+who().n+' · 04/08/2026 09:47</div>'+
   '<div class="acts" style="margin-top:16px"><button class="btn" id="submitDeclare">'+t('submitDeclare')+'</button>'+
   '<button class="btn ghost" data-nav="'+(isOwner?'dash':'ent')+'">'+t('cancel')+'</button></div></div></div>';
@@ -1952,11 +1951,12 @@ function bind(){
     if(S.form.mode==='asset'&&!S.form.assetCat){S.form.assetCat='land';S.form.assetVals={}}
     var okKeys=docTypeOptions(S.form.mode).map(function(o){return o.k});
     S.form.files=S.form.files.filter(function(fl){return okKeys.indexOf(fl.k)>-1});
-    S.form.docType=okKeys[0];
+    S.form.docType=okKeys[0];S.form.docErr='';
     render()}});
   var dts=$('#docType');if(dts)dts.onchange=function(){S.form.docType=dts.value};
   document.querySelectorAll('[data-rmfile]').forEach(function(b){b.onclick=function(ev){
-    ev.stopPropagation();S.form.files=S.form.files.filter(function(fl){return fl.k!==b.dataset.rmfile});render()}});
+    ev.stopPropagation();S.form.files=S.form.files.filter(function(fl){return fl.k!==b.dataset.rmfile});
+    S.form.docErr=docsErrMsg(S.form);render()}});
   var acs=$('#assetCat');if(acs)acs.onchange=function(){S.form.assetCat=acs.value;S.form.assetVals={};render()};
   document.querySelectorAll('[data-assetfield]').forEach(function(inp){inp.oninput=function(){
     if(!S.form.assetVals)S.form.assetVals={};S.form.assetVals[inp.dataset.assetfield]=inp.value}});
@@ -2067,7 +2067,9 @@ function bind(){
       var reqK=ASSET_REQ[S.form.assetCat],reqV=S.form.assetVals&&S.form.assetVals[reqK];
       if(!reqV||!reqV.trim()){S.form.err=t('errAssetField');return render()}
     }
-    if(!S.form.files.length){S.form.err=t('errFile');return render()}
+    var docErr=docsErrMsg(S.form);
+    if(docErr){S.form.docErr=docErr;return render()}
+    S.form.docErr='';
     S.form.sending=true;sp.disabled=true;
     var subWho=who().n,isOwner=S.role==='owner';
     S.tasks.push({ref:'APR-2026-0'+(918+S.tasks.length),ent:e,amt:v,mode:S.form.mode,
