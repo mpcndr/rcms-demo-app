@@ -287,3 +287,12 @@ Notes: simple reorder in vTask()'s inner assembly; vTxDetail() already had the s
 Notes: replaced modal-scoped state (S.modal.val/files/err) with page-level S.valI/S.valForm; removed the old 'valjobfirm' modal type entirely rather than keeping both paths. Fixed a stale sidebar-highlight condition that referenced a 'valjobdetail' view for the wrong menu item (valQueue, staff-side) — corrected to target 'valfirm' (the firm's own menu item), which is what actually navigates there now. Verified with `node --check`, full regression suite (71 checks across smoke/flow/flow2, zero JS errors — updated flow.py's assertions from S.modal to S.valForm/S.view), and a full-page screenshot confirming the collateral card renders with the real land-title/appraisal data.
 
 ---
+
+## Epic: Task Review Action Placement
+
+### Done
+- [x] TASK-071 | fix: moved Confirm & Sign / Return for correction buttons from the sidebar "Decision" card to a dedicated action bar at the very bottom of the Checker/Approver task review page — sized to content (not full-width blocks), right-aligned; the explanatory note stays in the sidebar for context near the top | 2026-08-06 | fix
+
+Notes: kept the note text (checkerNote/approverNote) in place in the "Decision" sidebar card since it's contextual explanation, not an action — only the two buttons moved into a new full-width card below the evidence section. Verified with `node --check`, full regression suite (55 checks, zero JS errors), and a screenshot confirming both buttons render compact and bottom-anchored.
+
+---

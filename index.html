@@ -1275,12 +1275,13 @@ function vTask(){
   '<div class="card"><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+files+
   '<div class="audit">'+t('evidenceN')+'</div></div></div></div>'+
   '<div><div class="card"><div class="h"><h3>'+t('decide')+'</h3></div><div class="c">'+
-  '<div style="font-size:11.5px;color:var(--muted);line-height:1.7;margin-bottom:13px">'+(isC?t('checkerNote'):t('approverNote'))+'</div>'+
-  '<div class="acts" style="flex-direction:column">'+
-  (isC?'<button class="btn" style="width:100%" data-fwd="1">'+t('fwdApprover')+'</button>'
-      :'<button class="btn" style="width:100%" data-sign="1">'+t('signApprove')+'</button>')+
-  '</div>'+
-  '<button class="btn danger" style="width:100%;margin-top:10px" data-openback="1">'+t('sendBack')+'</button></div></div></div></div>';
+  '<div style="font-size:11.5px;color:var(--muted);line-height:1.7">'+(isC?t('checkerNote'):t('approverNote'))+'</div>'+
+  '</div></div></div></div>'+
+  '<div class="card" style="margin-top:14px"><div class="c"><div class="acts" style="justify-content:flex-end">'+
+  '<button class="btn danger" data-openback="1">'+t('sendBack')+'</button>'+
+  (isC?'<button class="btn" data-fwd="1">'+t('fwdApprover')+'</button>'
+      :'<button class="btn" data-sign="1">'+t('signApprove')+'</button>')+
+  '</div></div></div>';
   return shell(x.ref,[isC?t('queueTitle'):t('queueApprove'),isC?'inspect':'approveQ'],inner);
 }
 
