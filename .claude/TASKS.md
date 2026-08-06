@@ -316,3 +316,12 @@ Notes: verified with `node --check`, full regression suite (71 checks across smo
 Notes: mock document names are deterministic per mode (cash vs asset pools) and sized to the existing doc-count field so counts stay consistent; transaction reference is deterministically derived from the date and amount rather than random, so re-renders are stable. Verified with `node --check`, full regression suite (71 checks, zero JS errors), and screenshots of both the tx-detail page (cash fields + mocked docs) and the valuation firm's post-submit read-only view.
 
 ---
+
+## Epic: Valuation Job — Granular Declared Fields
+
+### Done
+- [x] TASK-076 | feat: In-network valuation job page now shows a "Fields submitted at capital declaration" card — the granular ASSET_FIELDS values (Deed No., Land parcel No., Total area, Estimated price, etc.) the enterprise actually filled in per asset category, not just the summarized Collateral Items description. Persists for already-confirmed jobs too, not only pending ones | 2026-08-06 | feature
+
+Notes: added a `fields` object to each of the 4 seeded collateral entries matching their ASSET_FIELDS shape (land/building/machine), and render it in vValJobDetail() by pairing ASSET_FIELDS[type] labels with col.fields[key] values — reuses the same field-label translations already defined for the Declare Capital Payment form, so labels stay consistent app-wide. Verified with `node --check`, dict symmetry (346/346), full regression suite (71 checks, zero JS errors), and a screenshot confirming the fields render correctly for an already-accepted job.
+
+---

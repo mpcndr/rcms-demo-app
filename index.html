@@ -369,6 +369,7 @@ lo:{
  dropT:'ກົດເພື່ອແນບໄຟລ໌ ຫຼື ລາກໄຟລ໌ມາວາງທີ່ນີ້',dropS:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ໃບນຳຝາກ / ສະລິບໂອນ / ໜັງສືຢືນຢັນ · PDF, JPG ບໍ່ເກີນ 10MB',
  dropSVal:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ບົດລາຍງານປະເມີນລາຄາ / ຮູບຖ່າຍຊັບສິນ / ໃບກວດສະຖານທີ່ · PDF, JPG ບໍ່ເກີນ 10MB',
  reqLbl:'ຈຳເປັນ',optLbl:'ບໍ່ບັງຄັບ',anyOneLbl:'ເລືອກຢ່າງໜ້ອຍ 1',docAssetPhoto:'ຮູບຖ່າຍຊັບສິນ',
+ submittedFields:'ຂໍ້ມູນທີ່ຍື່ນຕອນປະກອບທຶນ',
  remainNote:'ຍັງເຫຼືອທີ່ຕ້ອງຊຳລະ',submitDeclare:'ຍື່ນເຂົ້າຄິວກວດສອບ',
  errAmt:'ກະລຸນາໃສ່ຈຳນວນເງິນ',errOver:'ຈຳນວນເກີນຍອດຄົງເຫຼືອ',errFile:'ຕ້ອງແນບເອກະສານຢ່າງໜ້ອຍ 1 ໄຟລ໌',
  errAssetField:'ກະລຸນາໃສ່ຂໍ້ມູນຊັບສິນທີ່ຈຳເປັນ (ຊ່ອງທີ່ມີ *)',
@@ -495,6 +496,7 @@ en:{
  dropT:'Click to attach, or drag and drop files here',dropS:'Attach at least 1: deposit slip / transfer receipt / confirmation letter · PDF, JPG up to 10MB',
  dropSVal:'Attach at least 1: appraisal report / asset photos / site inspection form · PDF, JPG up to 10MB',
  reqLbl:'Required',optLbl:'Optional',anyOneLbl:'Choose at least 1',docAssetPhoto:'Asset photos',
+ submittedFields:'Fields submitted at capital declaration',
  remainNote:'Outstanding balance',submitDeclare:'Submit for verification',
  errAmt:'Enter the amount',errOver:'Amount exceeds the outstanding balance',errFile:'Attach at least one supporting document',
  errAssetField:'Please fill in the required asset details (marked with *)',
@@ -631,7 +633,8 @@ function matchAcct(){var u=(S.loginUser||'').trim().toLowerCase();return ACCTS.f
 function seedEnts(){return[
  {id:'ELN-2025-1001',name:'ລາວກະສິກຳ ພັດທະນາ ຈຳກັດ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ນະຄອນຫຼວງວຽງຈັນ',en:'Vientiane Capital'},isic:'0111',
   reg:'18/08/2025',due:'18/08/2026',cap:1000000000,paid:300000000,status:'PARTIAL',acct:'APB 010-2-88471-6',taxris:'206448711',
-  collateral:[{type:'land',label:{lo:'ທີ່ດິນ 2 ຕອນ',en:'2 land plots'},detail:{lo:'ເນື້ອທີ່ 1.5 ha · ໃບຕາດິນເລກທີ 4471-A, 4471-B',en:'Area 1.5 ha · Land title nos. 4471-A, 4471-B'},value:700000000}],
+  collateral:[{type:'land',label:{lo:'ທີ່ດິນ 2 ຕອນ',en:'2 land plots'},detail:{lo:'ເນື້ອທີ່ 1.5 ha · ໃບຕາດິນເລກທີ 4471-A, 4471-B',en:'Area 1.5 ha · Land title nos. 4471-A, 4471-B'},value:700000000,
+   fields:{deedNo:'4471-A, 4471-B',landParcelNo:'PL-4471',totalArea:'15,000',landEstimatedPrice:'700,000,000'}}],
   insts:[{no:1,amt:300000000,state:'paid',meta:{lo:'ເງິນສົດ · ໂອນເຂົ້າບັນຊີ APB 010-2-88471-6 · ຢືນຢັນໂດຍ Checker 02/11/2025',en:'Cash · transferred to APB 010-2-88471-6 · confirmed by the Checker on 02/11/2025'}},
          {no:2,amt:700000000,state:'due',meta:{lo:'ແຈ້ງເປັນຊັບສິນ (ທີ່ດິນ 2 ຕອນ) · ລໍຜົນປະເມີນ',en:'Declared as assets (2 land plots) · awaiting appraisal'}}],
   hist:[{d:'02/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1 (ເງິນສົດ)',en:'Capital instalment 1 received (cash)'},m:'cash',v:300000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter'},
@@ -642,7 +645,8 @@ function seedEnts(){return[
          {no:2,amt:315000000,state:'wait',meta:{lo:'ລໍຊຳລະງວດທີ 1 ກ່ອນ',en:'Waiting on instalment 1'}}],hist:[]},
  {id:'ELN-2025-1003',name:'ສະຫວັນ ໂລຈິສຕິກ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ສະຫວັນນະເຂດ',en:'Savannakhet'},isic:'4923',
   reg:'29/08/2025',due:'29/08/2026',cap:2800000000,paid:1260000000,status:'PARTIAL',acct:'APB 021-4-11902-3',taxris:'206649931',
-  collateral:[{type:'building',label:{lo:'ອາຄານສາງສິນຄ້າ',en:'Warehouse building'},detail:{lo:'ພື້ນທີ່ໃຊ້ສອຍ 2,400 ຕ.ມ. · ສ້າງປີ 2018 · ເລກທະບຽນອາຄານ 330-WB-12',en:'Usage area 2,400 sq.m · built 2018 · building registration no. 330-WB-12'},value:1540000000}],
+  collateral:[{type:'building',label:{lo:'ອາຄານສາງສິນຄ້າ',en:'Warehouse building'},detail:{lo:'ພື້ນທີ່ໃຊ້ສອຍ 2,400 ຕ.ມ. · ສ້າງປີ 2018 · ເລກທະບຽນອາຄານ 330-WB-12',en:'Usage area 2,400 sq.m · built 2018 · building registration no. 330-WB-12'},value:1540000000,
+   fields:{buildingName:'Savan Logistics Warehouse',noOfFloor:'1',usageArea:'2,400',estimatedYear:'2018',totalPrice:'1,540,000,000'}}],
   insts:[{no:1,amt:1260000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 15/12/2025',en:'Confirmed 15/12/2025'}},
          {no:2,amt:1540000000,state:'due',meta:{lo:'ຍັງບໍ່ແຈ້ງຮູບແບບການຊຳລະ',en:'Payment form not yet declared'}}],
   hist:[{d:'15/12/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1260000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter'}]},
@@ -654,13 +658,15 @@ function seedEnts(){return[
         {d:'13/06/2026',a:{lo:'ເຂົ້າສະຖານະເກີນກຳນົດ (ອັດຕະໂນມັດ)',en:'Flagged overdue (automatic)'},m:'',v:0,u:'System',f:'—',ch:''}]},
  {id:'ELN-2025-1005',name:'ຫຼວງພະບາງ ທ່ອງທ່ຽວ',type:{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},prov:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},isic:'7911',
   reg:'31/08/2025',due:'31/08/2026',cap:180000000,paid:180000000,status:'COMPLETED',acct:'APB 044-2-77410-5',taxris:'207450441',
-  collateral:[{type:'land',label:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},detail:{lo:'ເນື້ອທີ່ 0.4 ha · ໃບຕາດິນເລກທີ 5518-C',en:'Area 0.4 ha · Land title no. 5518-C'},value:180000000}],
+  collateral:[{type:'land',label:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},detail:{lo:'ເນື້ອທີ່ 0.4 ha · ໃບຕາດິນເລກທີ 5518-C',en:'Area 0.4 ha · Land title no. 5518-C'},value:180000000,
+   fields:{deedNo:'5518-C',landParcelNo:'PL-5518',totalArea:'4,000',landEstimatedPrice:'180,000,000'}}],
   insts:[{no:1,amt:180000000,state:'paid',meta:{lo:'ຊຳລະຄັ້ງດຽວເຕັມຈຳນວນ · ອອກໃບຢັ້ງຢືນແລ້ວ',en:'Paid in full in one transfer · certificate issued'}},
          {no:2,amt:0,state:'na',meta:{lo:'',en:''}}],
   hist:[{d:'05/09/2025',a:{lo:'ຊຳລະທຶນເຕັມຈຳນວນ',en:'Capital paid in full'},m:'cash',v:180000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter'}]},
  {id:'ELN-2025-1006',name:'ຄຳມ່ວນ ກໍ່ສ້າງ ຈຳກັດ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຄຳມ່ວນ',en:'Khammouane'},isic:'4100',
   reg:'04/09/2025',due:'04/09/2026',cap:5400000000,paid:1620000000,status:'PARTIAL',acct:'APB 052-3-30188-7',taxris:'206447021',
-  collateral:[{type:'machine',label:{lo:'ເຄື່ອງຈັກຜະລິດວັດສະດຸກໍ່ສ້າງ 6 ລາຍການ',en:'6 construction-material machinery items'},detail:{lo:'ຜູ້ຜະລິດ XCMG · ກຳລັງຜະລິດ 50 ໜ່ວຍ/ຊມ',en:'Manufacturer XCMG · Capacity 50 units/hr'},value:3780000000}],
+  collateral:[{type:'machine',label:{lo:'ເຄື່ອງຈັກຜະລິດວັດສະດຸກໍ່ສ້າງ 6 ລາຍການ',en:'6 construction-material machinery items'},detail:{lo:'ຜູ້ຜະລິດ XCMG · ກຳລັງຜະລິດ 50 ໜ່ວຍ/ຊມ',en:'Manufacturer XCMG · Capacity 50 units/hr'},value:3780000000,
+   fields:{machineName:'XCMG Batching Plant Set (6 units)',machinePledgeType:'Chattel mortgage',manufactory:'XCMG',capacity:'50 units/hr',estimatedPrice:'3,780,000,000'}}],
   insts:[{no:1,amt:1620000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 28/11/2025',en:'Confirmed 28/11/2025'}},
          {no:2,amt:3780000000,state:'due',meta:{lo:'ລໍປະເມີນເຄື່ອງຈັກ · In-network Firm',en:'Machinery appraisal pending · in-network firm'}}],
   hist:[{d:'28/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1620000000,u:'ນ. ສີວິໄລ',f:'4',ch:'chCounter'}]}
@@ -1329,6 +1335,10 @@ function vValJobDetail(){
    '<div><span class="k">'+t('colDetail')+'</span><span class="v" style="text-align:right;max-width:280px">'+L(col.detail)+'</span></div>'+
    '<div><span class="k">'+t('colVal')+'</span><span class="v num">'+fmt(col.value)+' LAK</span></div>'+
    '</div></div></div>':'';
+  var fieldsCard=(col&&col.fields)?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('submittedFields')+'</h3></div><div class="c"><div class="kv">'+
+   (ASSET_FIELDS[col.type]||[]).filter(function(af){return col.fields[af[0]]}).map(function(af){
+     return '<div><span class="k">'+L(af[1])+'</span><span class="v num">'+col.fields[af[0]]+'</span></div>'}).join('')+
+   '</div></div></div>':'';
   var jobCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('reqDetail')+'</h3><span style="margin-left:auto"><span class="pill '+lbl[1]+'">'+t(lbl[0])+'</span></span></div><div class="c"><div class="kv">'+
    '<div><span class="k">'+t('cRef')+'</span><span class="v num">'+j.id+'</span></div>'+
    '<div><span class="k">'+t('cEnt')+'</span><span class="v">'+(e?e.name:j.ent)+'</span></div>'+
@@ -1350,7 +1360,7 @@ function vValJobDetail(){
    '<div class="files">'+S.valForm.files.map(function(n){return '<span class="chip"><b>✓</b>'+n+'</span>'}).join('')+'</div></div>'+
    '<button class="btn" style="width:100%;margin-top:6px" data-submitjob="'+S.valI+'">'+t('submitJob')+'</button>'+
    '</div></div>':'';
-  var inner=jobCard+colCard+filesCard+formCard;
+  var inner=jobCard+colCard+fieldsCard+filesCard+formCard;
   return shell(j.id,[t('valPortal'),'valfirm'],inner);
 }
 
