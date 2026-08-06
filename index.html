@@ -384,7 +384,7 @@ lo:{
  dropSVal:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ບົດລາຍງານປະເມີນລາຄາ / ຮູບຖ່າຍຊັບສິນ / ໃບກວດສະຖານທີ່ · PDF, JPG ບໍ່ເກີນ 10MB',
  reqLbl:'ຈຳເປັນ',optLbl:'ບໍ່ບັງຄັບ',anyOneLbl:'ເລືອກຢ່າງໜ້ອຍ 1',docAssetPhoto:'ຮູບຖ່າຍຊັບສິນ',
  submittedFields:'ຂໍ້ມູນທີ່ຍື່ນຕອນປະກອບທຶນ',
- remainNote:'ຍັງເຫຼືອທີ່ຕ້ອງຊຳລະ',fAmtAuto:'ຄິດໄລ່ອັດຕະໂນມັດຈາກລາຄາປະເມີນຂ້າງເທິງ',submitDeclare:'ຍື່ນເຂົ້າຄິວກວດສອບ',
+ remainNote:'ຍັງເຫຼືອທີ່ຕ້ອງຊຳລະ',submitDeclare:'ຍື່ນເຂົ້າຄິວກວດສອບ',
  errAmt:'ກະລຸນາໃສ່ຈຳນວນເງິນ',errOver:'ຈຳນວນເກີນຍອດຄົງເຫຼືອ',errFile:'ຕ້ອງແນບເອກະສານຢ່າງໜ້ອຍ 1 ໄຟລ໌',
  errAssetField:'ກະລຸນາໃສ່ຂໍ້ມູນຊັບສິນທີ່ຈຳເປັນ (ຊ່ອງທີ່ມີ *)',
  hasPending:'ມີລາຍການລໍພິຈາລະນາຢູ່ແລ້ວ',
@@ -514,7 +514,7 @@ en:{
  dropSVal:'Attach at least 1: appraisal report / asset photos / site inspection form · PDF, JPG up to 10MB',
  reqLbl:'Required',optLbl:'Optional',anyOneLbl:'Choose at least 1',docAssetPhoto:'Asset photos',
  submittedFields:'Fields submitted at capital declaration',
- remainNote:'Outstanding balance',fAmtAuto:'Auto-calculated from the estimated price above',submitDeclare:'Submit for verification',
+ remainNote:'Outstanding balance',submitDeclare:'Submit for verification',
  errAmt:'Enter the amount',errOver:'Amount exceeds the outstanding balance',errFile:'Attach at least one supporting document',
  errAssetField:'Please fill in the required asset details (marked with *)',
  hasPending:'A submission is already awaiting a decision',
@@ -1043,7 +1043,7 @@ function vOwnerDash(){
    '<div><span class="k">'+t('cDue')+'</span><span class="v num" style="color:'+(days<0?'var(--bad)':'var(--ink)')+'">'+e.due+' ('+(lang==='lo'?days+' ວັນ':days+' days')+')</span></div>'+
    '</div></div></div></div></div>';
   var inner='<div class="split70">'+entInfoCard(e,true)+capStatusCard+'</div>'+
-   (remain>0?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('howToPay')+'</h3></div><div class="c">'+
+   (remain>0&&!pend?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('howToPay')+'</h3></div><div class="c">'+
     '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">'+
     '<div class="num" style="font-size:18px;font-weight:600">'+e.acct+'</div>'+
     '<button class="btn ghost" style="padding:6px 12px;font-size:11px" data-copyacct="'+e.acct+'">'+t('copyAcct')+'</button></div>'+
@@ -1300,9 +1300,7 @@ function vDeclare(){
    ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
      return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
    '</div>'+
-   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
-   '<div class="field"><label>'+t('fAmt')+' (LAK)</label><input class="big num" id="fAmt" value="'+f.amt+'" readonly>'+
-   '<div class="hint'+(f.err?' err':'')+'">'+(f.err||t('fAmtAuto'))+'</div></div></div>'
+   (f.err?'<div class="hint err" style="margin-top:8px">'+f.err+'</div>':'')
    :'')+
   '<div class="field"><label>'+t('fDocs')+'</label>'+
   '<select id="docType" style="width:100%;margin-bottom:10px">'+docTypeOptions(f.mode).map(function(o){
