@@ -1278,11 +1278,7 @@ function vTask(){
   (isC?'<button class="btn" style="width:100%" data-fwd="1">'+t('fwdApprover')+'</button>'
       :'<button class="btn" style="width:100%" data-sign="1">'+t('signApprove')+'</button>')+
   '</div>'+
-  '<div class="field" style="margin-top:14px;margin-bottom:8px"><label>'+t('reasonIntLbl')+'</label>'+
-  '<textarea id="reasonIntTxt" rows="2" placeholder="'+t('reasonIntPh')+'">'+esc(S.backReasonInt||'')+'</textarea></div>'+
-  '<div class="field" style="margin-bottom:8px"><label>'+t('reasonExtLbl')+'</label>'+
-  '<textarea id="reasonExtTxt" rows="2" placeholder="'+t('reasonExtPh')+'">'+esc(S.backReasonExt||'')+'</textarea></div>'+
-  '<button class="btn ghost" style="width:100%" data-back="1"'+((S.backReasonExt||'').trim()?'':' disabled')+'>'+t('sendBack')+'</button></div></div></div></div>';
+  '<button class="btn ghost" style="width:100%;margin-top:10px" data-openback="1">'+t('sendBack')+'</button></div></div></div></div>';
   return shell(x.ref,[isC?t('queueTitle'):t('queueApprove'),isC?'inspect':'approveQ'],inner);
 }
 
@@ -1696,6 +1692,16 @@ function vModal(){
     '<div class="acts"><button class="btn" style="flex:1" id="doSaveUser">'+t('save')+'</button>'+
     '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
   }
+  if(m.type==='backreason'){
+    return '<div class="veil" id="veil"><div class="modal"><h3>'+t('sendBack')+'</h3>'+
+    '<div class="field" style="margin-top:12px;margin-bottom:8px"><label>'+t('reasonIntLbl')+'</label>'+
+    '<textarea id="reasonIntTxt" rows="2" placeholder="'+t('reasonIntPh')+'">'+esc(S.backReasonInt||'')+'</textarea></div>'+
+    '<div class="field" style="margin-bottom:8px"><label>'+t('reasonExtLbl')+'</label>'+
+    '<textarea id="reasonExtTxt" rows="2" placeholder="'+t('reasonExtPh')+'">'+esc(S.backReasonExt||'')+'</textarea></div>'+
+    (m.err?'<div class="hint err">'+m.err+'</div>':'')+
+    '<div class="acts" style="margin-top:14px"><button class="btn ghost" style="flex:1" data-back="1">'+t('sendBack')+'</button>'+
+    '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
+  }
   if(m.type==='verify'){
     var vq=(m.q||'').trim().toLowerCase();
     var vmatch=vq?S.ents.filter(function(x){return x.name.toLowerCase().indexOf(vq)>=0||x.id.toLowerCase().indexOf(vq)>=0})[0]:null;
@@ -1969,16 +1975,16 @@ function bind(){
     e.hist.push({d:'04/08/2026',a:{lo:'ກວດສອບໂດຍ Checker',en:'Verified by the Checker'},m:'',v:0,u:who1,f:'—',ch:''});
     toast(t('checkDone'),t('checkDoneS'),true);go('inspect')}});
   var riTxt=$('#reasonIntTxt');if(riTxt)riTxt.oninput=function(){S.backReasonInt=riTxt.value};
-  var reTxt=$('#reasonExtTxt');
-  if(reTxt)reTxt.oninput=function(){S.backReasonExt=reTxt.value;
-    var bb=$('[data-back]');if(bb)bb.disabled=!reTxt.value.trim()};
+  var reTxt=$('#reasonExtTxt');if(reTxt)reTxt.oninput=function(){S.backReasonExt=reTxt.value};
+  document.querySelectorAll('[data-openback]').forEach(function(b){b.onclick=function(){
+    S.modal={type:'backreason',err:''};render()}});
   document.querySelectorAll('[data-back]').forEach(function(b){b.onclick=function(){
-    if(!(S.backReasonExt||'').trim())return;
+    if(!(S.backReasonExt||'').trim()){S.modal.err=t('errRequired');return render()}
     var x=S.tasks[S.taskI],e=x.ent,extReason=S.backReasonExt.trim(),intNote=(S.backReasonInt||'').trim(),wasChecker=x.stage==='checker';
     if(e.insts[1]){e.insts[1].state='due';e.insts[1].meta={lo:'ຖືກຕີກັບໃຫ້ແກ້ໄຂ 04/08/2026',en:'Returned for correction on 04/08/2026'}}
     e.hist.push({d:'04/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ — '+extReason,en:'Returned for correction — '+extReason},
       m:'',v:0,u:who().n,f:'—',ch:'',internal:intNote});
-    S.tasks.splice(S.taskI,1);S.backReasonInt='';S.backReasonExt='';toast(t('backDone'),t('backDoneS'));
+    S.tasks.splice(S.taskI,1);S.backReasonInt='';S.backReasonExt='';S.modal=null;toast(t('backDone'),t('backDoneS'));
     go(wasChecker?'inspect':'approveQ')}});
 
   var o1=$('#otp');if(o1)otpWire(o1,function(f){$('#doLogin').disabled=!f});

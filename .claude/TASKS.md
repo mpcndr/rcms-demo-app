@@ -251,3 +251,12 @@ Notes: image referenced as a plain file (MOIC01.webp, ~126KB) alongside index.ht
 Notes: verified with `node --check`, full regression suite (55 checks, zero JS errors), and screenshots of both modes confirming the checklist now reads naturally.
 
 ---
+
+## Epic: Return-for-Correction Modal
+
+### Done
+- [x] TASK-067 | fix: Checker/Approver's "Decision" card — Return button now opens a modal asking for the internal/external reason before returning the case, instead of showing always-visible inline textareas with a conditionally-disabled button on the page itself | 2026-08-06 | fix
+
+Notes: new modal type 'backreason' reuses the same reasonIntTxt/reasonExtTxt ids and S.backReasonInt/Ext state, so the underlying return logic (mutating e.insts, pushing to e.hist, removing the task) is unchanged — only the trigger and validation-error surface moved into the modal (data-openback opens it, data-back now sets S.modal.err instead of just no-op'ing when the external reason is empty). Verified with `node --check`, full regression suite (55 checks, zero JS errors), a targeted Playwright test of the full block→fill→submit flow, and a screenshot of the modal.
+
+---
