@@ -1970,7 +1970,7 @@ function bind(){
     S.form.assetCat=acs.value;S.form.assetVals={};S.form.amt='';S.form.err='';render()};
   document.querySelectorAll('[data-assetfield]').forEach(function(inp){inp.oninput=function(){
     if(!S.form.assetVals)S.form.assetVals={};S.form.assetVals[inp.dataset.assetfield]=inp.value;
-    if(inp.dataset.assetfield===ASSET_PRICE_KEY[S.form.assetCat]){S.form.amt=inp.value;S.form.err='';render()}}});
+    if(inp.dataset.assetfield===ASSET_PRICE_KEY[S.form.assetCat]){S.form.amt=inp.value;S.form.err=''}}});
   document.querySelectorAll('[data-paymode]').forEach(function(b){b.onclick=function(){
     var e=S.ents.filter(function(x){return x.id===S.sel})[0];
     S.form.payMode=b.dataset.paymode;
