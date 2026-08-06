@@ -1701,6 +1701,8 @@ function vModal(){
 
 /* ================= render / navigation ================= */
 function render(){
+  var bodyEl=document.querySelector('.body'),prevTop=bodyEl?bodyEl.scrollTop:0;
+  var keepScroll=render._key===S.view+':'+S.mobile;
   document.body.className=(lang==='lo'?'lo':'');
   document.documentElement.lang=lang;
   var h;
@@ -1726,6 +1728,9 @@ function render(){
   var v=$('#veil');if(v)v.remove();
   if(S.modal)document.body.insertAdjacentHTML('beforeend',vModal());
   bind();
+  var newBody=document.querySelector('.body');
+  if(newBody&&keepScroll)newBody.scrollTop=prevTop;
+  render._key=S.view+':'+S.mobile;
 }
 function go(v){S.view=v;S.mobile=false;S.bell=false;S.umenu=false;render()}
 function logout(){S.role=null;S.view='login';S.mobile=false;S.bell=false;S.umenu=false;S.modal=null;

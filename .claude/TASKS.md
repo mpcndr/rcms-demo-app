@@ -193,3 +193,13 @@ Notes: verified with `node --check`, full regression suite (55 checks, zero JS e
 Notes: deleted the now-dead instalments()/instBadge() functions, `.insts`/`.inst`/`.law` CSS, and unused dict keys (capSched, lawNote, inst1, inst2, stWait, stOver, stReview, trail). Left the underlying e.insts data model and its mutations in approve/submit/return-for-correction handlers untouched since they don't cause errors and aren't rendered anywhere — pure internal state, not dead code with a visible symptom. Verified with `node --check`, dict symmetry (342/342), full regression suite (71 checks across smoke/flow/flow2, zero JS errors), and screenshots confirming both removals.
 
 ---
+
+## Epic: Post-Push Cleanup & Scroll-Reset Bug
+
+### Done
+- [x] TASK-057 | fix: found a second "On verification" leftover — the `afterOk`/`afterSign` dict keys mistranslated a status-summary card/row on the declare form and task review page; removed both entirely per explicit follow-up instruction to leave nothing matching that label anywhere | 2026-08-06 | fix
+- [x] TASK-058 | fix: every render() call recreated `.body` as a fresh DOM node, resetting its scrollTop to 0 — most noticeable when picking an Asset category partway down the Declare Capital Payment form and getting yanked back to the top. render() now saves/restores `.body`'s scrollTop when re-rendering the same view (keyed on view+mobile state), while still resetting scroll to top on genuine page navigation | 2026-08-06 | fix
+
+Notes: also discovered and fixed the root cause of a longer-standing confusion this session — local edits across many prior rounds had never been pushed to git, so the live GitHub Pages link stayed frozen on an old commit the whole time. Committed and pushed (3cf8ddd..f027cb7) to sync the live site. Verified the scroll fix with a Playwright check that scrolls `.body` to 400px, changes the asset category select, and confirms scrollTop is unchanged — plus a second check confirming scrollTop still resets to 0 on real page navigation. Full regression suite (55 checks) still passes, zero JS errors.
+
+---
