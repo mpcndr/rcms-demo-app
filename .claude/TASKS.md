@@ -278,3 +278,12 @@ Notes: added a reusable `.btn.danger` CSS class (background var(--bad), darker h
 Notes: simple reorder in vTask()'s inner assembly; vTxDetail() already had the stepper first so no change needed there. Verified with `node --check`, full regression suite (55 checks, zero JS errors), and a screenshot confirming the stepper now renders first.
 
 ---
+
+## Epic: Valuation Firm Job Detail — Modal to Full Page
+
+### Done
+- [x] TASK-070 | feat: In-network valuation firm's job detail is now a full page (new view 'valjobdetail', vValJobDetail()) instead of a modal — shows the collateral details the enterprise entered when declaring the asset (type, description, appraised value), documents, and the submission form, with a breadcrumb back to the Valuation Portal | 2026-08-06 | feature
+
+Notes: replaced modal-scoped state (S.modal.val/files/err) with page-level S.valI/S.valForm; removed the old 'valjobfirm' modal type entirely rather than keeping both paths. Fixed a stale sidebar-highlight condition that referenced a 'valjobdetail' view for the wrong menu item (valQueue, staff-side) — corrected to target 'valfirm' (the firm's own menu item), which is what actually navigates there now. Verified with `node --check`, full regression suite (71 checks across smoke/flow/flow2, zero JS errors — updated flow.py's assertions from S.modal to S.valForm/S.view), and a full-page screenshot confirming the collateral card renders with the real land-title/appraisal data.
+
+---
