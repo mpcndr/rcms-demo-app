@@ -215,3 +215,12 @@ Notes: also discovered and fixed the root cause of a longer-standing confusion t
 Notes: removed the now-dead data-gofinpen bind handler and its S.finTab='pen' shortcut. Verified with `node --check`, dict symmetry (344/344), full regression suite (55 checks, zero JS errors), and targeted Playwright checks: fDate/fAcct hidden in asset mode, checklist renders per mode, Finance & Penalties row has cursor:auto (not pointer), and a real click+keyboard select interaction only shows a ~40px native focus adjustment instead of a full jump to scrollTop 0.
 
 ---
+
+## Epic: Doc Checklist Redundancy Fix
+
+### Done
+- [x] TASK-063 | fix: cash-mode document checklist repeated "Choose at least 1" on all 3 rows (looked silly) — now shown once as a group header above the 3 doc names, since they're interchangeable alternatives not individually-required items; asset mode keeps its per-item Required/Optional labels since those genuinely differ per document | 2026-08-06 | fix
+
+Notes: verified with `node --check`, full regression suite (55 checks, zero JS errors), and screenshots of both modes confirming the new grouped layout.
+
+---
