@@ -224,3 +224,12 @@ Notes: removed the now-dead data-gofinpen bind handler and its S.finTab='pen' sh
 Notes: verified with `node --check`, full regression suite (55 checks, zero JS errors), and screenshots of both modes confirming the new grouped layout.
 
 ---
+
+## Epic: Unify Asset Checklist Style with Cash
+
+### Done
+- [x] TASK-064 | fix: asset-mode document checklist now uses the same bordered-box-with-header style as cash mode (header label + item name) instead of the old per-row Required/Optional badge layout, for visual consistency between the two modes | 2026-08-06 | fix
+
+Notes: docChecklist(mode) now builds a list of [header, items] groups for both modes — cash has one "Choose at least 1" group with all 3 alternatives, asset has a "Required" group (valuation report) and an "Optional" group (asset photos) — rendered through the same box markup. Verified with `node --check`, full regression suite (55 checks, zero JS errors), and a screenshot confirming the match.
+
+---
