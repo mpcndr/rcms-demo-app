@@ -296,3 +296,13 @@ Notes: replaced modal-scoped state (S.modal.val/files/err) with page-level S.val
 Notes: kept the note text (checkerNote/approverNote) in place in the "Decision" sidebar card since it's contextual explanation, not an action — only the two buttons moved into a new full-width card below the evidence section. Verified with `node --check`, full regression suite (55 checks, zero JS errors), and a screenshot confirming both buttons render compact and bottom-anchored.
 
 ---
+
+## Epic: Valuation Job Seed-Data Gaps & Action Bar Polish
+
+### Done
+- [x] TASK-072 | fix: 3 of the 4 pre-seeded valuation jobs (wait/outapprove/accepted statuses) referenced entities with an empty `collateral` array and had no `.files`, so their detail page showed nothing under Collateral Details or Supporting Documents — added matching collateral entries to ELN-2025-1003 (warehouse building) and ELN-2025-1005 (land plot), plus mock `.files` on the 3 already-submitted jobs (only 'doing' status legitimately has none yet) | 2026-08-06 | fix
+- [x] TASK-073 | fix: removed the card wrapper around the task-review bottom action bar and left-aligned both buttons (previously right-aligned inside a card) | 2026-08-06 | fix
+
+Notes: verified with `node --check`, full regression suite (71 checks across smoke/flow/flow2, zero JS errors), and a screenshot confirming both fixes.
+
+---

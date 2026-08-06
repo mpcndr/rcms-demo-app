@@ -641,7 +641,8 @@ function seedEnts(){return[
   insts:[{no:1,amt:135000000,state:'due',meta:{lo:'ຍັງບໍ່ມີການຊຳລະ',en:'No payment received yet'}},
          {no:2,amt:315000000,state:'wait',meta:{lo:'ລໍຊຳລະງວດທີ 1 ກ່ອນ',en:'Waiting on instalment 1'}}],hist:[]},
  {id:'ELN-2025-1003',name:'ສະຫວັນ ໂລຈິສຕິກ',type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ສະຫວັນນະເຂດ',en:'Savannakhet'},isic:'4923',
-  reg:'29/08/2025',due:'29/08/2026',cap:2800000000,paid:1260000000,status:'PARTIAL',acct:'APB 021-4-11902-3',taxris:'206649931',collateral:[],
+  reg:'29/08/2025',due:'29/08/2026',cap:2800000000,paid:1260000000,status:'PARTIAL',acct:'APB 021-4-11902-3',taxris:'206649931',
+  collateral:[{type:'building',label:{lo:'ອາຄານສາງສິນຄ້າ',en:'Warehouse building'},detail:{lo:'ພື້ນທີ່ໃຊ້ສອຍ 2,400 ຕ.ມ. · ສ້າງປີ 2018 · ເລກທະບຽນອາຄານ 330-WB-12',en:'Usage area 2,400 sq.m · built 2018 · building registration no. 330-WB-12'},value:1540000000}],
   insts:[{no:1,amt:1260000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 15/12/2025',en:'Confirmed 15/12/2025'}},
          {no:2,amt:1540000000,state:'due',meta:{lo:'ຍັງບໍ່ແຈ້ງຮູບແບບການຊຳລະ',en:'Payment form not yet declared'}}],
   hist:[{d:'15/12/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1260000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter'}]},
@@ -652,7 +653,8 @@ function seedEnts(){return[
   hist:[{d:'20/09/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:228000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter'},
         {d:'13/06/2026',a:{lo:'ເຂົ້າສະຖານະເກີນກຳນົດ (ອັດຕະໂນມັດ)',en:'Flagged overdue (automatic)'},m:'',v:0,u:'System',f:'—',ch:''}]},
  {id:'ELN-2025-1005',name:'ຫຼວງພະບາງ ທ່ອງທ່ຽວ',type:{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},prov:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},isic:'7911',
-  reg:'31/08/2025',due:'31/08/2026',cap:180000000,paid:180000000,status:'COMPLETED',acct:'APB 044-2-77410-5',taxris:'207450441',collateral:[],
+  reg:'31/08/2025',due:'31/08/2026',cap:180000000,paid:180000000,status:'COMPLETED',acct:'APB 044-2-77410-5',taxris:'207450441',
+  collateral:[{type:'land',label:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},detail:{lo:'ເນື້ອທີ່ 0.4 ha · ໃບຕາດິນເລກທີ 5518-C',en:'Area 0.4 ha · Land title no. 5518-C'},value:180000000}],
   insts:[{no:1,amt:180000000,state:'paid',meta:{lo:'ຊຳລະຄັ້ງດຽວເຕັມຈຳນວນ · ອອກໃບຢັ້ງຢືນແລ້ວ',en:'Paid in full in one transfer · certificate issued'}},
          {no:2,amt:0,state:'na',meta:{lo:'',en:''}}],
   hist:[{d:'05/09/2025',a:{lo:'ຊຳລະທຶນເຕັມຈຳນວນ',en:'Capital paid in full'},m:'cash',v:180000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter'}]},
@@ -673,9 +675,12 @@ function seedInv(){return[
 
 var VALJOBS=[
  {id:'VAL-2026-0341',ent:'ELN-2025-1001',asset:{lo:'ທີ່ດິນ 2 ຕອນ',en:'2 land plots'},firm:'Lao Valuation Co., Ltd.',net:'in',amt:700000000,status:'doing'},
- {id:'VAL-2026-0338',ent:'ELN-2025-1006',asset:{lo:'ເຄື່ອງຈັກ 6 ລາຍການ',en:'6 machinery items'},firm:'Mekong Appraisal',net:'in',amt:3780000000,status:'wait'},
- {id:'VAL-2026-0330',ent:'ELN-2025-1003',asset:{lo:'ອາຄານສາງສິນຄ້າ',en:'Warehouse building'},firm:'Indochina Asset',net:'out',amt:1540000000,status:'outapprove'},
- {id:'VAL-2026-0318',ent:'ELN-2025-1005',asset:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},firm:'Lao Valuation Co., Ltd.',net:'in',amt:180000000,status:'accepted'}
+ {id:'VAL-2026-0338',ent:'ELN-2025-1006',asset:{lo:'ເຄື່ອງຈັກ 6 ລາຍການ',en:'6 machinery items'},firm:'Mekong Appraisal',net:'in',amt:3780000000,status:'wait',
+  files:['valuation-report-VAL-2026-0338.pdf','asset-photos.pdf']},
+ {id:'VAL-2026-0330',ent:'ELN-2025-1003',asset:{lo:'ອາຄານສາງສິນຄ້າ',en:'Warehouse building'},firm:'Indochina Asset',net:'out',amt:1540000000,status:'outapprove',
+  files:['valuation-report-VAL-2026-0330.pdf','site-inspection.jpg']},
+ {id:'VAL-2026-0318',ent:'ELN-2025-1005',asset:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},firm:'Lao Valuation Co., Ltd.',net:'in',amt:180000000,status:'accepted',
+  files:['valuation-report-VAL-2026-0318.pdf','asset-photos.pdf','site-inspection.jpg']}
 ];
 var VAL_LBL={doing:['valDoing','p-warn'],wait:['valWait','p-rev'],outapprove:['valOut','p-idle'],accepted:['stPaid','p-ok']};
 
@@ -1277,11 +1282,11 @@ function vTask(){
   '<div><div class="card"><div class="h"><h3>'+t('decide')+'</h3></div><div class="c">'+
   '<div style="font-size:11.5px;color:var(--muted);line-height:1.7">'+(isC?t('checkerNote'):t('approverNote'))+'</div>'+
   '</div></div></div></div>'+
-  '<div class="card" style="margin-top:14px"><div class="c"><div class="acts" style="justify-content:flex-end">'+
+  '<div class="acts" style="margin-top:14px">'+
   '<button class="btn danger" data-openback="1">'+t('sendBack')+'</button>'+
   (isC?'<button class="btn" data-fwd="1">'+t('fwdApprover')+'</button>'
       :'<button class="btn" data-sign="1">'+t('signApprove')+'</button>')+
-  '</div></div></div>';
+  '</div>';
   return shell(x.ref,[isC?t('queueTitle'):t('queueApprove'),isC?'inspect':'approveQ'],inner);
 }
 
