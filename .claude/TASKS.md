@@ -242,3 +242,12 @@ Notes: docChecklist(mode) now builds a list of [header, items] groups for both m
 Notes: image referenced as a plain file (MOIC01.webp, ~126KB) alongside index.html, same pattern as moic-logo.png — not embedded as a data URI. Verified with `node --check`, full regression suite (71 checks across smoke/flow/flow2, zero JS errors), and a screenshot confirming the photo renders behind the login copy with good contrast.
 
 ---
+
+## Epic: Checklist Readability Fix (Round 2)
+
+### Done
+- [x] TASK-066 | fix: previous fix over-corrected — asset mode's two sparse single-item boxes looked as odd as cash's old repetition. Redesigned docChecklist() into one cohesive bordered box with checkbox-style (☐) rows per document; per-row Required/Optional labels only shown for asset mode where they genuinely differ, cash mode gets one "Choose at least 1" footer note since it's identical across all 3 alternatives | 2026-08-06 | fix
+
+Notes: verified with `node --check`, full regression suite (55 checks, zero JS errors), and screenshots of both modes confirming the checklist now reads naturally.
+
+---
