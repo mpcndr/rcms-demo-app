@@ -306,3 +306,13 @@ Notes: kept the note text (checkerNote/approverNote) in place in the "Decision" 
 Notes: verified with `node --check`, full regression suite (71 checks across smoke/flow/flow2, zero JS errors), and a screenshot confirming both fixes.
 
 ---
+
+## Epic: Transaction Detail Enrichment & Post-Submit Visibility
+
+### Done
+- [x] TASK-074 | feat: transaction detail page (Payment & Approval History drill-in) now shows a mocked Supporting Documents list instead of just a raw file count, plus a "Declare Capital Payment" card surfacing the cash-mode fields (payment date, receiving account, transaction reference) that were filled in at submission time but never persisted to history before | 2026-08-06 | feature
+- [x] TASK-075 | fix: submitting a valuation result no longer bounces the in-network firm back to the job list — it stays on the same job page, which now shows a read-only summary (declared value, collateral, uploaded documents) of what was just submitted, with a toast confirming acceptance is pending | 2026-08-06 | fix
+
+Notes: mock document names are deterministic per mode (cash vs asset pools) and sized to the existing doc-count field so counts stay consistent; transaction reference is deterministically derived from the date and amount rather than random, so re-renders are stable. Verified with `node --check`, full regression suite (71 checks, zero JS errors), and screenshots of both the tx-detail page (cash fields + mocked docs) and the valuation firm's post-submit read-only view.
+
+---

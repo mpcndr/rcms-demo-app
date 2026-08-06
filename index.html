@@ -1150,16 +1150,27 @@ function vTxDetail(){
    '<div><span class="k">'+t('cAmt')+'</span><span class="v num">'+fmt(h.v)+' LAK</span></div>'+
    '<div><span class="k">'+t('cBy')+'</span><span class="v">'+h.u+'</span></div>'+
    (h.ch?'<div><span class="k">'+t('payChannel')+'</span><span class="v">'+t(h.ch)+'</span></div>':'')+
-   (h.f&&h.f!=='—'?'<div><span class="k">'+t('fDocs')+'</span><span class="v num">'+h.f+'</span></div>':'')+
    '</div></div></div>';
-  var colCard=cItem?'<div class="card"><div class="h"><h3>'+t('collateral')+'</h3></div><div class="c"><div class="kv">'+
+  var payFieldsCard=h.m==='cash'?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('declareTitle')+'</h3></div><div class="c"><div class="kv">'+
+   '<div><span class="k">'+t('fDate')+'</span><span class="v num">'+h.d+'</span></div>'+
+   '<div><span class="k">'+t('fAcct')+'</span><span class="v num">'+e.acct+'</span></div>'+
+   '<div><span class="k">'+t('fRef')+'</span><span class="v num">TRX-'+h.d.split('/').reverse().join('')+'-'+('00000'+(h.v%100000)).slice(-5)+'</span></div>'+
+   '</div></div></div>':'';
+  var colCard=cItem?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('collateral')+'</h3></div><div class="c"><div class="kv">'+
    '<div><span class="k">'+t('cType')+'</span><span class="v">'+t(typeLbl[cItem.type]||'cType')+'</span></div>'+
    '<div><span class="k">'+t('cItem')+'</span><span class="v" style="text-align:right;max-width:260px">'+L(cItem.label)+'</span></div>'+
    '<div><span class="k">'+t('colDetail')+'</span><span class="v" style="text-align:right;max-width:260px">'+L(cItem.detail)+'</span></div>'+
    '<div><span class="k">'+t('colVal')+'</span><span class="v num">'+fmt(cItem.value)+' LAK</span></div></div>'+
    '<div class="acts" style="margin-top:14px"><button class="btn ghost" data-soon="'+t('viewReport')+'">'+t('viewReport')+'</button></div>'+
    '</div></div>':'';
-  var inner=pbar+entInfoCard(e)+txCard+colCard;
+  var docPool=h.m==='asset'?['valuation-report.pdf','asset-photos.pdf','site-inspection.jpg']:['bank-slip.pdf','confirmation-letter.pdf','deposit-receipt.jpg'];
+  var docCount=h.f&&h.f!=='—'?Number(h.f):0;
+  var mockDocs=docCount?docPool.slice(0,Math.min(docCount,docPool.length)):[];
+  var filesCard=mockDocs.length?'<div class="card"><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+
+   mockDocs.map(function(f){return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
+   '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+f+'</span>'+
+   '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div></div>':'';
+  var inner=pbar+entInfoCard(e)+txCard+payFieldsCard+colCard+filesCard;
   return shell(t('reqDetail'),[e.name,tx.back||'detail'],inner);
 }
 function vDetail(){
@@ -1926,7 +1937,7 @@ function bind(){
     if(!v){S.valForm.err=t('errAmt');return render()}
     if(!S.valForm.files.length){S.valForm.err=t('errFile');return render()}
     j.amt=v;j.files=S.valForm.files.slice();j.status='wait';toast(t('jobSubmitted'),t('jobSubmittedS'),true);
-    go('valfirm')}});
+    render()}});
   document.querySelectorAll('[data-acceptjob]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();var j=S.valjobs[Number(b.dataset.acceptjob)];if(!j)return;
     j.status='accepted';S.modal=null;render();toast(t('jobAccepted'),t('jobAcceptedS'),true)}});
