@@ -269,3 +269,12 @@ Notes: new modal type 'backreason' reuses the same reasonIntTxt/reasonExtTxt ids
 Notes: added a reusable `.btn.danger` CSS class (background var(--bad), darker hover) rather than one-off inline styling, and a new `confirm` dict key. Verified with `node --check`, dict symmetry (345/345), full regression suite (55 checks, zero JS errors), and a screenshot confirming both the page button and modal Confirm button render red.
 
 ---
+
+## Epic: Stepper Placement on Task Review Page
+
+### Done
+- [x] TASK-069 | fix: moved the circle stepper (Submitted → Checker → Approver) to the very top of the Checker/Approver task review page, above Entity Information — it was rendering below it | 2026-08-06 | fix
+
+Notes: simple reorder in vTask()'s inner assembly; vTxDetail() already had the stepper first so no change needed there. Verified with `node --check`, full regression suite (55 checks, zero JS errors), and a screenshot confirming the stepper now renders first.
+
+---
