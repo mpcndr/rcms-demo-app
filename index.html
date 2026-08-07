@@ -437,7 +437,7 @@ lo:{
  txnRefPh:'ເຊັ່ນ TXN-20260806-001',payEvidenceLbl:'ຫຼັກຖານການຊຳລະເງິນ',
  payPartialOnly:'ວິສາຫະກິດນີ້ໄດ້ຊຳລະທຶນມາແລ້ວໜຶ່ງຄັ້ງ — ຕ້ອງຊຳລະຍອດທີ່ເຫຼືອທັງໝົດເປັນງວດສຸດທ້າຍ',
  minReqNote:'ຂັ້ນຕ່ຳທີ່ຕ້ອງຊຳລະ',errMin30:'ຈຳນວນຕ້ອງບໍ່ໜ້ອຍກວ່າ 30% ຂອງທຶນຈົດທະບຽນ',
- assetNameLbl:'ຊື່ຊັບສິນ',assetDetailLbl:'ລາຍລະອຽດ / ເລກທະບຽນ / ເລກໂຉນດ ຫຼື ສະຖານທີ່ຕັ້ງ',assetQtyLbl:'ຈຳນວນ',
+ assetNameLbl:'ຊື່ຊັບສິນ',assetQtyLbl:'ຈຳນວນ',
  assetUnitLbl:'ໜ່ວຍນັບ',assetDeclValLbl:'ມູນຄ່າທີ່ແຈ້ງ (ກີບ)',ownDeedLbl:'ເອກະສານຫຼັກຖານກຳມະສິດ',
  valFirmCardTitle:'ຂໍ້ມູນບໍລິສັດປະເມີນ',valFirmCardSub:'ຈຳເປັນເມື່ອບໍ່ມີເອກະສານຫຼັກຖານກຳມະສິດແນບມາ',
  valReasonLbl:'ເຫດຜົນໃນການເລືອກບໍລິສັດປະເມີນ',valContactLbl:'ຜູ້ປະສານງານ',valPhoneLbl:'ເບີໂທລະສັບ',
@@ -601,7 +601,7 @@ en:{
  txnRefPh:'e.g. TXN-20260806-001',payEvidenceLbl:'Payment evidence',
  payPartialOnly:'This enterprise has already made one payment — the remaining balance must be paid as the final installment.',
  minReqNote:'Minimum required',errMin30:'Amount must be at least 30% of the registered capital',
- assetNameLbl:'Asset name',assetDetailLbl:'Details / registration no. / deed no. or location',assetQtyLbl:'Quantity',
+ assetNameLbl:'Asset name',assetQtyLbl:'Quantity',
  assetUnitLbl:'Unit',assetDeclValLbl:'Declared value (LAK)',ownDeedLbl:'Ownership evidence document',
  valFirmCardTitle:'Valuation firm information',valFirmCardSub:'Required when no ownership evidence document is attached',
  valReasonLbl:'Reason for selecting the valuation firm',valContactLbl:'Coordinator',valPhoneLbl:'Phone number',
@@ -899,6 +899,31 @@ var ASSET_FIELDS={
   ['model',{lo:'ຮຸ່ນ',en:'Model'},'text'],
   ['capacity',{lo:'ຂະໜາດ / ກຳລັງການຜະລິດ',en:'Capacity'},'text'],
   ['estimatedPrice',{lo:'ລາຄາປະເມີນ (ກີບ)',en:'Estimated price (LAK)'},'number']
+ ]
+};
+var DECL_ASSET_FIELDS={
+ land:[
+  ['deedNo',{lo:'ເລກໂຉນດ',en:'Deed No.'},'text'],
+  ['area',{lo:'ເນື້ອທີ່',en:'Area'},'text'],
+  ['location',{lo:'ແຂວງ/ເມືອງ/ຈັງຫວັດ',en:'District/City/Province'},'text']
+ ],
+ building:[
+  ['buildingNo',{lo:'ເລກທີ່ອາຄານ',en:'Building No.'},'text'],
+  ['buildingType2',{lo:'ປະເພດອາຄານ',en:'Building type'},'text'],
+  ['usableArea',{lo:'ພື້ນທີ່ໃຊ້ສອຍ',en:'Usable area'},'text']
+ ],
+ car:[
+  ['licenseNo',{lo:'ເລກທະບຽນ',en:'License Plate No.'},'text'],
+  ['brand',{lo:'ຍີ່ຫໍ້',en:'Brand'},'text'],
+  ['model',{lo:'ຮຸ່ນ',en:'Model'},'text'],
+  ['year',{lo:'ປີຜະລິດ',en:'Year'},'text'],
+  ['chassisNo',{lo:'ເລກຕົວຖັງ',en:'Chassis No.'},'text']
+ ],
+ machine:[
+  ['serialNo',{lo:'Serial Number',en:'Serial Number'},'text'],
+  ['brand',{lo:'ຍີ່ຫໍ້',en:'Brand'},'text'],
+  ['model',{lo:'ຮຸ່ນ',en:'Model'},'text'],
+  ['year',{lo:'ປີຜະລິດ',en:'Year'},'text']
  ]
 };
 var MASTER={
@@ -1489,7 +1514,8 @@ function vDeclare(){
    '<div class="field"><label>'+t('assetCategory')+' *</label><select id="assetCat">'+
    ['land','building','car','machine'].map(function(k){return '<option value="'+k+'"'+(f.assetCat===k?' selected':'')+'>'+t(k+'Type')+'</option>'}).join('')+'</select></div>'+
    '<div class="field"><label>'+t('assetNameLbl')+' *</label><input data-assetfield="name" value="'+esc((f.assetVals&&f.assetVals.name)||'')+'"></div>'+
-   '<div class="field" style="grid-column:1/-1"><label>'+t('assetDetailLbl')+'</label><input data-assetfield="detail" value="'+esc((f.assetVals&&f.assetVals.detail)||'')+'"></div>'+
+   (DECL_ASSET_FIELDS[f.assetCat]||[]).map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
+     return '<div class="field"><label>'+lbl+'</label><input data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
    '<div class="field"><label>'+t('assetQtyLbl')+'</label><input class="num" data-assetfield="qty" value="'+esc((f.assetVals&&f.assetVals.qty)||'')+'"></div>'+
    '<div class="field"><label>'+t('assetUnitLbl')+'</label><input data-assetfield="unit" value="'+esc((f.assetVals&&f.assetVals.unit)||'')+'"></div>'+
    '<div class="field"><label>'+t('assetDeclValLbl')+' *</label><input class="big num" id="fAmt" value="'+f.amt+'">'+
