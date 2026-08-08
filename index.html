@@ -1647,7 +1647,7 @@ function vOwnerDash(){
   var e=S.ents.filter(function(x){return x.id===S.sel})[0]||myEnts()[0]||S.ents[0];
   var remain=e.cap-e.paid,pend=pendingOf(e.id);
   var myInv=S.invs.filter(function(x){return x.ent===e.id});
-  var unpaidPen=myInv.filter(function(x){return x.kind==='penalty'&&x.status==='UNPAID'});
+  var unpaidPen=e.status==='OVERDUE'?myInv.filter(function(x){return x.kind==='penalty'&&x.status==='UNPAID'}):[];
   var invRows=myInv.map(function(iv){
     return '<tr><td style="padding-left:16px" class="num">'+iv.id+'</td><td>'+L(iv.title)+'</td>'+
     '<td class="r num">'+fmt(iv.amt)+'</td><td class="num">'+iv.due+'</td>'+
@@ -1727,18 +1727,13 @@ function regDetailCard(e,noMargin,stackMap){
   var pm=PROV_META[e.prov.lo]||PROV_META['ນະຄອນຫຼວງວຽງຈັນ'];
   var lat=e.lat||pm.lat,lng=e.lng||pm.lng;
   var district=e.district?L(e.district):L(pm.district),village=e.village?L(e.village):L(pm.village);
-  var entInvs=S.invs.filter(function(x){return x.ent===e.id});
-  var unpaidInvs=entInvs.filter(function(x){return x.status==='UNPAID'});
-  var unpaidAmt=unpaidInvs.reduce(function(a,x){return a+x.amt},0);
-  var finVal='<span style="color:'+(unpaidInvs.length?'var(--bad)':'var(--ok)')+'">'+
-    (unpaidInvs.length?(unpaidInvs.length+' · '+fmt(unpaidAmt)+' LAK'):t('stPaid'))+'</span>';
   var rows=[
     [t('regNo'),e.id],[t('nameLoLbl'),e.name],[t('nameEnLbl'),e.nameEn||'—'],[t('repLbl'),e.rep||'—'],
     [t('cRegD'),e.reg],[t('regStatusLbl'),t('operating')],[t('entType'),L(e.type)],
     [t('cProv'),L(e.prov)],[t('districtLbl'),district],[t('villageLbl'),village],
     ['ISIC',e.isic],[t('acctNo'),e.acct],
     [t('taxrisNo'),e.taxris],[t('taxRegDateLbl'),e.taxRegDate||e.reg],[t('taxStatusLbl'),t('operating')],
-    [t('vatStatusLbl'),t('vatRegistered')],[t('finTitle'),finVal]
+    [t('vatStatusLbl'),t('vatRegistered')]
   ];
   return '<div class="card"'+(noMargin?'':' style="margin-bottom:14px"')+'><div class="h"><h3>'+t('regCardTitle')+'</h3>'+
     '<span style="margin-left:auto;font-size:14px;color:var(--muted)">'+t('mapSyncedAt')+' 09:15</span></div>'+
@@ -1867,7 +1862,7 @@ function vTxDetail(){
 function vDetail(){
   var e=S.ents.filter(function(x){return x.id===S.sel})[0];
   var entInvs=S.invs.filter(function(x){return x.ent===e.id});
-  var unpaidPen=entInvs.filter(function(x){return x.kind==='penalty'&&x.status==='UNPAID'});
+  var unpaidPen=e.status==='OVERDUE'?entInvs.filter(function(x){return x.kind==='penalty'&&x.status==='UNPAID'}):[];
   var pend=pendingOf(e.id);
 
   var payBtn=(e.status!=='COMPLETED'&&S.role==='maker')?(pend
