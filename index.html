@@ -359,7 +359,7 @@ tbody tr:hover td{background:var(--m-lite)}
 .login .stat .l{font-size:10.5px;color:#83A5BD;margin-top:3px}
 .login .rt2{background:var(--white);padding:40px 52px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
 .login .rt2 h2{font-size:32px;font-weight:600; line-height:1.4em;}
-.login .rt2 p{font-size:12px;color:var(--muted);margin-bottom:24px}
+.login .rt2 p{font-size:14px;color:var(--muted);margin-bottom:24px}
 .acct{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:7px;cursor:pointer;
   display:flex;align-items:center;gap:11px;transition:.14s}
 .acct:hover{border-color:var(--m-light);background:var(--m-lite)}
@@ -1263,7 +1263,7 @@ function vLogin(){
   var credBody=
    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'+
    '<h2 style="margin-bottom:0">'+t('pickAcct')+'</h2>'+langToggle+'</div>'+
-   '<p style="margin-top:4px">'+t('loginHint')+'</p>'+
+   '<p>'+t('loginHint')+'</p>'+
    '<div class="field"><label>'+t('loginUser')+'</label>'+
    '<input id="loginUser" list="userlist" autocomplete="off" placeholder="lao.agri" value="'+esc(S.loginUser||'')+'"></div>'+
    '<datalist id="userlist">'+dl+'</datalist>'+
