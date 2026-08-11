@@ -239,9 +239,9 @@ tbody tr:hover td{background:var(--m-lite)}
 .kvLg>div{padding:13px 0}
 .kvLg .k{font-size:14px} .kvLg .v{font-size:14px}
 .reglist{border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:1.3;min-width:280px}
-.regrow{display:flex;justify-content:space-between;gap:14px;padding:9px 13px;font-size:14px}
+.regrow{display:flex;gap:14px;padding:9px 13px;font-size:14px}
 .regrow:nth-child(even){background:var(--soft)}
-.regrow .k{color:var(--muted)} .regrow .v{font-weight:600;color:var(--ink);text-align:right}
+.regrow .k{color:var(--muted);flex:0 0 150px} .regrow .v{font-weight:600;color:var(--ink);text-align:left;flex:1}
 .regmap{flex:1;min-width:240px;display:flex;flex-direction:column;gap:6px}
 .regmap .cap{font-size:14px;color:var(--muted);text-align:center}
 .leaflet-container{z-index:0}
@@ -848,6 +848,7 @@ function donutLegend(segs){
 var KPI_ICON={PENDING:'◷',PARTIAL:'◐',COMPLETED:'✓',OVERDUE:'⚠'};
 var LU={
  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+ scale:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
  rotateCcw:'<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
  calendarClock:'<path d="M16 14v2.2l1.6 1"/><path d="M16 2v3"/><path d="M21 7.338V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h2.338"/><path d="M3 9h5.859"/><path d="M8 2v3"/><circle cx="16" cy="16" r="6"/>',
  triangleAlert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
@@ -916,7 +917,6 @@ var ACCTS=[
  {id:'valfirm',user:'lao.valuation',nm:'Lao Valuation Co., Ltd.',rl:{lo:'ບໍລິສັດປະເມີນ · In-network Firm',en:'Valuation firm · In-network'},av:'LV'},
  {id:'checker',user:'sivilay.a',nm:'ນ. ສີວິໄລ',rl:{lo:'ເຈົ້າໜ້າທີ່ກວດສອບ · Checker',en:'Inspection officer · Checker'},av:'ສວ'},
  {id:'approver',user:'head.moic',nm:'ຫົວໜ້າພະແນກ',rl:{lo:'ຜູ້ອະນຸມັດ · Approver + E-Sign',en:'Division head · Approver + E-Sign'},av:'ຫພ'},
- {id:'external',user:'mof.gov',nm:'ກະຊວງການເງິນ',rl:{lo:'ໜ່ວຍງານພາຍນອກ · External Agency',en:'External agency'},av:'MOF'},
  {id:'admin',user:'bounmy.m',nm:'ທ. ບຸນມີ',rl:{lo:'ຜູ້ດູແລລະບົບ · System Admin',en:'System administrator'},av:'ບມ'}
 ];
 function who(){var a=ACCTS.filter(function(x){return x.id===S.role})[0]||ACCTS[0];
@@ -1186,7 +1186,6 @@ function menus(){
   if(S.role==='owner')return [['mMonitor'],['myEnts',I('wallet'),'myCap']];
   if(S.role==='maker')return [['mMonitor'],['dash',I('layoutDashboard'),'dash'],['ent',I('search'),'ent']];
   if(S.role==='valfirm')return [['mMonitor'],['valfirm',I('clipboardList'),'valPortal']];
-  if(S.role==='external')return [['mMonitor'],['portal',I('globe'),'portal']];
   if(S.role==='checker')return [['mMonitor'],['dash',I('layoutDashboard'),'dash'],
     ['ent',I('search'),'ent'],['valQueue',I('clipboardCheck'),'valQueue'],['mOther'],['fin',I('banknote'),'fin'],['rep',I('chartColumn'),'rep']];
   if(S.role==='approver')return [['mMonitor'],['dash',I('layoutDashboard'),'dash'],
@@ -1597,27 +1596,7 @@ function vAdminDash(){
    '<div class="card" style="margin-top:12px"><div class="h"><h3>'+t('orgBreakdown')+'</h3></div><div class="c" style="padding:10px 0 0">'+
    '<table><thead><tr><th style="padding-left:16px">'+t('uOrg')+'</th><th class="r">'+t('totalUsers')+'</th>'+
    '<th class="r">'+t('onlineNow')+'</th><th class="r" style="padding-right:16px">'+t('uLocked')+'</th></tr></thead>'+
-   '<tbody>'+orgRows+'</tbody></table></div></div>'+
-
-   sechead(t('secIntegration'))+
-   '<div class="card"><div class="h"><h3>'+t('secIntegration')+'</h3><span class="more" data-subtab="set:api">'+t('setApi')+' →</span></div>'+
-   '<div class="c" style="padding:10px 0 0">'+
-   '<table><thead><tr><th style="padding-left:16px">'+t('apiEndpoint')+'</th><th>'+t('cStatus')+'</th>'+
-   '<th class="r">'+t('apiRate')+'</th><th class="r">'+t('apiDur')+'</th><th class="r" style="padding-right:16px">'+t('apiLast')+'</th></tr></thead>'+
-   '<tbody>'+apiRows+'</tbody></table></div></div>'+
-
-   sechead(t('secConfig'))+
-   '<div class="grid3">'+
-   kpiTile('','banknote',t('cfgFee'),feeCount,lang==='lo'?'ລາຍການ · ອັບເດດ 17/06/2021':'tiers · updated 17/06/2021')+
-   kpiTile('','building2',t('cfgMaster'),masterRecs,lang==='lo'?'ລາຍການ · 5 ຊຸດຂໍ້ມູນ':'records · 5 datasets')+
-   kpiTile('','wallet',t('glTitle'),glCount,lang==='lo'?'ລາຍການ · ລົງບັນຊີ 04/08/2026':'entries · last posting 04/08/2026')+
-   '</div>'+
-
-   sechead(t('secAudit'))+
-   '<div class="card"><div class="h"><h3>'+t('secAudit')+'</h3></div><div class="c" style="padding:10px 0 0">'+
-   '<table><thead><tr><th style="padding-left:16px">'+t('cTime')+'</th><th>'+t('audUser')+'</th>'+
-   '<th>'+t('audAction')+'</th><th class="r" style="padding-right:16px">'+t('audCat')+'</th></tr></thead>'+
-   '<tbody>'+audRows+'</tbody></table></div></div>';
+   '<tbody>'+orgRows+'</tbody></table></div></div>';
   return shell(t('adminDashTitle'),'',inner);
 }
 
@@ -2170,11 +2149,12 @@ function vValQueue(){
     '<td class="r num">'+fmt(j.amt)+'</td><td class="r" style="padding-right:16px"><span class="pill '+lbl[1]+'">'+t(lbl[0])+'</span></td></tr>'}).join('');
   var counts={doing:0,wait:0,outapprove:0,accepted:0};
   S.valjobs.forEach(function(j){counts[j.status]++});
-  var inner='<div class="kpis">'+
-   '<div class="kpi"><div class="k">'+t('valAll')+'</div><div class="v num">'+S.valjobs.length+'</div></div>'+
-   '<div class="kpi warn"><div class="k">'+t('valDoing')+'</div><div class="v num">'+counts.doing+'</div></div>'+
-   '<div class="kpi"><div class="k">'+t('valWait')+'</div><div class="v num">'+counts.wait+'</div></div>'+
-   '<div class="kpi bad"><div class="k">'+t('valOut')+'</div><div class="v num">'+counts.outapprove+'</div></div></div>'+
+  var inner='<div class="kpiframe"><div class="kpis">'+
+   kpiTile('','scale',t('valAll'),S.valjobs.length,lang==='lo'?'ໃນຄິວປະເມີນ':'In the valuation queue')+
+   kpiTile('warn','clock',t('valDoing'),counts.doing,lang==='lo'?'ບໍລິສັດກຳລັງເຮັດ':'Firms working on it')+
+   kpiTile('','hourglass',t('valWait'),counts.wait,lang==='lo'?'ລໍຢືນຢັນຜົນ':'Awaiting acceptance')+
+   kpiTile('bad','triangleAlert',t('valOut'),counts.outapprove,lang==='lo'?'ຕ້ອງອະນຸມັດກ່ອນ':'Approve the firm first')+
+   '</div></div>'+
    '<div class="card"><div class="h"><h3>'+t('valTitle')+'</h3></div>'+
    '<div class="c" style="padding:12px 0 0"><table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th>'+
    '<th>'+t('cEnt')+' / '+t('valAsset')+'</th><th>'+t('valFirm')+'</th><th>'+t('valFirmType')+'</th>'+
@@ -2567,15 +2547,15 @@ function vModal(){
     '<div><span class="k">'+t('valFirmType')+'</span><span class="v">'+(j.net==='in'?t('inNet'):t('outNet').split(' (')[0])+'</span></div>'+
     '<div><span class="k">'+t('valDeclared')+'</span><span class="v num">'+fmt(j.amt)+' LAK</span></div>'+
     '<div><span class="k">'+t('cStatus')+'</span><span class="v"><span class="pill '+jLbl[1]+'">'+t(jLbl[0])+'</span></span></div></div>'+
-    (j.files&&j.files.length?'<div class="files" style="margin-top:12px">'+j.files.map(function(f){
+    (j.files&&j.files.length?'<div style="margin-top:12px">'+j.files.map(function(f){
       return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
       '<span style="color:var(--bad)">▤</span><span style="font-size:14px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
       '<span style="font-size:14px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div>':'')+
     '<div class="audit" style="margin-top:12px">'+t('valRule')+'</div>'+
     '<div class="acts" style="margin-top:16px">'+
+    (j.status==='wait'?'<button class="btn" style="flex:1" data-acceptjob="'+m.i+'">'+t('acceptResult')+'</button>':'')+
+    (j.status==='outapprove'?'<button class="btn" style="flex:1" data-approvefirm="'+m.i+'">'+t('approveFirm')+'</button>':'')+
     '<button class="btn ghost" data-close>'+t('close')+'</button>'+
-    (j.status==='wait'?'<button class="btn" data-acceptjob="'+m.i+'">'+t('acceptResult')+'</button>':'')+
-    (j.status==='outapprove'?'<button class="btn" data-approvefirm="'+m.i+'">'+t('approveFirm')+'</button>':'')+
     '</div></div></div>';
   }
   if(m.type==='valreject'){
@@ -2704,8 +2684,8 @@ function logout(){S.role=null;S.view='login';S.mobile=false;S.bell=false;S.umenu
   S.loginStep='cred';S.loginUser='';S.loginPass='';S.loginErr='';render()}
 
 function roleHome(role){
-  return role==='owner'?'myEnts':(role==='valfirm'?'valfirm':(role==='external'?'portal':
-    (role==='checker'?'dash':(role==='approver'?'dash':(role==='admin'?'dash':(role==='maker'?'dash':'ent'))))));
+  return role==='owner'?'myEnts':(role==='valfirm'?'valfirm':
+    (role==='checker'?'dash':(role==='approver'?'dash':(role==='admin'?'dash':(role==='maker'?'dash':'ent')))));
 }
 function switchRole(id){
   if(id===S.role){S.umenu=false;return render()}
