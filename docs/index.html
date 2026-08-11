@@ -68,6 +68,12 @@ button{font-family:inherit}
 .bell.open{background:var(--m-lite);border-color:#C8DDEC}
 .bell b{position:absolute;top:1px;right:1px;background:var(--bad);color:#fff;font-size:14px;
   border-radius:8px;padding:0 4px;font-weight:600;line-height:1.5}
+.clearCache{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--ink2);cursor:pointer;border:1px solid transparent}
+.clearCache:hover{background:var(--m-lite)}
+.clearCache.open{background:var(--m-lite);border-color:#C8DDEC}
+.clearCache b{position:absolute;top:1px;right:1px;background:var(--bad);color:#fff;font-size:8.5px;
+  border-radius:8px;padding:0 4px;font-weight:600;line-height:1.5}
 .panel{position:absolute;right:0;top:40px;width:344px;background:var(--white);border:1px solid var(--line);
   border-radius:9px;box-shadow:0 14px 40px rgba(8,50,77,.19);z-index:60;overflow:hidden}
 .panel .ph{padding:11px 14px;border-bottom:1px solid var(--soft);display:flex;align-items:center;gap:8px}
@@ -342,22 +348,18 @@ tbody tr:hover td{background:var(--m-lite)}
 .login{display:grid;grid-template-columns:1.15fr 1fr;height:100vh;overflow:hidden}
 .login .lf{background:linear-gradient(180deg,rgba(10,40,64,.82),rgba(10,40,64,.93)),url('./assets/MOIC01-CRSpHMZe.webp') center/cover no-repeat,var(--m-dark);
   color:#fff;padding:52px 52px;display:flex;flex-direction:column;overflow-y:auto}
-.seal{width:46px;height:46px;border-radius:50%;border:2px solid var(--m-light);color:var(--m-light);
-  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin-bottom:24px}
-.sealrow{display:flex;align-items:center;gap:13px;margin-bottom:24px}
-.sealrow .seal{margin-bottom:0}
-.moic-logo{width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:3px}
+.moic-logo{width:80px;height:80px;object-fit:contain;border-radius:8px;background:transparent;padding:3px}
 .moic-logo-login{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 0 7px rgba(255,255,255,.5))}
 .brand .moic-logo{width:22px;height:22px;padding:2px;margin-right:2px}
-.login h1{font-size:27px;font-weight:600;line-height:1.4;letter-spacing:-.02em;margin-bottom:14px}
+.login h1{font-size:32px;font-weight:600;line-height:1.4;letter-spacing:-.02em;margin-bottom:14px}
 .login h1 span{color:var(--m-light)}
 .login .sub{font-size:14px;color:#9EBCD1;line-height:1.9;max-width:440px}
 .login .stat{margin-top:auto;display:flex;gap:34px;padding-top:28px;border-top:1px solid #164B6C;flex-wrap:wrap}
 .login .stat .n{font-size:22px;font-weight:600;color:var(--m-light)}
-.login .stat .l{font-size:14px;color:#83A5BD;margin-top:3px}
-.login .rt2{background:var(--white);padding:40px 46px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
-.login .rt2 h2{font-size:17px;font-weight:600;margin-bottom:4px}
-.login .rt2 p{font-size:14px;color:var(--muted);margin-bottom:16px}
+.login .stat .l{font-size:10.5px;color:#83A5BD;margin-top:3px}
+.login .rt2{background:var(--white);padding:40px 52px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
+.login .rt2 h2{font-size:32px;font-weight:600; line-height:1.4em;}
+.login .rt2 p{font-size:14px;color:var(--muted);margin-bottom:24px}
 .acct{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:7px;cursor:pointer;
   display:flex;align-items:center;gap:11px;transition:.14s}
 .acct:hover{border-color:var(--m-light);background:var(--m-lite)}
@@ -397,7 +399,7 @@ tbody tr:hover td{background:var(--m-lite)}
   .steps{flex-direction:column} .login .lf{display:none}
 }
 </style>
-  <script type="module" crossorigin src="./assets/index-mi_aNyWY.js"></script>
+  <script type="module" crossorigin src="./assets/index-FtSM-qPp.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CIGW-MKW.css">
 </head>
 <body>
