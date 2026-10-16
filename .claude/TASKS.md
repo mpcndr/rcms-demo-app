@@ -325,3 +325,12 @@ Notes: mock document names are deterministic per mode (cash vs asset pools) and 
 Notes: added a `fields` object to each of the 4 seeded collateral entries matching their ASSET_FIELDS shape (land/building/machine), and render it in vValJobDetail() by pairing ASSET_FIELDS[type] labels with col.fields[key] values — reuses the same field-label translations already defined for the Declare Capital Payment form, so labels stay consistent app-wide. Verified with `node --check`, dict symmetry (346/346), full regression suite (71 checks, zero JS errors), and a screenshot confirming the fields render correctly for an already-accepted job.
 
 ---
+
+---
+
+## Epic: Layout Redesign (cmas-web style)
+
+### Done
+- [x] TASK-077 | feat: redesigned layout after cmas-web while keeping the existing colour tokens — in-page tabs (Finance, Settings) became sidebar submenus; Maker/Checker/Approver dashboards became a "My work" menu group whose submenus are the former dashboard tables; every list page is now one white content panel with a filter bar, toolbar, bordered table and pagination ("Total N items", page size); all KPI/total cards (kpiframe, capHero) removed; topbar shows a breadcrumb and the page title + back link + actions moved into a page header | 2026-10-16 | feature
+
+Notes: old `inspect`/`approveQ` views now route to My work > queue. User-table rows used `data-user`, which collided with the avatar-menu handler — renamed to `data-fuser`. Verified with `node --check`, a Playwright walkthrough of all 6 roles (no JS errors), and screenshots of every list page plus the checker forward flow.
